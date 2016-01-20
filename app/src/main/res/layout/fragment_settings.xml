@@ -1,0 +1,420 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="Fragments.ContactsFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/textColorPrimary">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/settingscroll"
+            android:fillViewport= "true">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="top"
+                android:id="@+id/settingstable">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:shrinkColumns="*"
+                    android:stretchColumns="*"
+                    android:orientation="vertical"
+                    android:id="@+id/notificationstable"
+                    android:layout_span="3">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingTop="25dp"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:id="@+id/notificationsheader">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Notifications"
+                            android:id="@+id/notificationsheadertext"
+                            android:layout_gravity="center_vertical"
+                            android:layout_span="3"
+                            android:textSize="@dimen/abc_text_size_medium_material"
+                            android:textStyle="bold" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="10dp"
+                        android:background="@drawable/cell_shape"
+                        android:id="@+id/notificationsemailrow"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="E-mail"
+                            android:id="@+id/notificationsemailtext"
+                            android:layout_gravity="center|left"
+                            android:layout_span="3"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="@dimen/abc_text_size_medium_material"
+                            android:layout_column="0" />
+
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/notificationsemailswitch"
+                            android:checked="false"
+                            android:layout_span="1"
+                            android:layout_column="1"
+                            android:layout_gravity="center|right"
+                            android:paddingRight="20dp" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:background="@drawable/cell_shape"
+                        android:id="@+id/notificationssmsrow">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Text Message"
+                            android:id="@+id/notificationssmstext"
+                            android:layout_gravity="center|left"
+                            android:layout_span="3"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="@dimen/abc_text_size_medium_material"
+                            android:layout_column="0" />
+
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/notificationssmsswitch"
+                            android:checked="false"
+                            android:layout_span="1"
+                            android:layout_column="1"
+                            android:layout_gravity="center|right"
+                            android:paddingRight="20dp" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="10dp"
+                        android:background="@drawable/cell_shape"
+                        android:id="@+id/notificationspushrow" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Push Notifications"
+                            android:id="@+id/notificationspushtext"
+                            android:layout_gravity="center|left"
+                            android:layout_span="3"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="@dimen/abc_text_size_medium_material"
+                            android:layout_column="0" />
+
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/notificationspushswitch"
+                            android:checked="false"
+                            android:layout_span="1"
+                            android:layout_column="1"
+                            android:layout_gravity="center|right"
+                            android:paddingRight="20dp" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="10dp"
+                        android:background="@drawable/cell_shape"
+                        android:id="@+id/notificationsfamilyrow" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Family and Friends"
+                            android:id="@+id/notificationsfamilytext"
+                            android:layout_gravity="center|left"
+                            android:layout_span="3"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="@dimen/abc_text_size_medium_material"
+                            android:layout_column="0" />
+
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/notificationsfamilyswitch"
+                            android:checked="false"
+                            android:layout_span="1"
+                            android:layout_column="1"
+                            android:layout_gravity="center|right"
+                            android:paddingRight="20dp" />
+                    </TableRow>
+                </TableLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Push notifications can be controlled from your Sentinel application or Settings on your mobile phone"
+                    android:id="@+id/notificationsexplanation" />
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:shrinkColumns="*"
+                    android:stretchColumns="*"
+                    android:orientation="vertical"
+                    android:id="@+id/contactstable"
+                    android:layout_span="3">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingTop="25dp"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:id="@+id/contactsheader">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Family Members or Friends"
+                            android:id="@+id/contactsheadertitle"
+                            android:layout_gravity="center_vertical"
+                            android:textSize="@dimen/abc_text_size_medium_material"
+                            android:textStyle="bold"
+                            android:layout_span="7" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="10dp"
+                        android:background="@drawable/cell_shape"
+                        android:id="@+id/contactsrow">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Contacts"
+                            android:id="@+id/contactstext"
+                            android:layout_gravity="center|left"
+                            android:layout_span="3"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="@dimen/abc_text_size_medium_material" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 of 5"
+                            android:id="@+id/contactscount"
+                            android:layout_gravity="center|right"
+                            android:layout_span="3"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="@dimen/abc_text_size_medium_material" />
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/contactsarrow"
+                            android:src="@drawable/ic_keyboard_arrow_right_white_24dp"
+                            android:layout_span="1"
+                            android:layout_column="1"
+                            android:background="#0000"
+                            android:layout_gravity="center_vertical" />
+
+                    </TableRow>
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:shrinkColumns="*"
+                    android:stretchColumns="*"
+                    android:orientation="vertical"
+                    android:id="@+id/languagestable">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingTop="25dp"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:id="@+id/languagesheader">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Options"
+                            android:layout_gravity="center_vertical"
+                            android:layout_span="3"
+                            android:textSize="@dimen/abc_text_size_medium_material"
+                            android:textStyle="bold"
+                            android:id="@+id/languagesheadertext"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="10dp"
+                        android:background="@drawable/cell_shape"
+                        android:id="@+id/languagesrow">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Languages"
+                            android:id="@+id/languagestext"
+                            android:layout_gravity="center|left"
+                            android:layout_span="3"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="@dimen/abc_text_size_medium_material" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="English"
+                            android:id="@+id/setlanguage"
+                            android:layout_gravity="center|right"
+                            android:layout_span="3"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="@dimen/abc_text_size_medium_material" />
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/languagesarrow"
+                            android:src="@drawable/ic_keyboard_arrow_right_white_24dp"
+                            android:layout_span="1"
+                            android:layout_column="1"
+                            android:background="#0000"
+                            android:layout_gravity="center_vertical" />
+
+                    </TableRow>
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:shrinkColumns="*"
+                    android:stretchColumns="*"
+                    android:orientation="vertical"
+                    android:id="@+id/supporttable">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingTop="25dp"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:id="@+id/supportheader">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Support"
+                            android:id="@+id/supportheadertext"
+                            android:layout_gravity="center_vertical"
+                            android:layout_span="3"
+                            android:textSize="@dimen/abc_text_size_medium_material"
+                            android:textStyle="bold" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="10dp"
+                        android:background="@drawable/cell_shape"
+                        android:id="@+id/policiesrow">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Privacy Policy and Terms"
+                            android:id="@+id/policiestext"
+                            android:layout_gravity="center|left"
+                            android:layout_span="5"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="@dimen/abc_text_size_medium_material" />
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/policiesarrow"
+                            android:src="@drawable/ic_keyboard_arrow_right_white_24dp"
+                            android:background="#0000"
+                            android:layout_span="1"
+                            android:layout_gravity="center_vertical" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="10dp"
+                        android:background="@drawable/cell_shape"
+                        android:id="@+id/feedbackrow">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Report a Problem"
+                            android:id="@+id/feedbacktext"
+                            android:layout_gravity="center|left"
+                            android:layout_span="5"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="@dimen/abc_text_size_medium_material" />
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/feedbackarrow"
+                            android:src="@drawable/ic_keyboard_arrow_right_white_24dp"
+                            android:layout_span="1"
+                            android:layout_column="1"
+                            android:background="#0000"
+                            android:layout_gravity="center_vertical" />
+
+                    </TableRow>
+                </TableLayout>
+
+            </TableLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+</FrameLayout>
