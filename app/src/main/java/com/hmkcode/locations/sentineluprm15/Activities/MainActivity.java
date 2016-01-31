@@ -18,6 +18,8 @@ import com.hmkcode.locations.sentineluprm15.R;
 
 import Fragments.ViewPagerFragment;
 
+// Added simple comment.
+
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
