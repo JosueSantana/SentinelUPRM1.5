@@ -17,3 +17,4 @@ public class ValuesCollection {
     public static final String EMAIL_VALUE = "SENTINEL_UPRM_EMAIL_VALUE";
 
 }
+
