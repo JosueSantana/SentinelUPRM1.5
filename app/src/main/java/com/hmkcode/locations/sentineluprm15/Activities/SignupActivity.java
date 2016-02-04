@@ -8,12 +8,12 @@ import com.hmkcode.locations.sentineluprm15.R;
 /**
  * This activity handles the inputs for the login menu.
  */
-public class LoginActivity extends AppCompatActivity {
+public class SignupActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_signup);
     }
 
     void onClick(){

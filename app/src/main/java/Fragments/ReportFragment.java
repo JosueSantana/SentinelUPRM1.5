@@ -40,6 +40,7 @@ public class ReportFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mButton = (ImageButton) getView().findViewById(R.id.alertButton);
 
+        // Create listener for Alert Button
         mButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
