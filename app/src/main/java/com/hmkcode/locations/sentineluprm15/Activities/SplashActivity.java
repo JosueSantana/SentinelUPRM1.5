@@ -2,6 +2,8 @@ package com.hmkcode.locations.sentineluprm15.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -49,9 +51,17 @@ public class SplashActivity extends AppCompatActivity {
         }
         else{
             //go to sign up screen
-            Intent signupIntent = new Intent(this, SignupActivity.class);
-            startActivity(signupIntent);
-            finish();
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // Do something after 5s = 5000ms
+                    Intent signupIntent = new Intent(SplashActivity.this, SignupActivity.class);
+                    startActivity(signupIntent);
+                    finish();
+                }
+            }, 3000);
+
 
         }
 
