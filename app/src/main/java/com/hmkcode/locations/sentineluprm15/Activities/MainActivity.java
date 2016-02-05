@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportFragmentManager().beginTransaction().add(R.id.coordlayout, new ViewPagerFragment()).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.coordlayout, new ViewPagerFragment()).commit();
 
     }
 

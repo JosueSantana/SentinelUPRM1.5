@@ -1,6 +1,7 @@
 package Fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,20 +9,29 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.TableRow;
 
 import com.hmkcode.locations.sentineluprm15.R;
+
+import OtherHandlers.ValuesCollection;
 
 /**
  * This fragment manages the toggles in the settings.
  */
 public class SettingsFragment extends Fragment {
 
-    private TableRow contactsrow;
-    private TableRow languagesrow;
+    private TableRow contactsRow;
+    private TableRow languagesRow;
     private TableRow feedbackRow;
     private TableRow policiesRow;
+
+    private Switch emailSwitch;
+    private Switch smsSwitch;
+    private Switch pushSwitch;
+    private Switch familySwitch;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -42,64 +52,74 @@ public class SettingsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
-        contactsrow = (TableRow) getView().findViewById(R.id.contactsrow);
-        languagesrow = (TableRow) getView().findViewById(R.id.languagesrow);
+        //get reference to row objects
+        contactsRow = (TableRow) getView().findViewById(R.id.contactsrow);
+        languagesRow = (TableRow) getView().findViewById(R.id.languagesrow);
         feedbackRow = (TableRow) getView().findViewById(R.id.feedbackrow);
         policiesRow = (TableRow) getView().findViewById(R.id.policiesrow);
 
         //set all the settings listeners
-        contactsListListener();
+        rowListener(contactsRow, new ContactsFragment());
+        rowListener(languagesRow, new LanguagesFragment());
+        rowListener(feedbackRow, new FeedbackFragment());
+        rowListener(policiesRow, new PoliciesFragment());
 
-        languagesListListener();
+        //get reference to switch objects
+        emailSwitch = (Switch) getView().findViewById(R.id.notificationsemailswitch);
+        smsSwitch = (Switch) getView().findViewById(R.id.notificationssmsswitch);
+        pushSwitch = (Switch) getView().findViewById(R.id.notificationspushswitch);
+        familySwitch = (Switch) getView().findViewById(R.id.notificationsfamilyswitch);
 
-        termsListener();
+        //get reference to settings shared preferences
+        SharedPreferences settings = getContext().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
 
-        reportProblemListener();
+        //check switch states
+        switchToggle(settings, emailSwitch, "mail");
+        switchToggle(settings, smsSwitch, "sms");
+        switchToggle(settings, pushSwitch, "push");
+        switchToggle(settings, familySwitch, "family");
+
+        //set all the switch listeners
+        switchListener(settings, emailSwitch, "mail");
+        switchListener(settings, smsSwitch, "sms" );
+        switchListener(settings, pushSwitch, "push");
+        switchListener(settings, familySwitch, "family");
     }
 
-    private void togglePreference(){
-
+    private void switchToggle(SharedPreferences settings, CompoundButton slideSwitch, String name){
+        if(settings.getBoolean(name, false)){slideSwitch.toggle();}
     }
 
-    private void contactsListListener(){
-        contactsrow.setOnTouchListener(new View.OnTouchListener() {
+    private void switchListener(final SharedPreferences settings, CompoundButton slideSwitch,final String name){
+
+        slideSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                //get the settings from sharedpreferences
+                SharedPreferences.Editor editor = settings.edit();
+
+                //set email status
+                if (isChecked) {
+                    editor.putBoolean(name, true);
+                } else {
+                    editor.putBoolean(name, false);
+                }
+
+                editor.commit();
+
+                System.out.println("Current " + name + " status: " + settings.getBoolean(name, false));
+
+            }
+        });
+    }
+
+    private void rowListener(TableRow row, final Fragment frag){
+        row.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.coordlayout, new ContactsFragment()).addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.coordlayout, frag).addToBackStack(null).commit();
                 return false;
             }
         });
-        return;
     }
-
-    private void languagesListListener(){
-        languagesrow.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.coordlayout, new LanguagesFragment()).addToBackStack(null).commit();
-                return false;
-            }
-        });
-    }
-
-    private void termsListener(){
-        feedbackRow.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.coordlayout, new FeedbackFragment()).addToBackStack(null).commit();
-                return false;
-            }
-        });
-    }
-
-    private void reportProblemListener(){
-        policiesRow.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.coordlayout, new PoliciesFragment()).addToBackStack(null).commit();
-                return false;
-            }
-        });
-    }
-
 }

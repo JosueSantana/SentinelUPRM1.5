@@ -1,4 +1,4 @@
-package OtherHandlers;
+package Services;
 
 import android.app.Service;
 import android.content.Intent;

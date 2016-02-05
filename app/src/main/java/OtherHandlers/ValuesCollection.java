@@ -16,5 +16,8 @@ public class ValuesCollection {
     public static final String TOKEN_VALUE = "SENTINEL_UPRM_TOKEN_VALUE";
     public static final String EMAIL_VALUE = "SENTINEL_UPRM_EMAIL_VALUE";
 
+    public static final String SETTINGS_SP = "SettingsFile";
+    public static final String CREDENTIALS_SP = "CredentialsFile";
+
 }
 
