@@ -39,7 +39,7 @@
             android:id="@+id/codeEnter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter validation code"
+            android:hint="@string/entercodelabel"
             android:inputType="textVisiblePassword"
             android:imeOptions="actionGo"
             android:maxLines="1"

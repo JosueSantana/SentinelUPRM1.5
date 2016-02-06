@@ -65,22 +65,22 @@ public class ViewPagerFragment extends Fragment {
     private void setupTabIcons() {
 
         TextView tabOne = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.custom_tab, null);
-        tabOne.setText("ALERT");
+        tabOne.setText(R.string.alert);
         tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_error_outline_white_24dp, 0, 0);
         tabLayout.getTabAt(0).setCustomView(tabOne);
 
         TextView tabTwo = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.custom_tab, null);
-        tabTwo.setText("INCIDENTS");
+        tabTwo.setText(R.string.incident);
         tabTwo.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_map_white_24dp  , 0, 0);
         tabLayout.getTabAt(1).setCustomView(tabTwo);
 
         TextView tabThree = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.custom_tab, null);
-        tabThree.setText("CALL");
+        tabThree.setText(R.string.call);
         tabThree.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_settings_phone_white_24dp, 0, 0);
         tabLayout.getTabAt(2).setCustomView(tabThree);
 
         TextView tabFour = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.custom_tab, null);
-        tabFour.setText("SETTINGS");
+        tabFour.setText(R.string.settings);
         tabFour.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_settings_applications_white_24dp, 0, 0);
         tabLayout.getTabAt(3).setCustomView(tabFour);
     }

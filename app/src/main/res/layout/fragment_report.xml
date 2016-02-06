@@ -15,28 +15,35 @@
             android:id="@+id/alertButton"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/alert_button" />
+            android:background="@drawable/alert_button"
+            android:layout_below="@+id/alertHeader" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Alert"
-            android:id="@+id/textView"
-            android:layout_above="@+id/alertButton"
+            android:text="@string/toplabel"
+            android:id="@+id/alertHeader"
             android:layout_centerHorizontal="true"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/abc_text_size_display_3_material"
-            android:layout_marginBottom="30dp" />
+            android:textSize="@dimen/abc_text_size_display_2_material"
+            android:layout_marginBottom="30dp"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:fontFamily="sans-serif-black" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Warning!"
-            android:id="@+id/textView2"
+            android:text="@string/bottomlabel"
+            android:id="@+id/alertFooter"
             android:layout_below="@+id/alertButton"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/abc_text_size_medium_material" />
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:gravity="center_horizontal"
+            android:fontFamily="sans-serif-condensed-light"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" />
     </RelativeLayout>
 </FrameLayout>

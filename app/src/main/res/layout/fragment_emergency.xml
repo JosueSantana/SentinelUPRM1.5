@@ -41,7 +41,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Guardia Universitaria"
+                        android:text="@string/campussecurityheader"
                         android:id="@+id/guardiauniversitariaheadertext"
                         android:layout_gravity="center"
                         android:textSize="@dimen/abc_text_size_medium_material"
@@ -112,7 +112,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Servicios Médicos"
+                        android:text="@string/medicalservicesheader"
                         android:id="@+id/serviciosmedicosheadtext"
                         android:layout_gravity="center"
                         android:textSize="@dimen/abc_text_size_medium_material"
@@ -158,7 +158,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Salud y Seguridad"
+                        android:text="@string/healthnsafetyheader"
                         android:id="@+id/textView9"
                         android:layout_gravity="center"
                         android:textSize="@dimen/abc_text_size_medium_material"
@@ -202,7 +202,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Emergencias Médicas"
+                        android:text="@string/medicalemergenciesheader"
                         android:id="@+id/textView11"
                         android:layout_gravity="center"
                         android:textSize="@dimen/abc_text_size_medium_material"
@@ -246,7 +246,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Policia Municipal"
+                        android:text="@string/municipalpoliceheader"
                         android:id="@+id/textView13"
                         android:layout_gravity="center"
                         android:textSize="@dimen/abc_text_size_medium_material"
@@ -290,7 +290,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Policia Estatal"
+                        android:text="@string/statepoliceheader"
                         android:id="@+id/textView15"
                         android:layout_gravity="center"
                         android:textSize="@dimen/abc_text_size_medium_material"
@@ -334,7 +334,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Hospital Bella Vista"
+                        android:text="@string/bellavistahospitalheader"
                         android:id="@+id/textView17"
                         android:layout_gravity="center"
                         android:textSize="@dimen/abc_text_size_medium_material"
@@ -378,7 +378,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Hospital San Antonio"
+                        android:text="@string/sanantoniohospitalheader"
                         android:id="@+id/textView19"
                         android:layout_gravity="center"
                         android:textSize="@dimen/abc_text_size_medium_material"
@@ -422,7 +422,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Hospital Perea"
+                        android:text="@string/pereahospitalheader"
                         android:id="@+id/textView21"
                         android:layout_gravity="center"
                         android:textSize="@dimen/abc_text_size_medium_material"

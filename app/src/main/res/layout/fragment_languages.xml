@@ -5,9 +5,66 @@
     tools:context="Fragments.LanguagesFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:shrinkColumns="*"
+        android:stretchColumns="*"
+        android:orientation="vertical" >
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/languageselectlabel"
+                android:id="@+id/textView"
+                android:layout_gravity="center"
+                android:textSize="@dimen/abc_text_size_medium_material"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="15dp"
+            android:background="@drawable/cell_shape" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="English"
+                android:id="@+id/textView2"
+                android:layout_gravity="center"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="@dimen/abc_text_size_large_material" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="15dp"
+            android:background="@drawable/cell_shape" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Español"
+                android:id="@+id/textView4"
+                android:layout_gravity="center"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="@dimen/abc_text_size_large_material" />
+        </TableRow>
+    </TableLayout>
 
 </FrameLayout>
