@@ -1,0 +1,139 @@
+<resources>
+    <string name="app_name">Sentinel</string>
+    <string name="font_fontFamily_medium">Arial</string>
+
+    <!--Tab bar -->
+    <string name="alert">Alert</string>
+    <string name="incident">Incidents</string>
+    <string name="call">Call</string>
+    <string name="settings">Settings</string>
+    <!-- -->
+    
+    <!--Sign up screen -->
+    <string name="signuptitle">Sign Up</string>
+    <string name="entercodelabel">Enter Code</string>
+    <string name="sendvalidationlabel">Validate</string>
+    <string name="sendverificationalerttitle">Verification Code Sent</string>
+    <string name="sendverificationalertmessage">A verification code has been sent to your email in order to legitimize the session.</string>
+    <string name="emailhint">Email</string>
+    <string name="passwordhint">Password</string>
+    <!-- -->
+    
+    <!--Alert Screen -->
+    <string name="toplabel">Tap to Alert</string>
+    <string name="bottomlabel">WARNING: You will have 5 seconds to stop the alert from being sent</string>
+    <string name="locationtitle">View Current Location</string>
+    <string name="locationmessage">Please select an option</string>
+    <string name="viewlocationtitle">View Location</string>
+    <string name="alertlocationdonelabel">Done</string>
+    <string name="setlocationtitle">Set Location Manually</string>
+    <string name="unsetlocationtitle">Unset Location Manually </string>
+    <string name="cancellocationtitle">Cancel</string>
+    <string name="sendbutton">SEND</string>
+    <string name="stopbutton">STOP</string>
+    <string name="alertnoinlocationtitle">Outside of University Bounds</string>
+    <string name="alertnoinlocationmessage">To send an alert, you need to be inside university boundaries</string>
+    <string name="alertlocationnotavailabletitle">Location Not Available</string>
+    <string name="alertlocationnotavailablemessage">You can turn on the GPS or authorize the app to get your location in Settings</string>
+    <string name="sendingalert">Sending Requested Alert...</string>
+    <!-- -->
+    
+    <!--Alert sent screen -->
+    <string name="toplabelalerted">Please wait for help to come!</string>
+    <string name="bottomlabelbeginningalerted">To send another alert, you will have to wait</string>
+    <string name="bottomlabelendingalerted">minutes</string>
+    <string name="alerttimerend">Ready to Alert Again</string>
+    <!-- -->
+    
+    <!--Incident view Screen -->
+    <string name="viewmap">View Map</string>
+    <string name="markertap">Tap Marker to Get Info</string>
+    <string name="showall">Show All</string>
+    <!-- -->
+    
+    <!--Location Map Screen -->
+    <string name="invalidadjustmentalert">Invalid Adjustment</string>
+    <string name="invalidadjustmentmessage">You have placed the cursor out of bounds</string>
+    <string name="unchangedalert">Your location remains unchanged</string>
+    <string name="distanceview">Distance</string>
+    <string name="orangelabel">Set the pin\'s position within 1000m of your current location</string>
+    <string name="setbarbutton">Set</string>
+    <!-- -->
+    
+    <!--Call Screen -->
+    <string name="oncallalerttitle">Your Device Must Be a Phone to Call</string>
+    <string name="oncallalertmessage">This feature is not available for tablets</string>
+    <string name="campussecurityheader">Campus Security</string>
+    <string name="medicalservicesheader">Medical Services</string>
+    <string name="healthnsafetyheader">Health and Safety</string>
+    <string name="medicalemergenciesheader">Medical Emergencies</string>
+    <string name="municipalpoliceheader">Municipal Police</string>
+    <string name="statepoliceheader">State Police</string>
+    <string name="bellavistahospitalheader">Bella Vista Hospital</string>
+    <string name="sanantoniohospitalheader">San Antonio Hospital</string>
+    <string name="pereahospitalheader">Perea Hospital</string>
+    <!-- -->
+    
+    <!--Settings Screen -->
+    <string name="emaillabel">E-mail</string>
+    <string name="smslabel">Text Messaging</string>
+    <string name="pushlabel">Push Notifications</string>
+    <string name="fflabel">Family and Friends</string>
+    <string name="languagelabel">English</string>
+    <string name="contactlabel">Contacts</string>
+    <string name="langlabel">Languages</string>
+    <string name="notificationheader">Notifications</string>
+    <string name="notificationfooter">Push notifications can also be set from Settings on your mobile devices</string>
+    <string name="contactcountlabel"> out of 5</string>
+    <string name="familylabel">Family members and Friends</string>
+    <string name="familyheader">You may add 5 mobile phone numbers belonging to family members or friends</string>
+    <string name="familyfooter">They will receive a text message if you were to have an emergency.</string>
+    <string name="languageheader">Options</string>
+    <string name="supportheader">Support</string>
+    <string name="privacylabel">Privacy Policy and Terms</string>
+    <string name="feedbacklabel">Feedback</string>
+    <string name="aboutuslabel">About Us</string>
+    <!-- -->
+    
+    <!--Languages Screen -->
+    <string name="languageselectlabel">Select Language</string>
+    <!-- -->
+    
+    <!--Report Screen -->
+    <string name="reportsendbutton">SEND</string>
+    <string name="reportlabel">Report Problem</string>
+    <string name="reportfeedback">General Feedback</string>
+    <string name="reportproblem">Something Isn\'t Working</string>
+    <string name="reportcancel">Cancel</string>
+    <string name="reportproblemfooter">If you are sure that you are dealing with a bug, please fill out the form. Be sure to fill in as many details about your problem as possible. Please use your best judgment.  </string>
+    <string name="reportfeedbackfooter">If you have any suggestions to improve the application, please let us know. We want to give you a great experience through Sentinel  </string>
+    <string name="reportalertonsendtitle">Sent</string>
+    <string name="reportalertonsendmessage">Thanks for helping us improve!</string>
+    <!-- -->
+    
+    <!--Contacts Screen -->
+    <string name="alertoverloadtitle">Unfortunately No More Contacts Can Be Authorized to be Added</string>
+    <string name="alertoverloadmessage">Please edit or remove any current contact</string>
+    <string name="alertphonevalidtitle">Incorrect Format</string>
+    <string name="alertphonevalidmessage">Please enter the right phone number format</string>
+    <string name="alertcontactaddtitle">Empty Fields</string>
+    <string name="alertcontactaddmessage">Please fill out all fields</string>
+    <string name="alertcontactaddedtitle">New Contact Added</string>
+    <string name="navigationtitle">Contact List</string>
+    <string name="navcontacttitle">Contact</string>
+    <!-- -->
+    
+    <!--Request Messages -->
+    <string name="errorconnectiontitle">Connection Error</string>
+    <string name="errorconnectionmessage">Failed Request</string>
+    <string name="errorretrievingtitle">Information Error</string>
+    <string name="errorretrievingmessage">A problem was encountered upon information request</string>
+    <string name="tableplaceholder">No Contacts Added</string>
+    <!-- -->
+
+    <!--Go to Sign Up -->
+    <string name="gotologintitle">You Have an Open Session in Another Device</string>
+    <string name="gotologinmessage">To reuse the app in this device, you need to register again</string>
+    <!-- -->
+
+</resources>

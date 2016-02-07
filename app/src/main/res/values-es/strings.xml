@@ -1,0 +1,139 @@
+<resources>
+    <string name="app_name">Sentinel</string>
+    <string name="font_fontFamily_medium">Arial</string>
+
+    <!--Barra navegadora -->
+    <string name="alert">Alerta</string>
+    <string name="incident">Incidentes</string>
+    <string name="call">Llamada</string>
+    <string name="settings">Ajustes</string>
+    <!-- -->
+    
+    <!--Pantalla para registrarse -->
+    <string name="signuptitle">Registrarse</string>
+    <string name="entercodelabel">Introduzca el Código</string>
+    <string name="sendvalidationlabel">Validar</string>
+    <string name="sendverificationalerttitle">Código de Verificación Enviado</string>
+    <string name="sendverificationalertmessage">Un código de verificación fue enviado a su correo electrónico para legitimar la sesión.</string>
+    <string name="emailhint">Correo Electrónico</string>
+    <string name="passwordhint">Contraseña</string>
+    <!-- -->
+    
+    <!--Pantalla de Alerta -->
+    <string name="toplabel">Presione para Alertar</string>
+    <string name="bottomlabel">AVISO: Usted tendrá 5 segundos para detener la alerta antes de ser enviada</string>
+    <string name="locationtitle">Ver Ubicación actual</string>
+    <string name="locationmessage">Por favor elija una opción</string>
+    <string name="viewlocationtitle">Ver Ubicación</string>
+    <string name="alertlocationdonelabel">Cerrar</string>
+    <string name="setlocationtitle">Activar Ubicación Manualmente</string>
+    <string name="unsetlocationtitle">Desactivar Ubicación Manualmente </string>
+    <string name="cancellocationtitle">Cancelar</string>
+    <string name="sendbutton">ENVIAR</string>
+    <string name="stopbutton">DETENER</string>
+    <string name="alertnoinlocationtitle">Fuera de los Predios de la Universidad</string>
+    <string name="alertnoinlocationmessage">Para enviar la alerta, debe estar dentro de los predios de la universidad</string>
+    <string name="alertlocationnotavailabletitle">Ubicación No Disponible</string>
+    <string name="alertlocationnotavailablemessage">Usted puede encender el GPS o autorizar que la aplicación obtenga su ubicación en Ajustes</string>
+    <string name="sendingalert">Enviando Alerta Solicitada... </string>
+    <!-- -->
+    
+    <!--Pantalla de alerta enviada -->
+    <string name="toplabelalerted">Por favor espera a que llegue la ayuda!</string>
+    <string name="bottomlabelbeginningalerted">Para enviar otra alerta, tendrá que esperar</string>
+    <string name="bottomlabelendingalerted">minutos</string>
+    <string name="alerttimerend">Listo para alertar!</string>
+    <!-- -->
+    
+    <!--Pantalla para ver incidentes -->
+    <string name="viewmap">Ver Mapa</string>
+    <string name="markertap">Toque el Marcador para Obtener Información</string>
+    <string name="showall">Mostrar Todos</string>
+    <!-- -->
+    
+    <!--Pantalla de mapas de ubicación -->
+    <string name="invalidadjustmentalert">Ajuste Inválido</string>
+    <string name="invalidadjustmentmessage">Usted ha colocado el cursor fuera de los predios</string>
+    <string name="unchangedalert">Su ubicación permanece igual</string>
+    <string name="distanceview">Distancia</string>
+    <string name="orangelabel">Ajuste la posición del cursor dentro de 1000 metros de su ubicación actual</string>
+    <string name="setbarbutton">Ajustar</string>
+    <!-- -->
+    
+    <!--Pantalla para Llamar -->
+    <string name="oncallalerttitle">Su dispositivo debe ser un teléfono para llamar</string>
+    <string name="oncallalertmessage">Esta función no está disponible para tabletas</string>
+    <string name="campussecurityheader">Guardia Universitaria</string>
+    <string name="medicalservicesheader">Servicios Médicos</string>
+    <string name="healthnsafetyheader">Salud y Seguridad</string>
+    <string name="medicalemergenciesheader">Emergencias Médicas</string>
+    <string name="municipalpoliceheader">Policía Municipal</string>
+    <string name="statepoliceheader">Policía Estatal</string>
+    <string name="bellavistahospitalheader">Hospital Bella Vista</string>
+    <string name="sanantoniohospitalheader">Hospital San Antonio</string>
+    <string name="pereahospitalheader">Hospital Perea</string>
+    <!-- -->
+    
+    <!--Pantalla de Ajustes -->
+    <string name="emaillabel">Correo Electrónico</string>
+    <string name="smslabel">Mensaje de Texto</string>
+    <string name="pushlabel">Notificaciones Push</string>
+    <string name="fflabel">Familia y Amigos</string>
+    <string name="languagelabel">Español</string>
+    <string name="contactlabel">Contactos</string>
+    <string name="langlabel">Idiomas</string>
+    <string name="notificationheader">Notificaciones</string>
+    <string name="notificationfooter">Las notificaciones push pueden ser ajustadas desde el menú de configuración de su dispositivo móvil.</string>
+    <string name="contactcountlabel"> de 5</string>
+    <string name="familylabel">Familiares y Amigos</string>
+    <string name="familyheader">Puede agregar 5 números de telefono de familiares o amigos</string>
+    <string name="familyfooter">Ellos recibirán un mensaje de texto en caso de que tenga una emergencia.</string>
+    <string name="languageheader">Opciones</string>
+    <string name="supportheader">Apoyo</string>
+    <string name="privacylabel">Política de Privacidad y Normas</string>
+    <string name="feedbacklabel">Opinar</string>
+    <string name="aboutuslabel">Acerca de Nosotros</string>
+    <!-- -->
+    
+    <!--Pantalla de Idiomas -->
+    <string name="languageselectlabel">Seleccione el idioma</string>
+    <!-- -->
+    
+    <!--Pantalla de Reportes -->
+    <string name="reportsendbutton">ENVIAR</string>
+    <string name="reportlabel">Reportar Problema</string>
+    <string name="reportfeedback">Opinión General</string>
+    <string name="reportproblem">Algo está no está funcionando</string>
+    <string name="reportcancel">Cancelar</string>
+    <string name="reportproblemfooter">Si está seguro de que usted está tratando con un error, por favor complete el formulario. Asegúrese de describir su problema con el mayor detalle posible. Utilice su juicio.</string>
+    <string name="reportfeedbackfooter">Si tiene alguna sugerencia para mejorar la aplicación, háganoslo saber. Queremos darle una experiencia grata a través de Sentinel. </string>
+    <string name="reportalertonsendtitle">Enviado</string>
+    <string name="reportalertonsendmessage">Gracias por ayudarnos a mejorar!</string>
+    <!-- -->
+    
+    <!--Pantalla de Contactos -->
+    <string name="alertoverloadtitle">Desafortunadamente, no se le puede autorizar más contactos</string>
+    <string name="alertoverloadmessage">Por favor editar o eliminar algún contacto presente</string>
+    <string name="alertphonevalidtitle">Formato incorrecto</string>
+    <string name="alertphonevalidmessage">Por favor, introduzca el formato correcto para el número de teléfono</string>
+    <string name="alertcontactaddtitle">Campos Vacíos</string>
+    <string name="alertcontactaddmessage">Por favor llene todos los campos</string>
+    <string name="alertcontactaddedtitle">Nuevo Contact Añadido</string>
+    <string name="navigationtitle">Lista de Contactos</string>
+    <string name="navcontacttitle">Contacto</string>
+    <!-- -->
+    
+    <!--Mensajes de Solicitud -->
+    <string name="errorconnectiontitle">Error en la conexión</string>
+    <string name="errorconnectionmessage">Solicitud suspendida</string>
+    <string name="errorretrievingtitle">Información de error</string>
+    <string name="errorretrievingmessage">Se encontró un problema al momento de obtener información</string>
+    <string name="tableplaceholder">Ningún Contacto Añadido</string>
+    <!-- -->
+
+    <!--Ir a registrarse -->
+    <string name="gotologintitle">Haz abierto una sesión en otro dispositivo</string>
+    <string name="gotologinmessage">Para reusar la aplicación en est dispositivo, necesita registrarse nuevamente</string>
+    <!-- -->
+
+</resources>
