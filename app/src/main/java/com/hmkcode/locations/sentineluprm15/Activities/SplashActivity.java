@@ -35,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
         if(credentials.contains("token")) {
 
             //verify verification code
-            if (credentials.contains("isVerified") && credentials.getBoolean("isVerified", false)) {
+            if (credentials.contains("isVerified") || credentials.getBoolean("isVerified", false)) {
 
                     //go directly to alert view
                     Intent mainIntent = new Intent(this, MainActivity.class);

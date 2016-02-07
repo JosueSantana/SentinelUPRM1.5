@@ -37,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:padding="15dp"
+            android:id="@+id/englishRow"
             android:background="@drawable/cell_shape" >
 
             <TextView
@@ -54,6 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:padding="15dp"
+            android:id="@+id/espanolRow"
             android:background="@drawable/cell_shape" >
 
             <TextView

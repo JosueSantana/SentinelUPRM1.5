@@ -1,14 +1,24 @@
 package Fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableRow;
+import android.widget.Toast;
 
+import com.hmkcode.locations.sentineluprm15.Activities.MainActivity;
 import com.hmkcode.locations.sentineluprm15.R;
+
+import java.util.Locale;
 
 public class LanguagesFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -19,6 +29,9 @@ public class LanguagesFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Locale myLocale;
+    private TableRow enRow;
+    private TableRow esRow;
 
     public LanguagesFragment() {
         // Required empty public constructor
@@ -55,6 +68,50 @@ public class LanguagesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_languages, container, false);
+    }
+
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+
+        enRow = (TableRow) getView().findViewById(R.id.englishRow);
+        esRow = (TableRow) getView().findViewById(R.id.espanolRow);
+
+        enRow.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Toast.makeText(getContext(),
+                        "You have selected English", Toast.LENGTH_SHORT)
+                        .show();
+                setLocale("en");
+                return true;
+            }
+
+        });
+
+        esRow.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Toast.makeText(getContext(),
+                        "Ha seleccionado español", Toast.LENGTH_SHORT)
+                        .show();
+                setLocale("es");
+                return true;
+            }
+        });
+    }
+
+
+    public void setLocale(String lang) {
+
+        myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        getActivity().getSupportFragmentManager().beginTransaction().detach(this).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().attach(this).commit();
     }
 }

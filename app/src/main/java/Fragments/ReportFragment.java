@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -49,7 +50,11 @@ public class ReportFragment extends Fragment {
 
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     mButton.setBackgroundResource(R.drawable.alert_button);
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.coordlayout, new CountdownFragment()).commit();
+
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    fm.beginTransaction().replace(R.id.coordlayout, new CountdownFragment()).addToBackStack("ReportFragment").commit();
+
+                    //fm.executePendingTransactions();
                 }
                 return false;
             }

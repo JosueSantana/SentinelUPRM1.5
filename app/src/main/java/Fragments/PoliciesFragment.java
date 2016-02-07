@@ -38,8 +38,10 @@ public class PoliciesFragment extends Fragment {
         WebView wv = (WebView) rootView.findViewById(R.id.termsPage);
 
         wv.setWebViewClient(new SwAWebClient());
-        wv.loadUrl("http://sentinel.ece.uprm.edu/terms");
+        wv.getSettings().setJavaScriptEnabled(true);
 
+        String pdf = "http://www.uprm.edu/politicas//politicas01.pdf";
+        wv.loadUrl("http://drive.google.com/viewerng/viewer?embedded=true&url=" + pdf);
         return rootView;
     }
 

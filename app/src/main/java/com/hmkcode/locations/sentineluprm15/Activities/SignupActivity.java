@@ -1,6 +1,7 @@
 package com.hmkcode.locations.sentineluprm15.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -13,60 +14,75 @@ import android.widget.TextView;
 
 import com.hmkcode.locations.sentineluprm15.R;
 
-import Fragments.CountdownFragment;
 import Fragments.EmergencyFragment;
-import Fragments.ViewPagerFragment;
+import OtherHandlers.ValuesCollection;
 
 /**
  * This activity handles the inputs for the login menu.
  */
 public class SignupActivity extends AppCompatActivity {
 
-    private ImageButton mButton;
+    private ImageButton phoneButton;
+    private ImageButton proceedButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        mButton = (ImageButton) findViewById(R.id.phoneOnSignup);
+        phoneButton = (ImageButton) findViewById(R.id.phoneOnSignup);
+        proceedButton = (ImageButton) findViewById(R.id.proceedsignup);
 
         // Create listener for Alert Button
-        mButton.setOnTouchListener(new View.OnTouchListener() {
+        phoneButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
                 getSupportFragmentManager().beginTransaction().add(R.id.signupRLayout, new EmergencyFragment()).addToBackStack(null).commit();
-                return false;
+                return true;
             }
         });
 
+        // Create listener for text field action
         EditText editText = (EditText) findViewById(R.id.password);
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 boolean handled = false;
                 if (i == EditorInfo.IME_ACTION_GO) {
-                    Intent veriIntent = new Intent(SignupActivity.this, VerificationActivity.class);
-                    startActivity(veriIntent);
-                    finish();
+                    attemptSignup();
                     handled = true;
                 }
                 return handled;
             }
         });
 
+        // Create listener for Alert Button
+        proceedButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                attemptSignup();
+                return true;
+            }
+        });
     }
+    private void attemptSignup() {
 
-    private void getEmailAndPassword(){
+        //TODO: call encryption mechanism
+        //TODO: call request handler
+        //TODO: manage failure conditions
 
-    }
+        SharedPreferences credentials = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
 
-    private boolean isUserValid(){
-        return false;
-    }
+        SharedPreferences.Editor editor = credentials.edit();
 
-    private void attemptLogin() {
+        String tk = "asdflkajls;fk";//provisionally, accepted to be the token value
 
+        editor.putString("token", tk).commit();
+
+        Intent veriIntent = new Intent(SignupActivity.this, VerificationActivity.class);
+        veriIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
+        startActivity(veriIntent);
     }
 }

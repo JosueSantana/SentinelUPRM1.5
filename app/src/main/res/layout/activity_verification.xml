@@ -53,7 +53,7 @@
     <ImageButton
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:id="@+id/proceedsignup"
+        android:id="@+id/proceedverification"
         android:layout_below="@+id/codeContainer"
         android:layout_centerInParent="true"
         android:background="@drawable/proceedbutton"
