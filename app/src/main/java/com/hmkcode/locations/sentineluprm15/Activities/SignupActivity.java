@@ -8,11 +8,15 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.hmkcode.locations.sentineluprm15.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import Fragments.EmergencyFragment;
 import OtherHandlers.ValuesCollection;
@@ -44,40 +48,53 @@ public class SignupActivity extends AppCompatActivity {
         });
 
         // Create listener for text field action
-        EditText editText = (EditText) findViewById(R.id.password);
+        final AutoCompleteTextView emailText = (AutoCompleteTextView) findViewById(R.id.email);
+        final EditText editText = (EditText) findViewById(R.id.password);
+        final List<TextView> l = new ArrayList<TextView>();
+        l.add(emailText);
+        l.add(editText);
+
+
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 boolean handled = false;
                 if (i == EditorInfo.IME_ACTION_GO) {
-                    attemptSignup();
+
+                    attemptSignup(l);
                     handled = true;
                 }
                 return handled;
             }
         });
 
-        // Create listener for Alert Button
+        // Create listener for Proceed Button
         proceedButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                attemptSignup();
+                attemptSignup(l);
                 return true;
             }
         });
     }
-    private void attemptSignup() {
+    private void attemptSignup(List textViews) {
 
         //TODO: call encryption mechanism
         //TODO: call request handler
         //TODO: manage failure conditions
 
+        //These are the strings corresponding to user input (potentially pass to a handling function)
+        String email = ((AutoCompleteTextView) textViews.get(0)).getText().toString();
+        String pass = ((EditText) textViews.get(1)).getText().toString();
+
+        //System.out.println("Your email: " + em.getText() + " and you pass: " + pass.getText() );
+
         SharedPreferences credentials = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
 
         SharedPreferences.Editor editor = credentials.edit();
 
-        String tk = "asdflkajls;fk";//provisionally, accepted to be the token value
+        String tk = "asdflkajls;fk"; //provisionally, accepted to be the token value
 
         editor.putString("token", tk).commit();
 

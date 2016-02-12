@@ -30,31 +30,30 @@ public class VerificationActivity extends AppCompatActivity {
 
         proceedButton = (ImageButton) findViewById(R.id.proceedverification);
 
-        EditText editText = (EditText) findViewById(R.id.codeEnter);
+        final EditText editText = (EditText) findViewById(R.id.codeEnter);
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 boolean handled = false;
                 if (i == EditorInfo.IME_ACTION_GO) {
-                    attemptVerification();
+                    attemptVerification(editText.getText().toString());
                     handled = true;
                 }
                 return handled;
             }
         });
 
-        // Create listener for Alert Button
+        // Create listener for Proceed Button
         proceedButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
-                attemptVerification();
+                attemptVerification(editText.getText().toString());
                 return true;
             }
         });
     }
 
-    private void attemptVerification() {
+    private void attemptVerification(String vCode) {
 
         //TODO: call encryption mechanism
         //TODO: call request handler
