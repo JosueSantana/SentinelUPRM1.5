@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
@@ -22,6 +23,12 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.hmkcode.locations.sentineluprm15.R;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
+import org.cryptonode.jncryptor.CryptorException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +37,8 @@ import java.util.regex.Pattern;
 
 import Fragments.EmergencyFragment;
 import Fragments.SentinelDialogFragment;
+import OtherHandlers.CryptographyHandler;
+import OtherHandlers.JSONHandler;
 import OtherHandlers.ValuesCollection;
 
 /**
@@ -71,7 +80,13 @@ public class SignupActivity extends FragmentActivity {
                 boolean handled = false;
                 if (i == EditorInfo.IME_ACTION_GO) {
 
-                    attemptSignup(l);
+                    try {
+                        attemptSignup(l);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (CryptorException e) {
+                        e.printStackTrace();
+                    }
                     handled = true;
                 }
                 return handled;
@@ -83,7 +98,13 @@ public class SignupActivity extends FragmentActivity {
         proceedButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptSignup(l);
+                try {
+                    attemptSignup(l);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (CryptorException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -103,7 +124,7 @@ public class SignupActivity extends FragmentActivity {
         return m.find();
     }
 
-    private void attemptSignup(List textViews) {
+    private void attemptSignup(List textViews) throws JSONException, CryptorException {
 
 
         //These are the strings corresponding to user input (potentially pass to a handling function)
@@ -152,15 +173,44 @@ public class SignupActivity extends FragmentActivity {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {*/
                         //ideally this toast will be replaced soon
-                        Toast.makeText(SignupActivity.this,
-                        R.string.sendverificationalerttitle, Toast.LENGTH_SHORT)
-                        .show();
-                        Intent veriIntent = new Intent(SignupActivity.this, VerificationActivity.class);
-                        veriIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        this.startActivity(veriIntent);
+            Toast.makeText(SignupActivity.this, R.string.sendverificationalerttitle, Toast.LENGTH_SHORT).show();
+
+            Intent veriIntent = new Intent(SignupActivity.this, VerificationActivity.class);
+            veriIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            final CryptographyHandler crypto = new CryptographyHandler();
+
+            JSONObject registerJSON = new JSONObject();
+            registerJSON.put("email",email);
+            registerJSON.put("phone", "7875293812");
+            registerJSON.put("os", ValuesCollection.ANDROID_OS_STRING);
+            registerJSON.put("deviceID", Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID).toString());
+
+            Ion.with(getBaseContext())
+                    .load(ValuesCollection.REGISTER_URL)
+                    .setBodyParameter("SentinelMessage", crypto.encryptJSON(registerJSON))
+                    .asString()
+                    .setCallback(new FutureCallback<String>() {
+                        @Override
+                        public void onCompleted(Exception e, String result) {
+                            System.out.println(result);
+                            try {
+                                JSONObject receivedJSON = JSONHandler.convertStringToJSON(result);
+                                String successValueEncrypted = receivedJSON.get("success").toString();
+                                String successValueDecrypted = crypto.decryptString(successValueEncrypted);
+                                System.out.println(successValueDecrypted);
+                            } catch (JSONException e1) {
+                                e1.printStackTrace();
+                            } catch (CryptorException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    });
+
+            this.startActivity(veriIntent);
+
                   /*  }
                 });*/
-
         }
     }
 }

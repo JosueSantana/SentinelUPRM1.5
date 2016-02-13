@@ -1,12 +1,18 @@
 package OtherHandlers;
 
+import android.provider.Settings;
+
 /**
  * Created by a136803 on 1/8/16.
  */
 public class ValuesCollection {
 
-    public static final String INITIAL_URL = "http://sentinel.uprm.edu:3000/";
+    public static final String INITIAL_URL = "https://136.145.219.61:7213/";
+    //public static final String INITIAL_URL = "https://sentinel.uprm.edu:7213/";
 
+    public static final String REGISTER_URL = INITIAL_URL + "de41089f1ae36d9395/user/ec8d28cf1ae36d9395/session";
+
+    /*
     public static final String SEND_INCIDENT_URL = INITIAL_URL + "incident/31923faa-340c-4707-8c93-df528e65aa41/incident-request/7c0d78d4-4b78-4ee2-9e8e-4b4d6988a855";
 
     public static final String FETCH_INCIDENT_URL = INITIAL_URL + "incident/588527d9-3c44-424b-9407-9e84729cde26/incidentlog/08b18427-3722-4ac3-ac5c-2e7c99bbea05";
@@ -15,9 +21,13 @@ public class ValuesCollection {
 
     public static final String TOKEN_VALUE = "SENTINEL_UPRM_TOKEN_VALUE";
     public static final String EMAIL_VALUE = "SENTINEL_UPRM_EMAIL_VALUE";
+    */
 
     public static final String SETTINGS_SP = "SettingsFile";
     public static final String CREDENTIALS_SP = "CredentialsFile";
 
+    public static final String SENTINEL_MESSAGE_KEY = "SentinelMessage";
+
+    public static final String ANDROID_OS_STRING = "android";
 }
 
