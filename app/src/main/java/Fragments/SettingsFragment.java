@@ -1,16 +1,15 @@
 package Fragments;
 
-import android.content.Context;
+import android.view.View.OnClickListener;
 import android.content.SharedPreferences;
-import android.net.Uri;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
+
 import android.widget.Switch;
 import android.widget.TableRow;
 
@@ -113,12 +112,11 @@ public class SettingsFragment extends Fragment {
         });
     }
 
-    private void rowListener(TableRow row, final Fragment frag){
-        row.setOnTouchListener(new View.OnTouchListener() {
+    private void rowListener(TableRow row, final Fragment frag) {
+        row.setOnClickListener(new OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.coordlayout, frag).addToBackStack(null).commit();
-                return false;
             }
         });
     }

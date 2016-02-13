@@ -1,12 +1,10 @@
 package Fragments;
 
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.net.Uri;
+import android.view.View.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
+
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,27 +40,17 @@ public class ReportFragment extends Fragment {
         mButton = (ImageButton) getView().findViewById(R.id.alertButton);
 
         // Create listener for Alert Button
-        mButton.setOnTouchListener(new View.OnTouchListener() {
+        mButton.setOnClickListener(new OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    mButton.setBackgroundResource(R.drawable.alert_button_pressed);
-
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    mButton.setBackgroundResource(R.drawable.alert_button);
-
+            public void onClick(View view) {
                     FragmentManager fm = getActivity().getSupportFragmentManager();
                     fm.beginTransaction().replace(R.id.coordlayout, new CountdownFragment()).addToBackStack("ReportFragment").commit();
-
-                    //fm.executePendingTransactions();
-                }
-                return false;
             }
         });
 
     }
 
-    private void onClick(){
+    private void onClick() {
 
     }
 

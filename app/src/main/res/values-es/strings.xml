@@ -13,17 +13,17 @@
     
     <!--Pantalla para registrarse -->
     <string name="signuptitle">Registrarse</string>
+    <string name="okmessage">OK</string>
     <string name="emptyformatalerttitle">Campos Vacíos</string>
     <string name="emptyformatalertmessage">Por favor llene todos los campos.</string>
-    <string name="incorrectphoneformattitle">Formato incorrecto</string>
-    <string name="incorrectphoneformatmessage">Por favor, introduzca el formato de número de telefono correcto.</string>
     <string name="incorrectemailformattitle">El Correo Electrónico no es Válido</string>
     <string name="incorrectemailformatmessage">El correo electrónico que ha entrado no es válido. Asegúrese que su correo electrónico pertenezca al dominio UPR o UPRM.</string>
     <string name="entercodelabel">Introduzca el Código</string>
     <string name="sendvalidationlabel">Validar</string>
     <string name="sendverificationalerttitle">Código de Verificación Enviado</string>
     <string name="sendverificationalertmessage">Un código de verificación fue enviado a su correo electrónico para legitimar la sesión.</string>
-    <string name="wrongcode">Código Incorrecto</string>
+    <string name="wrongcodetitle">Código Incorrecto</string>
+    <string name="wrongcodemessage">El código que usted ha sometido no concuerda. Verifique que haya entrado el código correctamente.</string>
     <string name="emailhint">Correo Electrónico</string>
     <string name="passwordhint">Contraseña</string>
     <!-- -->

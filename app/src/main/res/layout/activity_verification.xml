@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.VerificationActivity"
-    android:background="@color/colorSecondaryDark">
+    android:background="@color/colorSecondaryDark"
+    android:id="@+id/verificationRLayout">
 
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -17,7 +18,7 @@
         <ImageButton
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:id="@+id/phoneOnSignup"
+            android:id="@+id/phoneOnSignup2"
             android:layout_centerInParent="true"
             android:background="@drawable/ic_settings_phone_white_24dp"
             android:gravity="center_horizontal"
@@ -67,5 +68,13 @@
         android:background="@drawable/logosentinel"
         android:layout_centerHorizontal="true"
         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/textView3"
+        android:layout_below="@+id/codeContainer"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

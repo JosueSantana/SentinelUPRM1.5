@@ -13,17 +13,17 @@
     
     <!--Sign up screen -->
     <string name="signuptitle">Sign Up</string>
+    <string name="okmessage">OK</string>
     <string name="emptyformatalerttitle">Empty Fields</string>
     <string name="emptyformatalertmessage">Please fill out all fields.</string>
-    <string name="incorrectphoneformattitle">Incorrect Format</string>
-    <string name="incorrectphoneformatmessage">Please enter the right phone number format.</string>
     <string name="incorrectemailformattitle">E-mail Not Valid</string>
     <string name="incorrectemailformatmessage">The e-mail entered is not valid. Make sure your email belongs to the UPR or UPRM domain.</string>
     <string name="entercodelabel">Enter Code</string>
     <string name="sendvalidationlabel">Validate</string>
     <string name="sendverificationalerttitle">Verification Code Sent</string>
     <string name="sendverificationalertmessage">A verification code has been sent to your email in order to legitimize the session.</string>
-    <string name="wrongcode">Wrong Code</string>
+    <string name="wrongcodetitle">Wrong Code</string>
+    <string name="wrongcodemessage">The code you have submitted does not match. Verify you have typed the code correctly.</string>
     <string name="emailhint">Email</string>
     <string name="passwordhint">Password</string>
     <!-- -->
