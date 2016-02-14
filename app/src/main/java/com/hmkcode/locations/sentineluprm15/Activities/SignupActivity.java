@@ -186,7 +186,7 @@ public class SignupActivity extends FragmentActivity {
 
             JSONObject registerJSON = new JSONObject();
             registerJSON.put("email",email);
-            registerJSON.put("phone", "7875293812");
+            registerJSON.put("phone",phone);
             registerJSON.put("os", ValuesCollection.ANDROID_OS_STRING);
             registerJSON.put("deviceID", Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID).toString());
 
