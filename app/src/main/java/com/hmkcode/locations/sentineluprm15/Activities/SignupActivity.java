@@ -69,7 +69,7 @@ public class SignupActivity extends FragmentActivity {
 
         // Create listener for text field action
         final AutoCompleteTextView emailText = (AutoCompleteTextView) findViewById(R.id.email);
-        final EditText editText = (EditText) findViewById(R.id.password);
+        final EditText editText = (EditText) findViewById(R.id.phone);
         final List<TextView> l = new ArrayList<TextView>();
         l.add(emailText);
         l.add(editText);
@@ -110,11 +110,7 @@ public class SignupActivity extends FragmentActivity {
 
     }
 
-    private boolean checkEmailFormat(String email){
-
-        // String to be scanned to find the pattern.
-        String pattern = "(.*)(@uprm?\\.edu)($)";
-
+    private boolean checkFormat(String email, String pattern){
         // Create a Pattern object
         Pattern r = Pattern.compile(pattern);
 
@@ -129,12 +125,11 @@ public class SignupActivity extends FragmentActivity {
 
         //These are the strings corresponding to user input (potentially pass to a handling function)
         String email = ((AutoCompleteTextView) textViews.get(0)).getText().toString();
-        String pass = ((EditText) textViews.get(1)).getText().toString();
+        String phone = ((EditText) textViews.get(1)).getText().toString();
 
-        System.out.println("email: " + email + " pass: " + pass);
 
         //manage failure conditions
-        if(email.isEmpty() || pass.isEmpty()){
+        if(email.isEmpty() || phone.isEmpty()){
             Bundle bundle = new Bundle();
             bundle.putInt("dialogtitle", R.string.emptyformatalerttitle);
             bundle.putInt("dialogmessage", R.string.emptyformatalertmessage);
@@ -143,10 +138,19 @@ public class SignupActivity extends FragmentActivity {
             // Show Alert DialogFragment
             dialogFragment.show(fm, "Alert Dialog Fragment");
         }
-        else if(!checkEmailFormat(email)){
+        else if(!checkFormat(email, "(.*)(@uprm?\\.edu)($)")){
             Bundle bundle = new Bundle();
             bundle.putInt("dialogtitle", R.string.incorrectemailformattitle);
             bundle.putInt("dialogmessage", R.string.incorrectemailformatmessage);
+            SentinelDialogFragment dialogFragment = new SentinelDialogFragment();
+            dialogFragment.setArguments(bundle);
+            // Show Alert DialogFragment
+            dialogFragment.show(fm, "Alert Dialog Fragment");
+        }
+        else if(!checkFormat(phone, "[0-9]{10}$")){
+            Bundle bundle = new Bundle();
+            bundle.putInt("dialogtitle", R.string.incorrectphoneformattitle);
+            bundle.putInt("dialogmessage", R.string.incorrectphoneformatmessage);
             SentinelDialogFragment dialogFragment = new SentinelDialogFragment();
             dialogFragment.setArguments(bundle);
             // Show Alert DialogFragment

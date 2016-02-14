@@ -56,19 +56,19 @@
         android:textColorHint="@color/colorPrimaryT"
         android:textColor="@color/textColorPrimary"
         android:layout_below="@+id/emailContainer"
-        android:id="@+id/passContainer"
+        android:id="@+id/phoneContainer"
         android:layout_centerInParent="true"
         android:layout_marginTop="20dp">
 
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/passwordhint"
+            android:hint="@string/phonehint"
             android:imeActionId="@+id/login"
             android:imeActionLabel="@string/action_sign_in_short"
             android:imeOptions="actionGo"
-            android:inputType="textPassword"
+            android:inputType="phone"
             android:backgroundTint="@color/textColorPrimary"
             android:textColor="@color/textColorPrimary"
             android:maxLines="1"
@@ -81,7 +81,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:id="@+id/proceedsignup"
-        android:layout_below="@+id/passContainer"
+        android:layout_below="@+id/phoneContainer"
         android:layout_centerInParent="true"
         android:background="@drawable/proceedbutton"
         android:layout_marginTop="50dp" />

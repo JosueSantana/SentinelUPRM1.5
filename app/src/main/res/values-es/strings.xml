@@ -50,7 +50,6 @@
     <string name="alertlocationnotavailabletitle">Ubicación No Disponible</string>
     <string name="alertlocationnotavailablemessage">Usted puede encender el GPS o autorizar que la aplicación obtenga su ubicación en el menú de Ajustes.</string>
     <string name="sendingalert">Enviando Alerta Solicitada... </string>
-    <string name="distanceLabel">Distancia:</string>
     <!-- -->
     
     <!--Pantalla de alerta enviada -->
@@ -153,6 +152,10 @@
     <string name="gotologinmessage">Para reusar la aplicación en est dispositivo, necesita registrarse nuevamente</string>
     <string name="unsubscribetitle">Cancelación de Suscripción Completada</string>
     <string name="unsubscribemessage">La solicitud para la cancelación de su suscripción ha sido completada. Aún podrá recibir mensajes de texto en masa durante una emergencia.</string>
+    <string name="distancelabel">Distancia:</string>
+    <string name="incorrectphoneformattitle">Formato Incorrecto</string>
+    <string name="incorrectphoneformatmessage">Por favor, introduzca el formato de número de teléfono correcto.</string>
+    <string name="phonehint">Número Telefónico</string>
     <!-- -->
 
 </resources>
