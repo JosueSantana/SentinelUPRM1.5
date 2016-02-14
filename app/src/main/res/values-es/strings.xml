@@ -156,6 +156,7 @@
     <string name="incorrectphoneformattitle">Formato Incorrecto</string>
     <string name="incorrectphoneformatmessage">Por favor, introduzca el formato de número de teléfono correcto.</string>
     <string name="phonehint">Número Telefónico</string>
+    <string name="codenotreceivedmessage">No he recibido mi código</string>
     <!-- -->
 
 </resources>

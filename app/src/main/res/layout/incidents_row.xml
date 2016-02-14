@@ -13,8 +13,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/time"
+        android:text="Time"
+        android:id="@+id/incidentRowTime"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/IncidentIcon"
         android:textColor="@color/textColorPrimary" />
@@ -22,8 +22,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/date"
+        android:text="Date"
+        android:id="@+id/incidentRowDate"
         android:layout_alignBottom="@+id/IncidentIcon"
         android:layout_toEndOf="@+id/IncidentIcon"
         android:textColor="@color/textColorPrimary" />
@@ -31,8 +31,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/region"
+        android:text="Region"
+        android:id="@+id/incidentRowRegion"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="false"
         android:layout_alignParentRight="true"

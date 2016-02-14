@@ -63,7 +63,7 @@ public class SignupActivity extends FragmentActivity {
         phoneButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                getSupportFragmentManager().beginTransaction().add(R.id.signupRLayout, new EmergencyFragment()).addToBackStack("EmergencyFromSignUp").commit();
+                fm.beginTransaction().add(R.id.signupRLayout, new EmergencyFragment()).addToBackStack("EmergencyFromSignUp").commit();
             }
         });
 
@@ -120,6 +120,18 @@ public class SignupActivity extends FragmentActivity {
         return m.find();
     }
 
+    private void showSignupError(int titleID, int messageID ){
+        //prepare strings to pass to Fragment through Bundle
+        Bundle bundle = new Bundle();
+        bundle.putInt("dialogtitle", titleID);
+        bundle.putInt("dialogmessage", messageID);
+
+        //Call up AlertDialog
+        SentinelDialogFragment dialogFragment = new SentinelDialogFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "Alert Dialog Fragment");
+    }
+
     private void attemptSignup(List textViews) throws JSONException, CryptorException {
 
 
@@ -127,34 +139,15 @@ public class SignupActivity extends FragmentActivity {
         String email = ((AutoCompleteTextView) textViews.get(0)).getText().toString();
         String phone = ((EditText) textViews.get(1)).getText().toString();
 
-
         //manage failure conditions
         if(email.isEmpty() || phone.isEmpty()){
-            Bundle bundle = new Bundle();
-            bundle.putInt("dialogtitle", R.string.emptyformatalerttitle);
-            bundle.putInt("dialogmessage", R.string.emptyformatalertmessage);
-            SentinelDialogFragment dialogFragment = new SentinelDialogFragment();
-            dialogFragment.setArguments(bundle);
-            // Show Alert DialogFragment
-            dialogFragment.show(fm, "Alert Dialog Fragment");
+            showSignupError(R.string.emptyformatalerttitle, R.string.emptyformatalertmessage);
         }
         else if(!checkFormat(email, "(.*)(@uprm?\\.edu)($)")){
-            Bundle bundle = new Bundle();
-            bundle.putInt("dialogtitle", R.string.incorrectemailformattitle);
-            bundle.putInt("dialogmessage", R.string.incorrectemailformatmessage);
-            SentinelDialogFragment dialogFragment = new SentinelDialogFragment();
-            dialogFragment.setArguments(bundle);
-            // Show Alert DialogFragment
-            dialogFragment.show(fm, "Alert Dialog Fragment");
+            showSignupError(R.string.incorrectemailformattitle, R.string.incorrectemailformatmessage);
         }
         else if(!checkFormat(phone, "[0-9]{10}$")){
-            Bundle bundle = new Bundle();
-            bundle.putInt("dialogtitle", R.string.incorrectphoneformattitle);
-            bundle.putInt("dialogmessage", R.string.incorrectphoneformatmessage);
-            SentinelDialogFragment dialogFragment = new SentinelDialogFragment();
-            dialogFragment.setArguments(bundle);
-            // Show Alert DialogFragment
-            dialogFragment.show(fm, "Alert Dialog Fragment");
+            showSignupError(R.string.incorrectphoneformattitle, R.string.incorrectphoneformatmessage);
         }
         else{
             //TODO: call encryption mechanism
@@ -176,7 +169,8 @@ public class SignupActivity extends FragmentActivity {
             /*dialogFragment.onDismiss(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {*/
-                        //ideally this toast will be replaced soon
+
+            //ideally this toast will be replaced soon
             Toast.makeText(SignupActivity.this, R.string.sendverificationalerttitle, Toast.LENGTH_SHORT).show();
 
             Intent veriIntent = new Intent(SignupActivity.this, VerificationActivity.class);

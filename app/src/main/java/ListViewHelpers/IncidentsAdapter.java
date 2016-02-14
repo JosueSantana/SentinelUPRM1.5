@@ -5,76 +5,91 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.hmkcode.locations.sentineluprm15.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
 /**
  * Created by a136803 on 12/18/15.
  */
-public class IncidentsAdapter extends ArrayAdapter {
+public class IncidentsAdapter extends BaseAdapter {
 
-    private Context context;
+    private JSONArray dataArray;
+    private Activity activity;
 
-public IncidentsAdapter(Context context, List items) {
-        super(context, android.R.layout.simple_list_item_1, items);
-        this.context = context;
-        this.notifyDataSetChanged();
+    private static LayoutInflater inflater = null;
+
+    public IncidentsAdapter(JSONArray jsonArray, Activity activity) {
+        this.dataArray = jsonArray;
+        this.activity = activity;
+
+        inflater = (LayoutInflater) this.activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        View viewToUse;
-        IncidentsListItem item = (IncidentsListItem)getItem(position);
+    @Override
+    public int getCount() {
+        return this.dataArray.length();
+    }
 
+    @Override
+    public Object getItem(int i) {
+        return i;
+    }
 
-        // This block exists to inflate the settings list item conditionally based on whether
-        // we want to support a grid or list view.
-        LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+    @Override
+    public long getItemId(int i) {
+        return i;
+    }
 
-        if (convertView == null) {
+    public View getView(int i, View view, ViewGroup parent) {
 
-            viewToUse = mInflater.inflate(R.layout.incidents_row, null);
-            holder = new ViewHolder();
-            holder.time = (TextView)viewToUse.findViewById(R.id.time);
-            holder.date = (TextView)viewToUse.findViewById(R.id.date);
-            holder.region = (TextView)viewToUse.findViewById(R.id.region);
-            viewToUse.setTag(holder);
+        IncidentsRow row;
+        // set up convert view if it is null
+        if(view == null)
+        {
+            view = inflater.inflate(R.layout.incidents_row, null);
+            row = new IncidentsRow();
 
-        } else {
-            viewToUse = convertView;
-            holder = (ViewHolder) viewToUse.getTag();
+            row.locationName = (TextView) view.findViewById(R.id.incidentRowRegion);
+            row.incidentTime = (TextView) view.findViewById(R.id.incidentRowTime);
+            row.incidentDate = (TextView) view.findViewById(R.id.incidentRowDate);
+
+            view.setTag(row);
+        }
+        else
+        {
+            row = (IncidentsRow) view.getTag();
         }
 
-        holder.time.setText(item.getCreatedOn().substring(0, 10));
-        holder.date.setText(item.getCreatedOn().substring(11, item.getCreatedOn().length()-1));
-        holder.region.setText(item.getIncidentRegion());
-        this.notifyDataSetChanged();
-        return viewToUse;
+        //edit row data
+        try{
+            JSONObject jsonObject = this.dataArray.getJSONObject(i);
+
+            row.locationName.setText(jsonObject.getString("name"));
+            row.incidentTime.setText(jsonObject.getString("time"));
+            row.incidentDate.setText(jsonObject.getString("date"));
+
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        return view;
     }
 
-    /**
-     * Holder for the list items.
-     */
-    private class ViewHolder{
-        TextView time;
-        TextView date;
-        TextView region;
-    }
 
-    private void getItem(){
+    private class IncidentsRow
+    {
+        private TextView locationName;
+        private TextView incidentTime;
+        private TextView incidentDate;
 
     }
-
-    private void getItemId(){
-
-    }
-
-    /*private void getCount(){
-
-    }*/
-
 }

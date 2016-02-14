@@ -26,6 +26,7 @@
     <string name="sendverificationalertmessage">A verification code has been sent to your email in order to legitimize the session.</string>
     <string name="wrongcodetitle">Wrong Code</string>
     <string name="wrongcodemessage">The code you have submitted does not match. Verify you have typed the code correctly.</string>
+    <string name="codenotreceivedmessage">I did not receive my code</string>
     <string name="emailhint">Email</string>
     <string name="phonehint">Phone Number</string>
     <!-- -->

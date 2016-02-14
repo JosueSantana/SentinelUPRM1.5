@@ -1,8 +1,15 @@
 package Fragments;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.hmkcode.locations.sentineluprm15.R;
 
 import org.cryptonode.jncryptor.AES256JNCryptor;
 import org.cryptonode.jncryptor.CryptorException;
@@ -21,6 +28,7 @@ public class CountdownFragment extends Fragment {
         // Required empty public constructor
     }
 
+    private TextView countDownDisplay;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,4 +119,31 @@ public class CountdownFragment extends Fragment {
         */
     }
 
-}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_countdown, container, false);
+    }
+
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        countDownDisplay = (TextView) getView().findViewById(R.id.countDownDisplay);
+
+        new CountDownTimer(7000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+                    countDownDisplay.setText(String.valueOf((millisUntilFinished / 1000) - 1));
+                }
+
+                public void onFinish() {
+                    //removing current fragment and replacing it with the last fragment on backstack
+                    getActivity().getSupportFragmentManager().popBackStackImmediate();
+
+                }
+            }.start();
+
+        }
+
+    }

@@ -24,11 +24,13 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().add(R.id.coordlayout, new ViewPagerFragment()).commit();
 
-        //Just to clear sharedpreferences when necessary
 
+        //Just to clear sharedpreferences when necessary
         SharedPreferences sp = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
         SharedPreferences.Editor editor = sp.edit();
         editor.clear().commit();
 
     }
+
+
 }

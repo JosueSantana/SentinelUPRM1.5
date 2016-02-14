@@ -7,9 +7,11 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,11 @@ public class ViewPagerFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
+    ReportFragment report;
+    IncidentsFragment incident;
+    EmergencyFragment emergency;
+    SettingsFragment settings;
+
     public ViewPagerFragment() {
         // Required empty public constructor
     }
@@ -33,15 +40,19 @@ public class ViewPagerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
-        adapter.addFragment(new ReportFragment(), "Alert");
-        adapter.addFragment(new IncidentsFragment(), "Incidents");
-        adapter.addFragment(new EmergencyFragment(), "Emergency");
-        adapter.addFragment(new SettingsFragment(), "Settings");
+        ViewPagerAdapter adapter = new ViewPagerAdapter(this.getChildFragmentManager());
+
+        adapter.addFragment(report, "Alert");
+
+        adapter.addFragment(incident, "Incidents");
+
+        adapter.addFragment(emergency, "Emergency");
+
+        adapter.addFragment(settings, "Settings");
+
         viewPager.setAdapter(adapter);
     }
 
@@ -51,8 +62,15 @@ public class ViewPagerFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_view_pager, container, false);
 
+        incident = new IncidentsFragment();
+        emergency = new EmergencyFragment();
+        settings = new SettingsFragment();
+        report = new ReportFragment();
+
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        viewPager.setOffscreenPageLimit(4);
         setupViewPager(viewPager);
+
 
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -85,7 +103,12 @@ public class ViewPagerFragment extends Fragment {
         tabLayout.getTabAt(3).setCustomView(tabFour);
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    class ViewPagerAdapter extends FragmentStatePagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
