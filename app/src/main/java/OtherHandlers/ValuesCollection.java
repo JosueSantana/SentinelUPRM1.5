@@ -8,9 +8,9 @@ import android.provider.Settings;
 public class ValuesCollection {
 
     public static final String INITIAL_URL = "https://136.145.219.61:7213/";
-    //public static final String INITIAL_URL = "https://sentinel.uprm.edu:7213/";
 
     public static final String REGISTER_URL = INITIAL_URL + "de41089f1ae36d9395/user/ec8d28cf1ae36d9395/session";
+    public static final String PASSCODE_CONFIRMATION_URL = INITIAL_URL + "d687a815a1cb71f947/user/ea641d11e4e7bffd/validate";
 
     /*
     public static final String SEND_INCIDENT_URL = INITIAL_URL + "incident/31923faa-340c-4707-8c93-df528e65aa41/incident-request/7c0d78d4-4b78-4ee2-9e8e-4b4d6988a855";
@@ -31,3 +31,32 @@ public class ValuesCollection {
     public static final String ANDROID_OS_STRING = "android";
 }
 
+/*
+public struct URLRoutes {
+
+
+
+    static let incidentLog = ["route": "/588527de84729cde26/incident/08b1842e7c99bbea05/logs", "type": "POST"]
+
+    static let alert = ["route": "/31923fa28e65aa41/alert/7c0d78d4b4d6988a855/request", "type": "POST"]
+
+    static let setting = ["route": "/8dc8580836be036a/user/c8d7b2a2309baa3746/preferences", "type": "POST"]
+
+    static let feeback = ["route": "/1ea13556cc62590a90/report/8679df6f1ae36d9395/feedback", "type": "PUT"]
+
+    static let problem = ["route": "/8679df6f1ae36d9395/report/c525b9ff1ae36d9395/problem", "type": "PUT"]
+
+    static let userSession = ["route": "/de41089f1ae36d9395/user/ec8d28cf1ae36d9395/session", "type": "POST"]
+
+    static let userValidation = ["route": "/d687a815a1cb71f947/user/ea641d11e4e7bffd/validate", "type": "POST"]
+
+    static let contacts = ["route": "/1123c1a441f7dfef5eb/contact/408d27f6ce0a895c8f/contacts", "type": "POST"]
+
+    static let contactAdd = ["route": "/f3df283311e4e7bffd/contact/194d10f311e4e7bffd/add", "type": "PUT"]
+
+    static let contactEdit = ["route": "/47abedc1a15c9f73/contact/98aee6f6fbbbf06133/edit", "type": "POST"]
+
+    static let contactDelete = ["route": "/580b3b11e4e7bffd/contact/133757f42b99c7903/delete", "type": "DELETE"]
+
+}
+ */
