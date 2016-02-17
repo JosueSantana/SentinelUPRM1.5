@@ -116,7 +116,7 @@ public class SettingsFragment extends Fragment {
         row.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.coordlayout, frag).addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, frag).addToBackStack(null).commit();
             }
         });
     }

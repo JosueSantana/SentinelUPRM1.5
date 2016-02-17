@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="Fragments.LanguagesFragment">
+    tools:context="Fragments.LanguagesFragment"
+    android:background="@color/windowBackground">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content"
         android:shrinkColumns="*"
         android:stretchColumns="*"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TableRow
             android:layout_width="match_parent"

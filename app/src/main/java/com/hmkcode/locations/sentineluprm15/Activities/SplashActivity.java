@@ -36,7 +36,6 @@ public class SplashActivity extends AppCompatActivity {
 
             //verify verification code
             if (credentials.contains("isVerified") || credentials.getBoolean("isVerified", false)) {
-
                     //go directly to alert view
                     Intent mainIntent = new Intent(this, MainActivity.class);
                     startActivity(mainIntent);
@@ -50,18 +49,26 @@ public class SplashActivity extends AppCompatActivity {
             }
         }
         else{
-            //go to sign up screen
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    // Do something after 5s = 5000ms
-                    Intent signupIntent = new Intent(SplashActivity.this, SignupActivity.class);
-                    startActivity(signupIntent);
-                    finish();
-                }
-            }, 3000);
 
+            if(!credentials.contains("atSignup") || !(credentials.getBoolean("atSignup", false))){
+                //go to sign up screen
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Do something after 5s = 5000ms
+                        Intent signupIntent = new Intent(SplashActivity.this, SignupActivity.class);
+                        startActivity(signupIntent);
+                        finish();
+                    }
+                }, 3000);
+            }
+            else{
+                editor.putBoolean("atSignup", true).commit();
+                Intent signupIntent = new Intent(SplashActivity.this, SignupActivity.class);
+                startActivity(signupIntent);
+                finish();
+            }
 
         }
 
