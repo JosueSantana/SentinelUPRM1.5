@@ -181,9 +181,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/notificationfooter"
                     android:id="@+id/notificationsexplanation"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:fontFamily="sans-serif-condensed" />
+                    android:fontFamily="sans-serif-condensed"
+                    android:layout_marginLeft="@dimen/abc_button_inset_horizontal_material" />
 
                 <TableLayout
                     android:layout_width="match_parent"
@@ -207,11 +206,10 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/familylabel"
+                            android:text="@string/familyheader"
                             android:id="@+id/contactsheadertitle"
                             android:layout_gravity="center_vertical"
                             android:textSize="@dimen/abc_text_size_medium_material"
-                            android:textStyle="bold"
                             android:layout_span="7" />
                     </TableRow>
 
@@ -233,16 +231,35 @@
                             android:textColor="@color/textColorPrimary"
                             android:textSize="@dimen/abc_text_size_medium_material" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/contactcountlabel"
-                            android:id="@+id/contactscount"
-                            android:layout_gravity="center|right"
-                            android:layout_span="3"
-                            android:textColor="@color/textColorPrimary"
-                            android:textSize="@dimen/abc_text_size_medium_material"
-                            android:fontFamily="sans-serif-condensed-light" />
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical|right"
+                            android:layout_span="3">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0 "
+                                android:id="@+id/contactscountvalue"
+                                android:layout_gravity="center|right"
+                                android:layout_span="3"
+                                android:textColor="@color/textColorPrimary"
+                                android:textSize="@dimen/abc_text_size_medium_material"
+                                android:fontFamily="sans-serif-condensed-light" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/contactcountlabel"
+                                android:id="@+id/contactscount"
+                                android:layout_gravity="center|right"
+                                android:layout_span="3"
+                                android:textColor="@color/textColorPrimary"
+                                android:textSize="@dimen/abc_text_size_medium_material"
+                                android:fontFamily="sans-serif-condensed-light" />
+                        </LinearLayout>
 
                         <ImageButton
                             android:layout_width="wrap_content"
@@ -257,6 +274,14 @@
                     </TableRow>
 
                 </TableLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/familyfooter"
+                    android:id="@+id/textView7"
+                    android:fontFamily="sans-serif-condensed"
+                    android:layout_marginLeft="@dimen/abc_button_inset_horizontal_material" />
 
                 <TableLayout
                     android:layout_width="match_parent"
@@ -415,6 +440,34 @@
                             android:background="#0000"
                             android:layout_gravity="center_vertical" />
 
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="10dp"
+                        android:background="@drawable/cell_shape"
+                        android:id="@+id/aboutusrow" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/aboutuslabel"
+                            android:id="@+id/aboutustext"
+                            android:layout_gravity="center|left"
+                            android:layout_span="5"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="@dimen/abc_text_size_medium_material" />
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/aboutusarrow"
+                            android:src="@drawable/ic_keyboard_arrow_right_white_24dp"
+                            android:background="#0000"
+                            android:layout_span="1"
+                            android:layout_gravity="center_vertical" />
                     </TableRow>
                 </TableLayout>
 

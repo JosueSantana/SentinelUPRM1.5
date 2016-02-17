@@ -56,7 +56,7 @@ public class IncidentsFragment extends ListFragment {
         //TODO: Should we use AsyncTasks or does the Fragment take care of that?
 
         //all of this...
-
+        if(jsonArray.length() == 0){
         JSONObject jOb = new JSONObject();
         JSONObject jOb2 = new JSONObject();
         JSONObject jOb3 = new JSONObject();
@@ -104,6 +104,7 @@ public class IncidentsFragment extends ListFragment {
         jsonArray.put(jOb6);
         jsonArray.put(jOb7);
         jsonArray.put(jOb8);
+        }
         //...is provisional
 
         setListAdapter(new IncidentsAdapter(jsonArray, getActivity()));

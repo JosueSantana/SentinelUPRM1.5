@@ -34,7 +34,7 @@
     <!-- -->
     
     <!--Pantalla de Alerta -->
-    <string name="toplabel">Presione para Alertar</string>
+    <string name="toplabel">Pulse para Alertar</string>
     <string name="bottomlabel">AVISO: Usted tendrá 5 segundos para detener la alerta antes de ser enviada</string>
     <string name="locationtitle">Ver Ubicación Actual</string>
     <string name="locationmessage">Por favor elija una opción.</string>
@@ -157,6 +157,11 @@
     <string name="incorrectphoneformatmessage">Por favor, introduzca el formato de número de teléfono correcto.</string>
     <string name="phonehint">Número Telefónico</string>
     <string name="codenotreceivedmessage">No he recibido mi código</string>
+    <string name="aboutusblurbp1">El compromiso con la seguridad de nuestra institución se demuestra mediante la concepción de herramientas que mejoran el ambiente de sana convivencia. El 14 de agosto de 2014, un profesor fue apuñalado por un agresor, dejando al profesor moribundo. Este hecho demostró la necesidad de un mecanismo por el cual las personas puedan notificar a la comunidad universitaria de una emergencia sin demora.</string>
+    <string name= "aboutusblurbp2">Tras este evento inaudito, el Consejo de Estudiantes y el Decanato de Administración se dieron a la tarea de buscar soluciones. Bajo el respaldo de estas entidades,  los co-fundadores Joel R. Corporán, Jean C. Méndez y Josué A. Santana desarrollaron Sentinel, una aplicación de alertas de emergencias para el Recinto Universitario de Mayagüez. Sentinel procura establecer un sistema de reacción inmediata eficaz y fidedigno que movilice a los oficiales y a la comunidad a atender situaciones críticas. </string>
+    <string name="sentinelspecs">® Sentinel, para UPRM | Versión 1.0.0</string>
+    <string name="feedbackhint">Déjenos saber que piensa...</string>
+    <string name="problemhint">Describa su situación...</string>
     <!-- -->
 
 </resources>

@@ -19,9 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" >
+            android:paddingBottom="5dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -37,9 +35,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:padding="15dp"
             android:id="@+id/englishRow"
-            android:background="@drawable/cell_shape" >
+            android:background="@drawable/cell_shape"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -55,15 +54,73 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:padding="15dp"
             android:id="@+id/espanolRow"
-            android:background="@drawable/cell_shape" >
+            android:background="@drawable/cell_shape"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Español"
                 android:id="@+id/textView4"
+                android:layout_gravity="center"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="@dimen/abc_text_size_large_material" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/francaisRow"
+            android:background="@drawable/cell_shape"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Français"
+                android:id="@+id/textView3"
+                android:layout_gravity="center"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="@dimen/abc_text_size_large_material" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/portuguesRow"
+            android:background="@drawable/cell_shape"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Portugûes"
+                android:id="@+id/textView5"
+                android:layout_gravity="center"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="@dimen/abc_text_size_large_material" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/deutschRow"
+            android:background="@drawable/cell_shape"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Deutsch"
+                android:id="@+id/textView6"
                 android:layout_gravity="center"
                 android:textColor="@color/textColorPrimary"
                 android:textSize="@dimen/abc_text_size_large_material" />

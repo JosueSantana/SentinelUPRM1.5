@@ -44,7 +44,7 @@ public class ReportFragment extends Fragment {
             @Override
             public void onClick(View view) {
                     FragmentManager fm = getActivity().getSupportFragmentManager();
-                    fm.beginTransaction().replace(R.id.coordlayout, new CountdownFragment()).addToBackStack("ReportFragment").commit();
+                    fm.beginTransaction().replace(R.id.mainLayout, new CountdownFragment()).addToBackStack("ReportFragment").commit();
             }
         });
 

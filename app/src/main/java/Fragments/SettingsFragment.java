@@ -26,6 +26,7 @@ public class SettingsFragment extends Fragment {
     private TableRow languagesRow;
     private TableRow feedbackRow;
     private TableRow policiesRow;
+    private TableRow aboutusRow;
 
     private Switch emailSwitch;
     private Switch smsSwitch;
@@ -56,12 +57,14 @@ public class SettingsFragment extends Fragment {
         languagesRow = (TableRow) getView().findViewById(R.id.languagesrow);
         feedbackRow = (TableRow) getView().findViewById(R.id.feedbackrow);
         policiesRow = (TableRow) getView().findViewById(R.id.policiesrow);
+        aboutusRow = (TableRow) getView().findViewById(R.id.aboutusrow);
 
         //set all the settings listeners
         rowListener(contactsRow, new ContactsFragment());
         rowListener(languagesRow, new LanguagesFragment());
         rowListener(feedbackRow, new FeedbackFragment());
         rowListener(policiesRow, new PoliciesFragment());
+        rowListener(aboutusRow, new AboutUsFragment());
 
         //get reference to switch objects
         emailSwitch = (Switch) getView().findViewById(R.id.notificationsemailswitch);

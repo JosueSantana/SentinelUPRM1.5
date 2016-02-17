@@ -128,6 +128,8 @@
     <string name="reportfeedbackfooter">If you have any suggestions to improve the application, please let us know. We want to give you a great experience through Sentinel.  </string>
     <string name="reportalertonsendtitle">Sent</string>
     <string name="reportalertonsendmessage">Thanks for helping us improve!</string>
+    <string name="problemhint">Describe the problem...</string>
+    <string name="feedbackhint">Let us know what you think...</string>
     <!-- -->
     
     <!--Contacts Screen -->
@@ -158,7 +160,13 @@
     <string name="unsubscribetitle">Subscription Cancellation Completed</string>
     <string name="unsubscribemessage">La solicitud para la cancelación de su suscripción ha sido completada. Aún podrá recibir mensajes de texto en masa durante una emergencia.</string>
     <string name="passwordhint">Password</string>
+    <!-- -->
+
 
     <!-- -->
+
+    <string name="aboutusblurbp1">The commitment with the security of our institution is demonstrated by the creation of tools that improve our quality of coexistence. On August 14, 2014, a professor was stabbed by an offender, leaving him at the brink of death. This fact demonstrated the need of a mechanism by which people can communicate their emergency to the community without delay.</string>
+    <string name= "aboutusblurbp2">Following this terrible event, the Student Council and the Administrative Offices sought out solutions. Under the endorsement of these entities, co-founders Joel R. Corporán, Jean C. Méndez and Josué A. Santana developed Sentinel, an application for emergency alerts within the University of Puerto Rico Mayagüez Campus. Sentinel aims to establish an efficient and reliable immediate reaction system that mobilizes officers and the campus community to resolve critical events.  </string>
+    <string name="sentinelspecs">® Sentinel, for UPRM | Version 1.0.0</string>
 
 </resources>

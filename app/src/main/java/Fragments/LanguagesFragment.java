@@ -32,6 +32,9 @@ public class LanguagesFragment extends Fragment {
     private Locale myLocale;
     private TableRow enRow;
     private TableRow esRow;
+    private TableRow deRow;
+    private TableRow ptRow;
+    private TableRow frRow;
 
     public LanguagesFragment() {
         // Required empty public constructor
@@ -77,6 +80,9 @@ public class LanguagesFragment extends Fragment {
 
         enRow = (TableRow) getView().findViewById(R.id.englishRow);
         esRow = (TableRow) getView().findViewById(R.id.espanolRow);
+        frRow = (TableRow) getView().findViewById(R.id.francaisRow);
+        deRow = (TableRow) getView().findViewById(R.id.deutschRow);
+        ptRow = (TableRow) getView().findViewById(R.id.portuguesRow);
 
         enRow.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -97,6 +103,39 @@ public class LanguagesFragment extends Fragment {
                         "Ha seleccionado español", Toast.LENGTH_SHORT)
                         .show();
                 setLocale("es");
+                return true;
+            }
+        });
+
+        frRow.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Toast.makeText(getContext(),
+                        "Ha seleccionado español", Toast.LENGTH_SHORT)
+                        .show();
+                setLocale("fr");
+                return true;
+            }
+        });
+
+        deRow.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Toast.makeText(getContext(),
+                        "Ha seleccionado español", Toast.LENGTH_SHORT)
+                        .show();
+                setLocale("de");
+                return true;
+            }
+        });
+
+        ptRow.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Toast.makeText(getContext(),
+                        "Ha seleccionado español", Toast.LENGTH_SHORT)
+                        .show();
+                setLocale("pt");
                 return true;
             }
         });
