@@ -7,10 +7,13 @@ import android.provider.Settings;
  */
 public class ValuesCollection {
 
-    public static final String INITIAL_URL = "https://136.145.219.61:7213/";
+    //public static final String INITIAL_URL = "https://136.145.219.61:7213/";
+    public static final String INITIAL_URL = "https://sentinel.uprm.edu:7213/";
 
     public static final String REGISTER_URL = INITIAL_URL + "de41089f1ae36d9395/user/ec8d28cf1ae36d9395/session";
-    public static final String PASSCODE_CONFIRMATION_URL = INITIAL_URL + "d687a815a1cb71f947/user/ea641d11e4e7bffd/validate";
+    public static final String PASSCODE_VALIDATION_URL = INITIAL_URL + "d687a815a1cb71f947/user/ea641d11e4e7bffd/validate";
+    public static final String SEND_ALERT_URL = INITIAL_URL + "31923fa28e65aa41/alert/7c0d78d4b4d6988a855/request";
+
 
     /*
     public static final String SEND_INCIDENT_URL = INITIAL_URL + "incident/31923faa-340c-4707-8c93-df528e65aa41/incident-request/7c0d78d4-4b78-4ee2-9e8e-4b4d6988a855";
@@ -25,6 +28,9 @@ public class ValuesCollection {
 
     public static final String SETTINGS_SP = "SettingsFile";
     public static final String CREDENTIALS_SP = "CredentialsFile";
+
+    public static final String EMAIL_KEY = "email";
+    public static final String TOKEN_KEY = "token";
 
     public static final String SENTINEL_MESSAGE_KEY = "SentinelMessage";
 

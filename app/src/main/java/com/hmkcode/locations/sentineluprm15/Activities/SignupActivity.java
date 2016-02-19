@@ -134,9 +134,8 @@ public class SignupActivity extends FragmentActivity {
 
     private void attemptSignup(List textViews) throws JSONException, CryptorException {
 
-
         //These are the strings corresponding to user input (potentially pass to a handling function)
-        String email = ((AutoCompleteTextView) textViews.get(0)).getText().toString();
+        final String email = ((AutoCompleteTextView) textViews.get(0)).getText().toString();
         String phone = ((EditText) textViews.get(1)).getText().toString();
 
         //manage failure conditions
@@ -150,65 +149,87 @@ public class SignupActivity extends FragmentActivity {
             showSignupError(R.string.incorrectphoneformattitle, R.string.incorrectphoneformatmessage);
         }
         else{
-            //TODO: call encryption mechanism
-            //TODO: call request handler
-            SharedPreferences credentials = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
-            SharedPreferences.Editor editor = credentials.edit();
-
-            String tk = "asdflkajls;fk"; //provisionally, accepted to be the token value
-
-            editor.putString("token", tk).commit();
-
-            /*Bundle bundle = new Bundle();
-            bundle.putInt("dialogtitle", R.string.sendverificationalerttitle);
-            bundle.putInt("dialogmessage", R.string.sendverificationalertmessage);
-            final SentinelDialogFragment dialogFragment = new SentinelDialogFragment();
-            dialogFragment.setArguments(bundle);
-            dialogFragment.show(fm, "Alert Dialog Fragment");*/
-
-            /*dialogFragment.onDismiss(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {*/
-
             //ideally this toast will be replaced soon
-            Toast.makeText(SignupActivity.this, R.string.sendverificationalerttitle, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(SignupActivity.this, R.string.sendverificationalerttitle, Toast.LENGTH_SHORT).show();
 
-            Intent veriIntent = new Intent(SignupActivity.this, VerificationActivity.class);
+            final Intent veriIntent = new Intent(SignupActivity.this, VerificationActivity.class);
             veriIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             final CryptographyHandler crypto = new CryptographyHandler();
 
             JSONObject registerJSON = new JSONObject();
             registerJSON.put("email",email);
-            registerJSON.put("phone",phone);
+            registerJSON.put("phone", phone);
             registerJSON.put("os", ValuesCollection.ANDROID_OS_STRING);
             registerJSON.put("deviceID", Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID).toString());
 
             Ion.with(getBaseContext())
                     .load(ValuesCollection.REGISTER_URL)
-                    .setBodyParameter("SentinelMessage", crypto.encryptJSON(registerJSON))
+                    .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
                     .asString()
                     .setCallback(new FutureCallback<String>() {
                         @Override
-                        public void onCompleted(Exception e, String result) {
-                            System.out.println(result);
-                            try {
-                                JSONObject receivedJSON = JSONHandler.convertStringToJSON(result);
-                                String successValueEncrypted = receivedJSON.get("success").toString();
-                                String successValueDecrypted = crypto.decryptString(successValueEncrypted);
-                                System.out.println(successValueDecrypted);
-                            } catch (JSONException e1) {
-                                e1.printStackTrace();
-                            } catch (CryptorException e1) {
-                                e1.printStackTrace();
+                        public void onCompleted(Exception e, String receivedJSON) {
+                            // Successful Request
+                            if (requestIsSuccessful(e)) {
+                                JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+                                System.out.println(decryptedValue);
+
+                                // Received Success Message
+                                if (receivedSuccessMessage(decryptedValue)) {
+                                    SharedPreferences credentials = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+                                    SharedPreferences.Editor emailEditor = credentials.edit();
+                                    emailEditor.putString(ValuesCollection.EMAIL_KEY, email);
+                                    emailEditor.commit();
+                                    startActivity(veriIntent);
+                                }
+
+                                // Message Was Not Successful.
+                                else {
+
+                                }
+
+                            }
+                            // Errors
+                            else {
+
                             }
                         }
+
+                        // Extract Success Message From Received JSON.
+                        private boolean receivedSuccessMessage(JSONObject decryptedValue) {
+                            String success = null;
+                            try {
+                                success = decryptedValue.getString("success");
+                                return success.equals("1");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            return false;
+                        }
+
+                        // Verify if there was an Error in the Request.
+                        private boolean requestIsSuccessful(Exception e) {
+                            return e == null;
+                        }
+
+                        // Convert received JSON String into a Decrypted JSON.
+                        private JSONObject getDecryptedValue(String receivedJSONString) {
+                            try {
+                                JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
+                                String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
+                                String decryptedStringValue = crypto.decryptString(encryptedStringValue);
+                                JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
+                                return decryptedJSON;
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (CryptorException e) {
+                                e.printStackTrace();
+                            }
+                            return null;
+                        }
+
                     });
-
-            this.startActivity(veriIntent);
-
-                  /*  }
-                });*/
         }
     }
 }
