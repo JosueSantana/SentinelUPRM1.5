@@ -1,5 +1,6 @@
 package com.hmkcode.locations.sentineluprm15.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -15,6 +16,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hmkcode.locations.sentineluprm15.R;
 import com.koushikdutta.async.future.FutureCallback;
@@ -145,7 +147,12 @@ public class VerificationActivity extends AppCompatActivity {
                                     userIsVerified();
                                     startMainActivity();
                                 } else if(userEntersIncorrectPasscode(decryptedValue)){
+                                    Context context = getApplicationContext();
+                                    CharSequence text = "Inputted Passcode is Incorrect";
+                                    int duration = Toast.LENGTH_SHORT;
 
+                                    Toast toast = Toast.makeText(context, text, duration);
+                                    toast.show();
                                 }
                                 // Message Was Not Successful.
                                 else {}
