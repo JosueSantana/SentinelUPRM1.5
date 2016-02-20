@@ -1,5 +1,4 @@
 package OtherHandlers;
-
 import android.util.Base64;
 import org.cryptonode.jncryptor.AES256JNCryptor;
 import org.cryptonode.jncryptor.CryptorException;
@@ -36,21 +35,6 @@ public final class CryptographyHandler {
         this.cryptor = new AES256JNCryptor();
     }
 
-    // Test Constructor
-    /*
-    public CryptographyHandler() throws JSONException {
-        this.cryptor = new AES256JNCryptor();
-
-        this.email = "jean.mendez2@upr.edu";
-        this.phone = "7875293812";
-        this.os = "android";
-        this.deviceID = "unavailable";
-
-        jsonSetup();
-    }
-    */
-
-
     public String encryptJSON(JSONObject json) throws CryptorException {
         // Encrypt JSON String into Byte Array.
         byte[] encryptedByteArray = this.cryptor.encryptData(json.toString().getBytes(), this.SENTINEL_ENCRYPTION_KEY.toCharArray());
@@ -67,23 +51,6 @@ public final class CryptographyHandler {
         return new String(decryptedMessageArray, StandardCharsets.UTF_8);
     }
 
-    /*
-    public JSONObject getJSONToSent() throws CryptorException {
-
-        JSONObject temp = new JSONObject();
-
-        //String encryptedJson = this.encryptJSON();
-
-        System.out.println("Encrypted JSON Is: ");
-        try {
-            temp.accumulate("SentinelMessage", encryptedJson);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return temp;
-    }
-    */
-
     public String decryptJSON(String json) throws CryptorException {
         byte[] decryptedMessageArray = this.cryptor.decryptData(Base64.decode(json, 0), SENTINEL_ENCRYPTION_KEY.toCharArray());
         return new String(decryptedMessageArray, StandardCharsets.UTF_8);
@@ -91,16 +58,6 @@ public final class CryptographyHandler {
 
     public String getJsonString(){
         return this.json.toString();
-    }
-
-
-    private void jsonSetup() throws JSONException {
-        this.json = new JSONObject();
-
-        this.json.accumulate("email", this.email);
-        this.json.accumulate("phone", this.phone);
-        this.json.accumulate("os", this.os);
-        this.json.accumulate("deviceID", this.deviceID);
     }
 
 }

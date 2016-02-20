@@ -11,10 +11,18 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.hmkcode.locations.sentineluprm15.R;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
+import org.cryptonode.jncryptor.CryptorException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
 import Fragments.ViewPagerFragment;
+import OtherHandlers.CryptographyHandler;
+import OtherHandlers.JSONHandler;
 import OtherHandlers.ValuesCollection;
 
 // Added simple comment.
@@ -49,24 +57,49 @@ public class MainActivity extends AppCompatActivity {
         /*SharedPreferences sp = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
         SharedPreferences.Editor editor = sp.edit();
         editor.clear().commit();*/
+        System.out.println("lol");
+        //sendAlert();
+
 
     }
 
-    @Override
-    public void onBackPressed() {
+    private void sendAlert() throws JSONException, CryptorException {
 
-        int count = getFragmentManager().getBackStackEntryCount();
+        final CryptographyHandler crypto = new CryptographyHandler();
 
-        List<Fragment> fragmentList =  getSupportFragmentManager().getFragments();
-        if (count == 0) {
-            super.onBackPressed();
-            //additional code
-        } else {
+        JSONObject alertJSON = new JSONObject();
 
+        alertJSON.put("token", getToken());
+        alertJSON.put("latitude", "18.2338540");
+        alertJSON.put("longitude", "-67.1337090");
 
-            getFragmentManager().popBackStack();
-        }
+        Ion.with(getBaseContext())
+                .load(ValuesCollection.SEND_ALERT_URL)
+                .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(alertJSON))
+                .asString()
+                .setCallback(new FutureCallback<String>() {
+                    @Override
+                    public void onCompleted(Exception e, String result) {
+                        System.out.println(result);
+                        try {
+                            JSONObject receivedSentinelMessage = JSONHandler.convertStringToJSON(result);
+                            String encryptedJSONReceived = JSONHandler.getSentinelMessage(receivedSentinelMessage);
+                            String decryptedJSONReceived = crypto.decryptString(encryptedJSONReceived);
 
+                            JSONObject receivedJSON = JSONHandler.convertStringToJSON(decryptedJSONReceived);
+
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        } catch (CryptorException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                });
     }
 
+    private String getToken() {
+        SharedPreferences credentials = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+        return storedToken;
+    }
 }
