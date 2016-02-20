@@ -22,52 +22,21 @@
     <ImageView
         android:layout_width="400dp"
         android:layout_height="400dp"
-        android:id="@+id/imageView"
+        android:id="@+id/sentinelLogo"
         android:layout_centerInParent="true"
         android:src="@drawable/logosentinel" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/minutecontainer"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/minHeight">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" 0 "
-            android:id="@+id/minutestoalert"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:textSize="@dimen/abc_text_size_medium_material"
-            android:textColor="@color/textColorPrimary" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/bottomlabelendingalerted"
-            android:id="@+id/bottomlabelendingalerted"
-            android:layout_toRightOf="@+id/minutestoalert"
-            android:layout_alignParentBottom="false"
-            android:layout_centerHorizontal="true"
-            android:layout_alignBottom="@+id/minutestoalert"
-            android:textIsSelectable="false"
-            android:textSize="@dimen/abc_text_size_medium_material"
-            android:textColor="@color/textColorPrimary" />
-    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/bottomlabelbeginningalerted"
-        android:id="@+id/bottomlabelbeginningalerted"
-        android:layout_alignParentBottom="false"
+        android:text="@string/bottomlabelalerted"
+        android:id="@+id/bottomlabelalerted"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/minutecontainer"
         android:textSize="@dimen/abc_text_size_medium_material"
-        android:textColor="@color/textColorPrimary" />
+        android:textColor="@color/textColorPrimary"
+        android:layout_marginBottom="@dimen/minHeight"
+        android:gravity="center_horizontal"
+        android:textAlignment="gravity" />
 
 </RelativeLayout>

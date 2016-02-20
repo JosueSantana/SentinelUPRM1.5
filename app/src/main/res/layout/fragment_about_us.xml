@@ -20,49 +20,55 @@
             android:layout_centerInParent="true"
             android:cropToPadding="false" />
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/aboutusblurb">
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/scrollView" >
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/aboutusblurbp1"
-                android:id="@+id/aboutusblurbp1"
-                android:textColor="@color/textColorPrimary"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/minHeight"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_gravity="center_horizontal" />
+                android:id="@+id/aboutusblurb">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/aboutusblurbp2"
-                android:id="@+id/aboutusblurbp2"
-                android:textColor="@color/textColorPrimary"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/aboutusblurbp1"
-                android:layout_marginTop="@dimen/abc_action_bar_subtitle_bottom_margin_material"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_gravity="center_horizontal" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/aboutusblurbp1"
+                    android:id="@+id/aboutusblurbp1"
+                    android:textColor="@color/textColorPrimary"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/minHeight"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_gravity="center_horizontal" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sentinelspecs"
-                android:id="@+id/sentinelspecs"
-                android:textColor="@color/textColorPrimary"
-                android:layout_centerHorizontal="true"
-                android:textStyle="bold"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_below="@+id/aboutusblurb"
-                android:layout_gravity="center_horizontal" />
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/aboutusblurbp2"
+                    android:id="@+id/aboutusblurbp2"
+                    android:textColor="@color/textColorPrimary"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/aboutusblurbp1"
+                    android:layout_marginTop="@dimen/abc_action_bar_subtitle_bottom_margin_material"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sentinelspecs"
+                    android:id="@+id/sentinelspecs"
+                    android:textColor="@color/textColorPrimary"
+                    android:layout_centerHorizontal="true"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_below="@+id/aboutusblurb"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
+        </ScrollView>
 
     </RelativeLayout>
 

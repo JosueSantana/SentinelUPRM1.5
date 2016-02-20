@@ -9,6 +9,9 @@ import android.os.Bundle;
 
 import com.hmkcode.locations.sentineluprm15.R;
 
+import java.util.concurrent.TimeUnit;
+
+import Fragments.AlertWaitFragment;
 import OtherHandlers.ValuesCollection;
 
 /**
@@ -36,10 +39,43 @@ public class SplashActivity extends AppCompatActivity {
 
             //verify verification code
             if (credentials.contains("isVerified") || credentials.getBoolean("isVerified", false)) {
-                    //go directly to alert view
-                    Intent mainIntent = new Intent(this, MainActivity.class);
-                    startActivity(mainIntent);
-                    finish();
+
+                System.out.println("Credentials contains alertDisabled?: " + String.valueOf(credentials.contains("alertDisabled")));
+                    if(credentials.contains("alertDisabled")){
+                        System.out.println("value of alertDisabled?: " + String.valueOf(credentials.getBoolean("alertDisabled", false)));
+                        if(credentials.getBoolean("alertDisabled", false)){
+                            long alertTime = credentials.getLong("alertTime", 0);
+
+                            System.out.println("Time Elapsed: " + String.valueOf(TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - alertTime)));
+
+                            if(TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - alertTime) < ValuesCollection.TIMER_PERIOD){
+                                getSupportFragmentManager().beginTransaction().add(R.id.splashRelative, new AlertWaitFragment()).commit();
+                            }
+                            else{
+                                editor.putLong("alertTime", 0);
+                                editor.putBoolean("alertDisabled", false);
+                                editor.commit();
+                                //go directly to alert view
+                                Intent mainIntent = new Intent(this, MainActivity.class);
+                                startActivity(mainIntent);
+                                finish();
+
+                            }
+                        }
+                        else{
+                            //go directly to alert view
+                            Intent mainIntent = new Intent(this, MainActivity.class);
+                            startActivity(mainIntent);
+                            finish();
+                        }
+                    }
+                else{
+                        //go directly to alert view
+                        Intent mainIntent = new Intent(this, MainActivity.class);
+                        startActivity(mainIntent);
+                        finish();
+                    }
+;
             }
             else {
                 //go to verification view instead
@@ -64,7 +100,6 @@ public class SplashActivity extends AppCompatActivity {
                 }, 3000);
             }
             else{
-                editor.putBoolean("atSignup", true).commit();
                 Intent signupIntent = new Intent(SplashActivity.this, SignupActivity.class);
                 startActivity(signupIntent);
                 finish();

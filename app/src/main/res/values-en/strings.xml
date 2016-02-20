@@ -59,8 +59,7 @@
     
     <!--Alert sent screen -->
     <string name="toplabelalerted">Please wait for help to come!</string>
-    <string name="bottomlabelbeginningalerted">To send another alert, you will have to wait</string>
-    <string name="bottomlabelendingalerted">minutes</string>
+    <string name="bottomlabelalerted">To send another alert, you will have to wait %1$s minutes</string>
     <string name="alerttimerend">Ready to Alert!</string>
     <!-- -->
     

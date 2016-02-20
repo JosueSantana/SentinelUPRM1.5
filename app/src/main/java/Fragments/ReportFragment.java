@@ -17,11 +17,14 @@ import com.hmkcode.locations.sentineluprm15.R;
  * This fragment listens on user input when reporting.
  */
 public class ReportFragment extends Fragment {
+
+    private ImageButton mButton;
+
     public ReportFragment() {
         // Required empty public constructor
     }
 
-    private ImageButton mButton;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,11 +46,9 @@ public class ReportFragment extends Fragment {
         mButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                    FragmentManager fm = getActivity().getSupportFragmentManager();
-                    fm.beginTransaction().replace(R.id.mainLayout, new CountdownFragment()).addToBackStack("ReportFragment").commit();
-            }
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                fm.beginTransaction().replace(R.id.mainLayout, new CountdownFragment()).addToBackStack("ReportFragment").commit();}
         });
-
     }
 
     private void onClick() {

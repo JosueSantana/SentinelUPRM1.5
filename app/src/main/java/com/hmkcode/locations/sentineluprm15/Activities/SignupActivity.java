@@ -49,14 +49,22 @@ public class SignupActivity extends FragmentActivity {
     private ImageButton phoneButton;
     private ImageButton proceedButton;
     private FragmentManager fm = getSupportFragmentManager();
+    private SharedPreferences credentials;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        credentials = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        editor = credentials.edit();
+
+        editor.putBoolean("atSignup", true).commit();
+
         //fix orientation on Portrait
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 
         // Create listener for Alert Button
         phoneButton = (ImageButton) findViewById(R.id.phoneOnSignup);
@@ -152,8 +160,6 @@ public class SignupActivity extends FragmentActivity {
         else{
             //TODO: call encryption mechanism
             //TODO: call request handler
-            SharedPreferences credentials = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
-            SharedPreferences.Editor editor = credentials.edit();
 
             String tk = "asdflkajls;fk"; //provisionally, accepted to be the token value
 

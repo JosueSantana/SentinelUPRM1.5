@@ -1,122 +1,90 @@
 package Fragments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
+
+import com.google.android.gms.location.LocationListener;
+
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.hmkcode.locations.sentineluprm15.R;
 
-import org.cryptonode.jncryptor.AES256JNCryptor;
-import org.cryptonode.jncryptor.CryptorException;
-import org.cryptonode.jncryptor.InvalidHMACException;
-import org.cryptonode.jncryptor.JNCryptor;
-import org.json.JSONException;
-import org.json.JSONObject;
+public class CountdownFragment extends Fragment implements
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-import java.nio.charset.StandardCharsets;
+    private GoogleApiClient mGoogleApiClient;
+    private android.location.Location mLastLocation;
+    private LocationRequest mLocationRequest;
+    private TextView countDownDisplay;
 
-import OtherHandlers.CryptographyHandler;
-import OtherHandlers.JSONHandler;
+    private static int UPDATE_INTERVAL = 10000; // 10 sec
+    private static int FASTEST_INTERVAL = 5000; // 5 sec
+    private static int DISPLACEMENT = 5; // 10 meters
+    private ImageButton cancelButton;
+    private ImageButton sendButton;
+    CountDownTimer CDT;
 
-public class CountdownFragment extends Fragment {
     public CountdownFragment() {
         // Required empty public constructor
     }
 
-    private TextView countDownDisplay;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         System.out.println("---Created Countdown----");
 
-        try {
+        // Create an instance of GoogleAPIClient and location request
+        buildGoogleApiClient();
+        createLocationRequest();
+    }
 
-            CryptographyHandler crypto = new CryptographyHandler();
+    @Override
+    public void onStart() {
+        super.onStart();
+        //assure the service is connected
+        mGoogleApiClient.connect();
+    }
 
-            JSONObject receivedJSON = new JSONObject();
-            receivedJSON.put("SentinelMessage", "AwFXWwsGAXxKtBU+tZsX9d0qGMjxGUY9zhi+Rizvwhj61wDH2M36LoJe31yCFsw/0IoqaXXpfOa/2SOIJoZ3CrYpv4b53dNQZQxbi5QLMg9AKA==");
+    @Override
+    public void onResume() {
+        super.onResume();
 
-            String receivedJSONString = receivedJSON.toString();
+        //checkPlayServices();
 
-            JSONObject convertedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-            String receivedKey = JSONHandler.getSentinelMessage(convertedJSON);
-
-            String decryptedKey = crypto.decryptString(receivedKey);
-            System.out.println(receivedKey);
-
-            System.out.println("decrypted key is: " + decryptedKey);
-            JSONObject receivedConfirmationValue = JSONHandler.convertStringToJSON(decryptedKey);
-            String success = receivedConfirmationValue.get("success").toString();
-
-            System.out.println(success);
-
-            /*
-            JNCryptor encryptor = new AES256JNCryptor();
-            byte[] decryptedMessageArray = encryptor.decryptData(Base64.decode(receivedKey, 0), SENTINEL_ENCRYPTION_KEY.toCharArray());
-
-            String decryptedMessage = new String(decryptedMessageArray, StandardCharsets.UTF_8);
-            System.out.println(decryptedMessage);
-            */
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (CryptorException e) {
-            e.printStackTrace();
+        // Resuming the periodic location updates
+        if (mGoogleApiClient.isConnected()) {
+            startLocationUpdates();
         }
+    }
 
-        /*
-        try {
-            JSONObject receivedJSON = new JSONObject(receivedMessage);
-            String encryptedMessage = receivedJSON.get("SentinelMessage").toString();
-            System.out.println("received JSON parameter is: " + encryptedMessage);
-
-            System.out.println("Android Unique ID is: " + Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID) );
-
-            JNCryptor encryptor = new AES256JNCryptor();
-        } catch (JSONException e) {
-            e.printStackTrace();
+    @Override
+    public void onStop() {
+        //ensure client is disconnected when fragment is destroyed
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
         }
-        */
+        super.onStop();
+    }
 
-        /*
-        try {
-            final CryptographyHandler cryptoManager = new CryptographyHandler();
-
-            try {
-                Ion.with(getContext())
-                        .load("https://136.145.219.61:7213/de41089f1ae36d9395/user/ec8d28cf1ae36d9395/session")
-                        .setBodyParameter("SentinelMessage", cryptoManager.encryptJSON())
-                        .asString()
-                        .setCallback(new FutureCallback<String>() {
-                            @Override
-                            public void onCompleted(Exception e, String result) {
-                                try {
-                                    JSONObject json = new JSONObject(result);
-                                    String valueOfJson = json.get("SentinelMessage").toString();
-                                    System.out.println(valueOfJson);
-                                    String decodedMessage = cryptoManager.decryptJSON(valueOfJson);
-                                    System.out.println(decodedMessage);
-                                } catch (JSONException e1) {
-                                    e1.printStackTrace();
-                                } catch (CryptorException e1) {
-                                    e1.printStackTrace();
-                                }
-                            }
-                        });
-
-            } catch (CryptorException e) {
-                e.printStackTrace();
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        */
+    @Override
+    public void onPause() {
+        super.onPause();
+        // stop trying to update while fragment is not active
+        stopLocationUpdates();
     }
 
     @Override
@@ -129,21 +97,127 @@ public class CountdownFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        //The string that holds the countdown number
         countDownDisplay = (TextView) getView().findViewById(R.id.countDownDisplay);
 
-        new CountDownTimer(7000, 1000) {
+        //Set up the countdown timer
+        CDT = new CountDownTimer(7000, 1000) {
 
-                public void onTick(long millisUntilFinished) {
-                    countDownDisplay.setText(String.valueOf((millisUntilFinished / 1000) - 1));
+            public void onTick(long millisUntilFinished) {
+                countDownDisplay.setText(String.valueOf((millisUntilFinished / 1000) - 1));
+                //periodically print location so we know it's working
+                if (mGoogleApiClient.isConnected()) {
+                    String text = String.valueOf(mLastLocation.getLatitude()) + ", " + String.valueOf(mLastLocation.getLongitude());
+                    System.out.println("Coordinates: " + text);
                 }
+            }
 
-                public void onFinish() {
-                    //removing current fragment and replacing it with the last fragment on backstack
-                    getActivity().getSupportFragmentManager().popBackStackImmediate();
+            public void onFinish() {
+                //removing current fragment and replacing it with the last fragment on backstack
+                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, new AlertWaitFragment()).commit();
 
-                }
-            }.start();
+            }
+        }.start();
 
-        }
+        //reference to the send button, moves into the alertwaitfragment
+        sendButton = (ImageButton) getView().findViewById(R.id.sendButton);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, new AlertWaitFragment()).commit();
+            }
+        });
+
+        //reference to the back button,
+        cancelButton = (ImageButton) getView().findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
+            }
+        });
 
     }
+
+    public void onDestroy(){
+        super.onDestroy();
+        //cancel timer when this fragment is destroyed
+        CDT.cancel();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        //get initial connected location
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        startLocationUpdates();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Toast.makeText(getActivity(), "Connection suspended...", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Toast.makeText(getActivity(), "Failed to connect...", Toast.LENGTH_SHORT).show();
+    }
+
+    protected void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        //begin attempting updates
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient, mLocationRequest, this);
+
+    }
+
+    //stops
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+    }
+
+    //Sets up the google api client
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    //Sets up the location requests
+    protected void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setSmallestDisplacement(DISPLACEMENT); // 5 meters
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLastLocation = location;
+    }
+
+}

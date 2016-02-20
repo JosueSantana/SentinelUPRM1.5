@@ -29,6 +29,8 @@ public class ValuesCollection {
     public static final String SENTINEL_MESSAGE_KEY = "SentinelMessage";
 
     public static final String ANDROID_OS_STRING = "android";
+
+    public static final long TIMER_PERIOD = 2;
 }
 
 /*
