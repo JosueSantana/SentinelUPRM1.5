@@ -1,6 +1,7 @@
 package Fragments;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 
@@ -22,6 +23,16 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.hmkcode.locations.sentineluprm15.R;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
+import org.cryptonode.jncryptor.CryptorException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import OtherHandlers.CryptographyHandler;
+import OtherHandlers.JSONHandler;
+import OtherHandlers.ValuesCollection;
 
 public class CountdownFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -113,10 +124,14 @@ public class CountdownFragment extends Fragment implements
             }
 
             public void onFinish() {
-                //removing current fragment and replacing it with the last fragment on backstack
-                getActivity().getSupportFragmentManager().popBackStack();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, new AlertWaitFragment()).commit();
-
+                // Send the Alert.
+                try {
+                    sendAlert();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (CryptorException e) {
+                    e.printStackTrace();
+                }
             }
         }.start();
 
@@ -125,8 +140,14 @@ public class CountdownFragment extends Fragment implements
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().popBackStack();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, new AlertWaitFragment()).commit();
+                // Send the Alert.
+                try {
+                    sendAlert();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (CryptorException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -140,6 +161,54 @@ public class CountdownFragment extends Fragment implements
         });
 
     }
+
+    private String getToken() {
+        SharedPreferences credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+        return storedToken;
+    }
+
+    private void sendAlert() throws JSONException, CryptorException {
+
+        final CryptographyHandler crypto = new CryptographyHandler();
+
+        JSONObject alertJSON = new JSONObject();
+
+        alertJSON.put("token", getToken());
+        alertJSON.put("latitude", mLastLocation.getLatitude());
+        alertJSON.put("longitude", mLastLocation.getLongitude());
+
+        Ion.with(getContext())
+                .load(ValuesCollection.SEND_ALERT_URL)
+                .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(alertJSON))
+                .asString()
+                .setCallback(new FutureCallback<String>() {
+                    @Override
+                    public void onCompleted(Exception e, String result) {
+                        System.out.println(result);
+                        try {
+                            JSONObject receivedSentinelMessage = JSONHandler.convertStringToJSON(result);
+                            String encryptedJSONReceived = JSONHandler.getSentinelMessage(receivedSentinelMessage);
+                            String decryptedJSONReceived = crypto.decryptString(encryptedJSONReceived);
+
+                            JSONObject receivedJSON = JSONHandler.convertStringToJSON(decryptedJSONReceived);
+
+                            goBackToAlertWaitFragment();
+
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        } catch (CryptorException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    private void goBackToAlertWaitFragment(){
+        getActivity().getSupportFragmentManager().popBackStack();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, new AlertWaitFragment()).commit();
+    }
+
 
     public void onDestroy(){
         super.onDestroy();

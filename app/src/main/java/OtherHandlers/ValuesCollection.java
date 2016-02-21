@@ -40,10 +40,6 @@ public class ValuesCollection {
 }
 
 /*
-public struct URLRoutes {
-
-
-
     static let incidentLog = ["route": "/588527de84729cde26/incident/08b1842e7c99bbea05/logs", "type": "POST"]
 
     static let alert = ["route": "/31923fa28e65aa41/alert/7c0d78d4b4d6988a855/request", "type": "POST"]
@@ -65,6 +61,4 @@ public struct URLRoutes {
     static let contactEdit = ["route": "/47abedc1a15c9f73/contact/98aee6f6fbbbf06133/edit", "type": "POST"]
 
     static let contactDelete = ["route": "/580b3b11e4e7bffd/contact/133757f42b99c7903/delete", "type": "DELETE"]
-
-}
  */
