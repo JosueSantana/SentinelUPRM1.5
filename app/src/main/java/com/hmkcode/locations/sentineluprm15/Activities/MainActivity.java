@@ -1,5 +1,6 @@
 package com.hmkcode.locations.sentineluprm15.Activities;
 
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.pm.ActivityInfo;

@@ -58,10 +58,10 @@ public class ReportFragment extends Fragment {
         mButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
+
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 fm.beginTransaction().replace(R.id.mainLayout, new CountdownFragment()).addToBackStack("ReportFragment").commit();
-                */
+
                 System.out.println("lol");
 
                 Context context = getContext();

@@ -1,6 +1,7 @@
 package Fragments;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import com.hmkcode.locations.sentineluprm15.Activities.MainActivity;
 import com.hmkcode.locations.sentineluprm15.Activities.SplashActivity;
 import com.hmkcode.locations.sentineluprm15.R;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import OtherHandlers.ValuesCollection;
@@ -27,72 +30,78 @@ public class AlertWaitFragment extends Fragment {
 
     private TextView timeCount;
     private SharedPreferences credentials;
-    private Handler handler = new Handler();
     private SharedPreferences.Editor editor;
-
-    /*//This runnable runs for as long as a minute hasn't passed by
-    private final Runnable refreshing = new Runnable() {
-        public void run() {
-            timeCount = (TextView) getActivity().findViewById(R.id.bottomlabelalerted);
-
-            if (isRefreshing()) {
-                // re run the verification after 1 minute
-                String minutesToAlert = String.valueOf(ValuesCollection.TIMER_PERIOD - TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - credentials.getLong("alertTime", 0)));
-                System.out.println("IN RUNNABLE!!");
-                String text = String.format(getResources().getString(R.string.bottomlabelalerted), minutesToAlert);
-                timeCount.setText(text);
-
-                getActivity().getSupportFragmentManager().beginTransaction().detach(AlertWaitFragment.this).commit();
-                getActivity().getSupportFragmentManager().beginTransaction().attach(AlertWaitFragment.this).commit();
-                handler.postDelayed(this, 60000);
-            }
-            else{
-                editor = credentials.edit();
-                editor.putLong("alertTime", 0);
-                editor.putBoolean("alertDisabled", false);
-                editor.commit();
-
-                if(getActivity() instanceof SplashActivity){
-                    getActivity().getSupportFragmentManager().beginTransaction().remove(AlertWaitFragment.this).commit();
-                    Intent mainIntent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(mainIntent);
-                    getActivity().finish();
-                }
-                else{
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, new ViewPagerFragment()).commit();
-                }
-            }
-
-
-        }
-    };*/
-
-   /* private boolean isRefreshing() {
-        long alertTime = credentials.getLong("alertTime", 0);
-
-        return TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - alertTime) < ValuesCollection.TIMER_PERIOD;
-    }*/
+    private static TimerTask tTask;
+    private static Timer updateTimer;
 
     public AlertWaitFragment() {
         // Required empty public constructor
     }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.fragment_alert_wait, container, false);
-        }
+    public TimerTask produceTimerTask() {
+        TimerTask timer = new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("IN RUNNABLE!!");
+                        if (TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - credentials.getLong("alertTime", 0)) < ValuesCollection.TIMER_PERIOD) {
+                            String minutesToAlert = String.valueOf(ValuesCollection.TIMER_PERIOD - TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - credentials.getLong("alertTime", 0)));
+                            String text = String.format(getResources().getString(R.string.bottomlabelalerted), minutesToAlert);
+                            timeCount.setText(text);
+                        }
+                    }
+                });
+                if (!(TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - credentials.getLong("alertTime", 0)) < ValuesCollection.TIMER_PERIOD)) {
+                    editor = credentials.edit();
+                    editor.putLong("alertTime", 0);
+                    editor.putBoolean("alertDisabled", false);
+                    editor.commit();
+                    updateTimer.cancel();
+
+                    if (getActivity() instanceof SplashActivity) {
+                        System.out.println("INSTANCEOF SPLASH");
+                        Activity myActivity = getActivity();
+                        getActivity().getSupportFragmentManager().beginTransaction().remove(AlertWaitFragment.this).commitAllowingStateLoss();
+                        Intent mainIntent = new Intent(myActivity, MainActivity.class);
+                        startActivity(mainIntent);
+                        myActivity.finish();
+                    } else if (getActivity() instanceof MainActivity) {
+                        System.out.println("INSTANCEOF MAIN");
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, new ViewPagerFragment()).commitAllowingStateLoss();
+                    }
+
+                    this.cancel();
+                }
+            }
+        };
+        return timer;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        return inflater.inflate(R.layout.fragment_alert_wait, container, false);
+    }
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //get reference to bottom label object
-        TextView timeCount = (TextView) getView().findViewById(R.id.bottomlabelalerted);
-
+        System.out.println("CALLING ONACTIVITYCREATED");
         //get reference to credentials
         credentials = getContext().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
         editor = credentials.edit();
+
+        //get reference to bottom label object
+        timeCount = (TextView) getView().findViewById(R.id.bottomlabelalerted);
 
         //first time accessing this screen since alert?
         if(!credentials.contains("alertDisabled")|| !credentials.getBoolean("alertDisabled", false)){
@@ -124,6 +133,36 @@ public class AlertWaitFragment extends Fragment {
                 }
             });
         }
-        //handler.post(refreshing);
+
+        /*// Inflate the layout for this fragment
+        updateTimer = new Timer();
+        tTask = produceTimerTask();
+        updateTimer.scheduleAtFixedRate(tTask, 0, 60000);*/
+    }
+
+
+
+    public void onResume(){
+        super.onResume();
+        System.out.println("CALLING ONRESUME");
+
+        //get the time difference until ready
+        String minutesToAlert = String.valueOf(ValuesCollection.TIMER_PERIOD - TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - credentials.getLong("alertTime", 0)));
+
+        String text = String.format(getResources().getString(R.string.bottomlabelalerted), minutesToAlert);
+        timeCount.setText(text);
+
+        // Inflate the layout for this fragment
+        updateTimer = new Timer();
+        tTask = produceTimerTask();
+        updateTimer.scheduleAtFixedRate(tTask, 0, 60000);
+    }
+
+    public void onStop(){
+        System.out.println("CALLING ONSTOP");
+        System.out.println("CANCELLED?: " + tTask.cancel());
+        updateTimer.cancel();
+        updateTimer.purge();
+        super.onStop();
     }
 }
