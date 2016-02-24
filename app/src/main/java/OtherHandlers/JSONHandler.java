@@ -1,5 +1,6 @@
 package OtherHandlers;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,6 +19,17 @@ public final class JSONHandler {
     public static JSONObject convertStringToJSON(String json) throws JSONException {
         return new JSONObject(json);
     }
+
+    /*
+    public static JSONArray convertStringToJSON(String json) throws JSONException {
+        try {
+            return new JSONArray(json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    */
 
     /**
      * Convert a JSON object into a String.

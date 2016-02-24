@@ -1,9 +1,11 @@
 package Fragments;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 
+import android.provider.Settings;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -13,12 +15,19 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.hmkcode.locations.sentineluprm15.R;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
+import org.cryptonode.jncryptor.CryptorException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import ListViewHelpers.IncidentsAdapter;
+import OtherHandlers.CryptographyHandler;
+import OtherHandlers.DateHandler;
+import OtherHandlers.JSONHandler;
+import OtherHandlers.ValuesCollection;
 
 /**
  * This fragment controls the incidents to be manipulated into the table.
@@ -29,6 +38,7 @@ public class IncidentsFragment extends ListFragment {
     private Handler handler = new Handler();
     JSONArray jsonArray = new JSONArray();
     ListView mList;
+    private int numberOfIncidents;
 
     public IncidentsFragment() {
         // Required empty public constructor
@@ -37,6 +47,7 @@ public class IncidentsFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.numberOfIncidents = 0;
     }
 
     @Override
@@ -57,56 +68,101 @@ public class IncidentsFragment extends ListFragment {
 
         //all of this...
         if(jsonArray.length() == 0){
-        JSONObject jOb = new JSONObject();
-        JSONObject jOb2 = new JSONObject();
-        JSONObject jOb3 = new JSONObject();
-        JSONObject jOb4 = new JSONObject();
-        JSONObject jOb5 = new JSONObject();
-        JSONObject jOb6 = new JSONObject();
-        JSONObject jOb7 = new JSONObject();
-        JSONObject jOb8 = new JSONObject();
 
-        try {
-            jOb.put("name","Edificio Stefani");
-            jOb.put("time", "7:23 PM");
-            jOb.put("date", "February 14, 2016");
-            jOb2.put("name","Edificio Luchetti");
-            jOb2.put("time", "2:00 AM");
-            jOb2.put("date", "January 20, 2016");
-            jOb3.put("name","Edificio Stefani");
-            jOb3.put("time", "7:23 PM");
-            jOb3.put("date", "February 14, 2016");
-            jOb4.put("name","Edificio Chardon");
-            jOb4.put("time", "2:00 AM");
-            jOb4.put("date", "January 20, 2016");
-            jOb5.put("name","Edificio Fisica");
-            jOb5.put("time", "7:23 PM");
-            jOb5.put("date", "February 14, 2016");
-            jOb6.put("name","Edificio Monzon");
-            jOb6.put("time", "2:00 AM");
-            jOb6.put("date", "January 20, 2016");
-            jOb7.put("name","Edificio Quimica");
-            jOb7.put("time", "7:23 PM");
-            jOb7.put("date", "February 14, 2016");
-            jOb8.put("name","Edificio Civil");
-            jOb8.put("time", "2:00 AM");
-            jOb8.put("date", "January 20, 2016");
+            final CryptographyHandler crypto;
+            try {
+                crypto = new CryptographyHandler();
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+                JSONObject registerJSON = new JSONObject();
+                registerJSON.put("token", getToken());
 
-        jsonArray.put(jOb);
-        jsonArray.put(jOb2);
-        jsonArray.put(jOb3);
-        jsonArray.put(jOb4);
-        jsonArray.put(jOb5);
-        jsonArray.put(jOb6);
-        jsonArray.put(jOb7);
-        jsonArray.put(jOb8);
-        }
-        //...is provisional
+                Ion.with(getContext())
+                        .load(ValuesCollection.GET_ALERTS_URL)
+                        .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                        .asString()
+                        .setCallback(new FutureCallback<String>() {
+                            @Override
+                            public void onCompleted(Exception e, String receivedJSON) {
+                                // Successful Request
+                                if (requestIsSuccessful(e)) {
+                                    JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+                                    System.out.println(decryptedValue);
 
+                                    try {
+                                        JSONArray incidents = decryptedValue.getJSONArray("incident");
+                                        numberOfIncidents = incidents.length();
+                                        System.out.println(incidents);
+
+                                        for(int i = 0; i < incidents.length(); i++) {
+                                            JSONObject tempJSON = new JSONObject();
+                                            DateHandler date = new DateHandler(incidents.getJSONObject(i).get("created_on").toString());
+                                            tempJSON.put("name", incidents.getJSONObject(i).get("regionName"));
+                                            tempJSON.put("date", date.getDisplayDate());
+                                            tempJSON.put("time", "");
+                                            jsonArray.put(tempJSON);
+                                        }
+
+                                    } catch (JSONException e1) {
+                                        e1.printStackTrace();
+                                    }
+
+                                    // Received Success Message
+                                    if (receivedSuccessMessage(decryptedValue)) {
+
+                                    }
+
+                                    // Message Was Not Successful.
+                                    else {
+
+                                    }
+
+                                }
+                                // Errors
+                                else {
+
+                                }
+                            }
+
+                            // Extract Success Message From Received JSON.
+                            private boolean receivedSuccessMessage(JSONObject decryptedValue) {
+                                String success = null;
+                                try {
+                                    success = decryptedValue.getString("success");
+                                    return success.equals("1");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                return false;
+                            }
+
+                            // Verify if there was an Error in the Request.
+                            private boolean requestIsSuccessful(Exception e) {
+                                return e == null;
+                            }
+
+                            // Convert received JSON String into a Decrypted JSON.
+                            private JSONObject getDecryptedValue(String receivedJSONString) {
+                                try {
+                                    JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
+                                    String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
+                                    String decryptedStringValue = crypto.decryptString(encryptedStringValue);
+                                    JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
+                                    return decryptedJSON;
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                } catch (CryptorException e) {
+                                    e.printStackTrace();
+                                }
+                                return null;
+                            }
+
+                        });
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (CryptorException e) {
+                e.printStackTrace();
+            }
         setListAdapter(new IncidentsAdapter(jsonArray, getActivity()));
 
         //makes sure it doesn't try to refresh the list while the visible list is not at the top
@@ -140,7 +196,13 @@ public class IncidentsFragment extends ListFragment {
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
 
         getListView();
+        }
+    }
 
+    private String getToken() {
+        SharedPreferences credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+        return storedToken;
     }
 
     //this asynctask runs while refreshing and gets new data from DB
@@ -179,6 +241,110 @@ public class IncidentsFragment extends ListFragment {
                 } else {
                     // TODO : update your list with the new data
 
+
+                    final CryptographyHandler crypto;
+                    try {
+                        crypto = new CryptographyHandler();
+
+                        JSONObject registerJSON = new JSONObject();
+                        registerJSON.put("token", getToken());
+
+                        Ion.with(getContext())
+                                .load(ValuesCollection.GET_ALERTS_URL)
+                                .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                                .asString()
+                                .setCallback(new FutureCallback<String>() {
+                                    @Override
+                                    public void onCompleted(Exception e, String receivedJSON) {
+                                        // Successful Request
+                                        if (requestIsSuccessful(e)) {
+                                            JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+                                            System.out.println(decryptedValue);
+
+                                            try {
+                                                JSONArray incidents = decryptedValue.getJSONArray("incident");
+
+                                                // new incidents reported since last refresh
+                                                if(incidents.length() > numberOfIncidents){
+
+                                                    numberOfIncidents = incidents.length();
+                                                    jsonArray = new JSONArray();
+
+                                                    for(int i = 0; i < incidents.length(); i++) {
+                                                        JSONObject tempJSON = new JSONObject();
+                                                        tempJSON.put("name", incidents.getJSONObject(i).get("regionName"));
+                                                        tempJSON.put("time", incidents.getJSONObject(i).get("created_on"));
+                                                        jsonArray.put(tempJSON);
+                                                    }
+
+                                                } else {
+                                                    // no new incidents reported; do nothing.
+                                                }
+
+                                            } catch (JSONException e1) {
+                                                e1.printStackTrace();
+                                            }
+
+                                            // Received Success Message
+                                            if (receivedSuccessMessage(decryptedValue)) {
+
+                                            }
+
+                                            // Message Was Not Successful.
+                                            else {
+
+                                            }
+
+                                        }
+                                        // Errors
+                                        else {
+
+                                        }
+                                    }
+
+                                    // Extract Success Message From Received JSON.
+                                    private boolean receivedSuccessMessage(JSONObject decryptedValue) {
+                                        String success = null;
+                                        try {
+                                            success = decryptedValue.getString("success");
+                                            return success.equals("1");
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return false;
+                                    }
+
+                                    // Verify if there was an Error in the Request.
+                                    private boolean requestIsSuccessful(Exception e) {
+                                        return e == null;
+                                    }
+
+                                    // Convert received JSON String into a Decrypted JSON.
+                                    private JSONObject getDecryptedValue(String receivedJSONString) {
+                                        try {
+                                            JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
+                                            String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
+                                            String decryptedStringValue = crypto.decryptString(encryptedStringValue);
+                                            JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
+                                            return decryptedJSON;
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        } catch (CryptorException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return null;
+                                    }
+
+                                });
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (CryptorException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    /*
                     JSONObject jOb = new JSONObject();
                     JSONObject jOb2 = new JSONObject();
 
@@ -195,6 +361,7 @@ public class IncidentsFragment extends ListFragment {
 
                     jsonArray.put(jOb);
                     jsonArray.put(jOb2);
+                    */
                 }
             } catch (Exception e) {
                 e.printStackTrace();

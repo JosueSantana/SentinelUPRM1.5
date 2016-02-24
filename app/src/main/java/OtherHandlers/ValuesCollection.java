@@ -11,8 +11,14 @@ public class ValuesCollection {
     public static final String INITIAL_URL = "https://sentinel.uprm.edu:7213/";
 
     public static final String REGISTER_URL = INITIAL_URL + "de41089f1ae36d9395/user/ec8d28cf1ae36d9395/session";
+
     public static final String PASSCODE_VALIDATION_URL = INITIAL_URL + "d687a815a1cb71f947/user/ea641d11e4e7bffd/validate";
+
     public static final String SEND_ALERT_URL = INITIAL_URL + "31923fa28e65aa41/alert/7c0d78d4b4d6988a855/request";
+
+    public static final String GET_ALERTS_URL = INITIAL_URL + "588527de84729cde26/incident/08b1842e7c99bbea05/logs";
+
+    public static final String SETTINGS_URL = INITIAL_URL + "8dc8580836be036a/user/c8d7b2a2309baa3746/preferences";
 
 
     /*
