@@ -25,6 +25,24 @@ public class DateHandler {
         return this.month + " " + this.day + ", " + this.year;
     }
 
+    public String getDisplayTime() {
+        String amOrPm = "AM";
+        int timeNumber = Integer.parseInt(this.time.substring(0,2));
+        int minutes = Integer.parseInt(this.time.substring(3,5));
+
+        if (timeNumber >= 12) {
+            amOrPm = "PM";
+        }
+
+        if(timeNumber == 0){
+            timeNumber = 12;
+        }
+        else if (timeNumber > 12){
+            timeNumber -= 12;
+        }
+        return timeNumber + ":" + minutes + " " + amOrPm;
+    }
+
     private String getDay(String date) {
         return date.substring(8, 10);
     }
@@ -75,7 +93,7 @@ public class DateHandler {
     }
 
     private String getTime(String datetime) {
-        return datetime.substring(11, 19);
+        return datetime.substring(11, 16);
     }
 
     private String getDate(String datetime) {

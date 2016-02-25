@@ -81,6 +81,8 @@ public class SettingsFragment extends Fragment {
         switchToggle(settings, pushSwitch, "push");
         switchToggle(settings, familySwitch, "family");
 
+
+
         //set all the switch listeners
         switchListener(settings, emailSwitch, "mail");
         switchListener(settings, smsSwitch, "sms" );

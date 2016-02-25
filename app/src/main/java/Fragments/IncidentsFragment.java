@@ -98,7 +98,7 @@ public class IncidentsFragment extends ListFragment {
                                             DateHandler date = new DateHandler(incidents.getJSONObject(i).get("created_on").toString());
                                             tempJSON.put("name", incidents.getJSONObject(i).get("regionName"));
                                             tempJSON.put("date", date.getDisplayDate());
-                                            tempJSON.put("time", "");
+                                            tempJSON.put("time", date.getDisplayTime());
                                             jsonArray.put(tempJSON);
                                         }
 
@@ -272,10 +272,11 @@ public class IncidentsFragment extends ListFragment {
 
                                                     for(int i = 0; i < incidents.length(); i++) {
                                                         JSONObject tempJSON = new JSONObject();
+                                                        DateHandler date = new DateHandler(incidents.getJSONObject(i).get("created_on").toString());
                                                         tempJSON.put("name", incidents.getJSONObject(i).get("regionName"));
-                                                        tempJSON.put("time", incidents.getJSONObject(i).get("created_on"));
-                                                        jsonArray.put(tempJSON);
-                                                    }
+                                                        tempJSON.put("date", date.getDisplayDate());
+                                                        tempJSON.put("time", date.getDisplayTime());
+                                                        jsonArray.put(tempJSON);                                                    }
 
                                                 } else {
                                                     // no new incidents reported; do nothing.
@@ -342,26 +343,6 @@ public class IncidentsFragment extends ListFragment {
                     } catch (CryptorException e) {
                         e.printStackTrace();
                     }
-
-
-                    /*
-                    JSONObject jOb = new JSONObject();
-                    JSONObject jOb2 = new JSONObject();
-
-                    try{
-                        jOb.put("name","Edificio Blablabla");
-                        jOb.put("time", "7:23 PM");
-                        jOb.put("date", "February 14, 2016");
-                        jOb2.put("name","Edificio Etc");
-                        jOb2.put("time", "2:00 AM");
-                        jOb2.put("date", "January 20, 2016");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    jsonArray.put(jOb);
-                    jsonArray.put(jOb2);
-                    */
                 }
             } catch (Exception e) {
                 e.printStackTrace();
