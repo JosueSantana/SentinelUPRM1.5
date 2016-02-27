@@ -36,7 +36,7 @@ public class IncidentsFragment extends ListFragment {
 
     SwipeRefreshLayout swipeRefreshLayout;
     private Handler handler = new Handler();
-    JSONArray jsonArray = new JSONArray();
+    JSONArray jsonArray;
     ListView mList;
     private int numberOfIncidents;
 
@@ -48,6 +48,7 @@ public class IncidentsFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.numberOfIncidents = 0;
+        this.jsonArray = new JSONArray();
     }
 
     @Override
@@ -65,6 +66,8 @@ public class IncidentsFragment extends ListFragment {
 
         //TODO: Get JSONArray from Handler
         //TODO: Should we use AsyncTasks or does the Fragment take care of that?
+
+        System.out.println("lol");
 
         //all of this...
         if(jsonArray.length() == 0){
@@ -87,7 +90,6 @@ public class IncidentsFragment extends ListFragment {
                                 if (requestIsSuccessful(e)) {
                                     JSONObject decryptedValue = getDecryptedValue(receivedJSON);
                                     System.out.println(decryptedValue);
-
                                     try {
                                         JSONArray incidents = decryptedValue.getJSONArray("incident");
                                         numberOfIncidents = incidents.length();
@@ -102,20 +104,18 @@ public class IncidentsFragment extends ListFragment {
                                             jsonArray.put(tempJSON);
                                         }
 
+                                        setListAdapter(new IncidentsAdapter(jsonArray, getActivity()));
                                     } catch (JSONException e1) {
                                         e1.printStackTrace();
                                     }
-
                                     // Received Success Message
                                     if (receivedSuccessMessage(decryptedValue)) {
 
                                     }
-
                                     // Message Was Not Successful.
                                     else {
 
                                     }
-
                                 }
                                 // Errors
                                 else {
@@ -155,7 +155,6 @@ public class IncidentsFragment extends ListFragment {
                                 }
                                 return null;
                             }
-
                         });
 
             } catch (JSONException e) {
@@ -163,39 +162,37 @@ public class IncidentsFragment extends ListFragment {
             } catch (CryptorException e) {
                 e.printStackTrace();
             }
-        setListAdapter(new IncidentsAdapter(jsonArray, getActivity()));
 
-        //makes sure it doesn't try to refresh the list while the visible list is not at the top
-        mList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            //makes sure it doesn't try to refresh the list while the visible list is not at the top
+            mList.setOnScrollListener(new AbsListView.OnScrollListener() {
 
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-            }
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+                }
 
-            public void onScroll(AbsListView view, int firstVisibleItem,
-                                 int visibleItemCount, int totalItemCount) {
-                swipeRefreshLayout.setEnabled(mList != null &&
-                                (mList.getChildCount() == 0 || mList.getChildCount() > 0
-                                        && mList.getFirstVisiblePosition() == 0
-                                        && mList.getChildAt(0).getTop() == 0)
-                );
-            }
-        });
+                public void onScroll(AbsListView view, int firstVisibleItem,
+                                     int visibleItemCount, int totalItemCount) {
+                    swipeRefreshLayout.setEnabled(mList != null &&
+                                    (mList.getChildCount() == 0 || mList.getChildCount() > 0
+                                            && mList.getFirstVisiblePosition() == 0
+                                            && mList.getChildAt(0).getTop() == 0)
+                    );
+                }
+            });
 
-        //listener for when you try to refresh the list
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            //listener for when you try to refresh the list
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
-            @Override
-            public void onRefresh() {
-                // our swipeRefreshLayout needs to be notified when the data is returned in order for it to stop the animation
-                //handler.post(refreshing);
-                new RefreshAdapter().execute();
-            }
-        });
+                @Override
+                public void onRefresh() {
+                    // our swipeRefreshLayout needs to be notified when the data is returned in order for it to stop the animation
+                    //handler.post(refreshing);
+                    new RefreshAdapter().execute();
+                }
+            });
 
-        // sets the colors used in the refresh animation
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
+            // sets the colors used in the refresh animation
+            swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
 
-        getListView();
         }
     }
 

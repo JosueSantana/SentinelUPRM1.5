@@ -1,5 +1,6 @@
 package Fragments;
 
+import android.content.Context;
 import android.view.View.OnClickListener;
 import android.content.SharedPreferences;
 
@@ -12,9 +13,18 @@ import android.widget.CompoundButton;
 
 import android.widget.Switch;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 import com.hmkcode.locations.sentineluprm15.R;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
+import org.cryptonode.jncryptor.CryptorException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import OtherHandlers.CryptographyHandler;
+import OtherHandlers.JSONHandler;
 import OtherHandlers.ValuesCollection;
 
 /**
@@ -81,13 +91,17 @@ public class SettingsFragment extends Fragment {
         switchToggle(settings, pushSwitch, "push");
         switchToggle(settings, familySwitch, "family");
 
-
-
         //set all the switch listeners
         switchListener(settings, emailSwitch, "mail");
         switchListener(settings, smsSwitch, "sms" );
         switchListener(settings, pushSwitch, "push");
         switchListener(settings, familySwitch, "family");
+    }
+
+    private String getToken() {
+        SharedPreferences credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+        return storedToken;
     }
 
     private void switchToggle(SharedPreferences settings, CompoundButton slideSwitch, String name){
@@ -112,6 +126,51 @@ public class SettingsFragment extends Fragment {
                 editor.commit();
 
                 System.out.println("Current " + name + " status: " + settings.getBoolean(name, false));
+
+                Context context = getContext();
+                CharSequence text = "Hello toast!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+
+
+                final CryptographyHandler crypto;
+
+                try {
+                    crypto = new CryptographyHandler();
+
+                    JSONObject alertJSON = new JSONObject();
+
+                    alertJSON.put("token", getToken());
+
+                    Ion.with(getContext())
+                            .load(ValuesCollection.SETTINGS_URL)
+                            .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(alertJSON))
+                            .asString()
+                            .setCallback(new FutureCallback<String>() {
+                                @Override
+                                public void onCompleted(Exception e, String result) {
+                                    System.out.println(result);
+                                    try {
+                                        JSONObject receivedSentinelMessage = JSONHandler.convertStringToJSON(result);
+                                        String encryptedJSONReceived = JSONHandler.getSentinelMessage(receivedSentinelMessage);
+                                        String decryptedJSONReceived = crypto.decryptString(encryptedJSONReceived);
+
+                                        JSONObject receivedJSON = JSONHandler.convertStringToJSON(decryptedJSONReceived);
+
+                                    } catch (JSONException e1) {
+                                        e1.printStackTrace();
+                                    } catch (CryptorException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                }
+                            });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (CryptorException e) {
+                    e.printStackTrace();
+                }
 
             }
         });

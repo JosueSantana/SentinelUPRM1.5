@@ -28,7 +28,7 @@ public class DateHandler {
     public String getDisplayTime() {
         String amOrPm = "AM";
         int timeNumber = Integer.parseInt(this.time.substring(0,2));
-        int minutes = Integer.parseInt(this.time.substring(3,5));
+        String minutes = this.time.substring(3,5);
 
         if (timeNumber >= 12) {
             amOrPm = "PM";
