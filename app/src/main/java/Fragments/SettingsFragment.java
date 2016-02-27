@@ -15,16 +15,9 @@ import android.widget.Switch;
 import android.widget.TableRow;
 import android.widget.Toast;
 
+import com.google.android.gms.iid.InstanceID;
 import com.hmkcode.locations.sentineluprm15.R;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 
-import org.cryptonode.jncryptor.CryptorException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import OtherHandlers.CryptographyHandler;
-import OtherHandlers.JSONHandler;
 import OtherHandlers.ValuesCollection;
 
 /**
@@ -51,6 +44,26 @@ public class SettingsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+    @Override
+    public void onStop() {
+        Context context = getContext();
+        CharSequence text = "left fragment";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+    }
+
+    public void onPause() {
+        Context context = getContext();
+        CharSequence text = "left fragment";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+    }
+
 
     @Override
          public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -128,13 +141,13 @@ public class SettingsFragment extends Fragment {
                 System.out.println("Current " + name + " status: " + settings.getBoolean(name, false));
 
                 Context context = getContext();
-                CharSequence text = "Hello toast!";
+                CharSequence text = "Flipped Switch";
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
 
-
+                /*
                 final CryptographyHandler crypto;
 
                 try {
@@ -171,7 +184,7 @@ public class SettingsFragment extends Fragment {
                 } catch (CryptorException e) {
                     e.printStackTrace();
                 }
-
+                */
             }
         });
     }
