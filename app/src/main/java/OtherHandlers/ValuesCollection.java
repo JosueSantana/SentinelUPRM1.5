@@ -20,6 +20,8 @@ public class ValuesCollection {
 
     public static final String SETTINGS_URL = INITIAL_URL + "8dc8580836be036a/user/c8d7b2a2309baa3746/preferences";
 
+    public static final String CONTACT_LIST_URL = INITIAL_URL + "1123c1a441f7dfef5eb/contact/408d27f6ce0a895c8f/contacts";
+
     /*
     public static final String SEND_INCIDENT_URL = INITIAL_URL + "incident/31923faa-340c-4707-8c93-df528e65aa41/incident-request/7c0d78d4-4b78-4ee2-9e8e-4b4d6988a855";
 
@@ -34,8 +36,15 @@ public class ValuesCollection {
     public static final String SETTINGS_SP = "SettingsFile";
     public static final String CREDENTIALS_SP = "CredentialsFile";
 
-    public static final String EMAIL_KEY = "email";
     public static final String TOKEN_KEY = "token";
+
+    // Settings Values:
+    public static final String EMAIL_KEY = "mail";
+    public static final String PUSH_KEY = "push";
+    public static final String FAMILY_KEY = "family";
+    public static final String SMS_KEY = "sms";
+
+
     public static final String INSTANCE_ID_GCM = "sentinel_instance_id";
 
     public static final String SENTINEL_MESSAGE_KEY = "SentinelMessage";
