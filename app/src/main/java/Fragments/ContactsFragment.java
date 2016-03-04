@@ -1,12 +1,13 @@
 package Fragments;
 
 import android.support.v4.app.ListFragment;
-import android.content.Context;
-import android.net.Uri;
-import android.os.AsyncTask;
+
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -18,7 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ListViewHelpers.ContactsAdapter;
-import OtherHandlers.JSONHandler;
 
 
 public class ContactsFragment extends ListFragment{
@@ -29,9 +29,12 @@ public class ContactsFragment extends ListFragment{
         // Required empty public constructor
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
     }
 
@@ -39,6 +42,7 @@ public class ContactsFragment extends ListFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
 
@@ -70,6 +74,29 @@ public class ContactsFragment extends ListFragment{
         getListView();
 
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_contacts, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add_contacts:
+                // User chose the "Settings" item, show the app settings UI...
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, new PhonebookFragment()).addToBackStack(null).commit();;
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
 
     public void onListItemClick(ListView l, View v, int position, long id){
         //TODO: Do stuff when you click

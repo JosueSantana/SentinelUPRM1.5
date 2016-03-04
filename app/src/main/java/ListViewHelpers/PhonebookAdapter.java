@@ -77,15 +77,6 @@ public class PhonebookAdapter extends BaseAdapter {
 
             row.contactName.setText(jsonObject.getString("name"));
 
-            // Create a Pattern object
-            Pattern r = Pattern.compile(".*([0-9]{3}).*([0-9]{3})-([0-9]{4})");
-
-            // Now create matcher object.
-            Matcher m = r.matcher(jsonObject.getString("phone"));
-            if(m.matches()){
-                System.out.println("M MATCHES " + m.group(1) + m.group(2) + m.group(3));
-                row.contactPhone.setText("(" + m.group(1) + ") " + m.group(2) + "-" + m.group(3));
-            }
         }
         catch (JSONException e){
             e.printStackTrace();

@@ -10,12 +10,16 @@ import android.support.v4.content.CursorLoader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.hmkcode.locations.sentineluprm15.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ListViewHelpers.ContactsAdapter;
 import ListViewHelpers.PhonebookAdapter;
@@ -25,6 +29,8 @@ import ListViewHelpers.PhonebookAdapter;
  */
 public class PhonebookFragment extends ListFragment{
 
+
+    JSONArray contactsList;
 
     public PhonebookFragment() {
         // Required empty public constructor
@@ -48,7 +54,7 @@ public class PhonebookFragment extends ListFragment{
         CursorLoader loader = new CursorLoader(this.getActivity(), uri, projection, null, null, null);
         Cursor cursor = loader.loadInBackground();
 
-        JSONArray contactsList = new JSONArray();
+        contactsList = new JSONArray();
 
         if(cursor.moveToFirst()){
             do{
@@ -67,7 +73,19 @@ public class PhonebookFragment extends ListFragment{
                         Cursor phones = phonesLoader.loadInBackground();
                         phones.moveToFirst();
 
-                        item.put("phone", phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+                        String phoneStr = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+
+                        // Create a Pattern object
+                        Pattern r = Pattern.compile(".*([0-9]{3}).*([0-9]{3})-([0-9]{4})");
+
+                        // Now create matcher object.
+                        Matcher m = r.matcher(phoneStr);
+                        if(m.matches()){
+                            System.out.println("M MATCHES " + m.group(1) + m.group(2) + m.group(3));
+                            item.put("phone", m.group(1) + m.group(2) + m.group(3));
+                        }
+
                         contactsList.put(item);
 
                     }
@@ -84,4 +102,11 @@ public class PhonebookFragment extends ListFragment{
         setListAdapter(new PhonebookAdapter(contactsList, getActivity()));
         getListView();
     }
+
+    public void onListItemClick(ListView l, View v, int position, long id){
+        
+    }
+
+
+
 }

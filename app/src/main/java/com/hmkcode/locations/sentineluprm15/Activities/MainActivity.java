@@ -1,8 +1,5 @@
 package com.hmkcode.locations.sentineluprm15.Activities;
 
-import android.content.SharedPreferences;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -12,17 +9,9 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.hmkcode.locations.sentineluprm15.R;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
-
-import org.cryptonode.jncryptor.CryptorException;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import Fragments.ViewPagerFragment;
-import OtherHandlers.CryptographyHandler;
-import OtherHandlers.JSONHandler;
-import OtherHandlers.ValuesCollection;
+
 
 public class MainActivity extends AppCompatActivity {
 
