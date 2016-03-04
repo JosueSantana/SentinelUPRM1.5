@@ -72,8 +72,18 @@ public class SplashActivity extends AppCompatActivity {
             }
         }
         else{
-
-            if(!credentials.contains("atSignup") || !(credentials.getBoolean("atSignup", false))){
+            if(credentials.contains("atSignup") && credentials.contains("email")) {
+                //go directly to alert view
+                Intent mainIntent = new Intent(SplashActivity.this, VerificationActivity.class);
+                startActivity(mainIntent);
+                finish();
+            }
+            else if((credentials.getBoolean("atSignup", false))){
+                Intent signupIntent = new Intent(SplashActivity.this, SignupActivity.class);
+                startActivity(signupIntent);
+                finish();
+            }
+            else{
                 //go to sign up screen
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -85,17 +95,6 @@ public class SplashActivity extends AppCompatActivity {
                         finish();
                     }
                 }, 3000);
-            }
-            else if(credentials.contains("atSignup") && (credentials.getBoolean("atSignup", false))) {
-                //go directly to alert view
-                Intent mainIntent = new Intent(SplashActivity.this, VerificationActivity.class);
-                startActivity(mainIntent);
-                finish();
-            }
-            else{
-                Intent signupIntent = new Intent(SplashActivity.this, SignupActivity.class);
-                startActivity(signupIntent);
-                finish();
             }
 
         }

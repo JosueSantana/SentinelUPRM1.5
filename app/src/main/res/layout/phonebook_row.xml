@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground"
+    android:padding="15dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/contactlabel"
+        android:id="@+id/phonebookName"
+        android:layout_gravity="center|left"
+        android:layout_span="3"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_toLeftOf="@+id/phonebookNumber" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/contactcountlabel"
+        android:id="@+id/phonebookNumber"
+        android:layout_gravity="center|right"
+        android:layout_span="3"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:fontFamily="sans-serif-condensed-light"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>
