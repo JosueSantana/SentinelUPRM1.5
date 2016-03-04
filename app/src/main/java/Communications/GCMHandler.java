@@ -8,8 +8,8 @@ public class GCMHandler {
 }
 
 /*
-Server API Key help
+Server API Key
 AIzaSyBZp3GhlsNudd0XBwlR_I7mqg_ZtYOlW8s
-Sender ID: help
+Sender ID
 6008874123
  */

@@ -1,8 +1,12 @@
 package OtherHandlers;
 
+import android.os.Bundle;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Set;
 
 /**
  * Created by jeanmendez on 2/13/16.
@@ -47,5 +51,19 @@ public final class JSONHandler {
      */
     public static String getSentinelMessage(JSONObject json) throws JSONException {
         return json.get(ValuesCollection.SENTINEL_MESSAGE_KEY).toString();
+    }
+
+    public static JSONObject convertBundleToJSON(Bundle data) {
+        JSONObject json = new JSONObject();
+        Set<String> keys = data.keySet();
+        for (String key : keys) {
+            try {
+                // json.put(key, bundle.get(key)); see edit below
+                json.put(key, JSONObject.wrap(data.get(key)));
+            } catch(JSONException e) {
+                //Handle exception here
+            }
+        }
+        return json;
     }
 }

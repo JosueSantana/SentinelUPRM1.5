@@ -20,7 +20,6 @@ public class ValuesCollection {
 
     public static final String SETTINGS_URL = INITIAL_URL + "8dc8580836be036a/user/c8d7b2a2309baa3746/preferences";
 
-
     /*
     public static final String SEND_INCIDENT_URL = INITIAL_URL + "incident/31923faa-340c-4707-8c93-df528e65aa41/incident-request/7c0d78d4-4b78-4ee2-9e8e-4b4d6988a855";
 
@@ -37,22 +36,21 @@ public class ValuesCollection {
 
     public static final String EMAIL_KEY = "email";
     public static final String TOKEN_KEY = "token";
+    public static final String INSTANCE_ID_GCM = "sentinel_instance_id";
 
     public static final String SENTINEL_MESSAGE_KEY = "SentinelMessage";
 
     public static final String ANDROID_OS_STRING = "android";
 
     public static final long TIMER_PERIOD = 2;
+
+    public static final String ANDROID_SENDER_ID = "6008874123";
 }
 
 /*
-    static let incidentLog = ["route": "/588527de84729cde26/incident/08b1842e7c99bbea05/logs", "type": "POST"]
-
-    static let alert = ["route": "/31923fa28e65aa41/alert/7c0d78d4b4d6988a855/request", "type": "POST"]
-
     static let setting = ["route": "/8dc8580836be036a/user/c8d7b2a2309baa3746/preferences", "type": "POST"]
 
-    static let feeback = ["route": "/1ea13556cc62590a90/report/8679df6f1ae36d9395/feedback", "type": "PUT"]
+    static let feedback = ["route": "/1ea13556cc62590a90/report/8679df6f1ae36d9395/feedback", "type": "PUT"]
 
     static let problem = ["route": "/8679df6f1ae36d9395/report/c525b9ff1ae36d9395/problem", "type": "PUT"]
 

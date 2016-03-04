@@ -4,11 +4,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 
 import android.view.View;
@@ -22,6 +24,8 @@ import android.widget.TextView;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
 import com.hmkcode.locations.sentineluprm15.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -30,6 +34,7 @@ import org.cryptonode.jncryptor.CryptorException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -52,10 +57,15 @@ public class SignupActivity extends FragmentActivity {
     private SharedPreferences credentials;
     private SharedPreferences.Editor editor;
 
+    GoogleCloudMessaging gcm;
+    InstanceID instanceID;
+    String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        getRegId();
 
         credentials = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
         editor = credentials.edit();
@@ -63,7 +73,7 @@ public class SignupActivity extends FragmentActivity {
         editor.putBoolean("atSignup", true).commit();
 
         //fix orientation on Portrait
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
         // Create listener for Alert Button
@@ -94,6 +104,8 @@ public class SignupActivity extends FragmentActivity {
                         e.printStackTrace();
                     } catch (CryptorException e) {
                         e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                     handled = true;
                 }
@@ -112,13 +124,15 @@ public class SignupActivity extends FragmentActivity {
                     e.printStackTrace();
                 } catch (CryptorException e) {
                     e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
 
     }
 
-    private boolean checkFormat(String email, String pattern){
+    private boolean checkFormat(String email, String pattern) {
         // Create a Pattern object
         Pattern r = Pattern.compile(pattern);
 
@@ -128,7 +142,7 @@ public class SignupActivity extends FragmentActivity {
         return m.find();
     }
 
-    private void showSignupError(int titleID, int messageID ){
+    private void showSignupError(int titleID, int messageID) {
         //prepare strings to pass to Fragment through Bundle
         Bundle bundle = new Bundle();
         bundle.putInt("dialogtitle", titleID);
@@ -140,23 +154,20 @@ public class SignupActivity extends FragmentActivity {
         dialogFragment.show(fm, "Alert Dialog Fragment");
     }
 
-    private void attemptSignup(List textViews) throws JSONException, CryptorException {
+    private void attemptSignup(List textViews) throws JSONException, CryptorException, IOException {
 
         //These are the strings corresponding to user input (potentially pass to a handling function)
         final String email = ((AutoCompleteTextView) textViews.get(0)).getText().toString();
         String phone = ((EditText) textViews.get(1)).getText().toString();
 
         //manage failure conditions
-        if(email.isEmpty() || phone.isEmpty()){
+        if (email.isEmpty() || phone.isEmpty()) {
             showSignupError(R.string.emptyformatalerttitle, R.string.emptyformatalertmessage);
-        }
-        else if(!checkFormat(email, "(.*)(@uprm?\\.edu)($)")){
+        } else if (!checkFormat(email, "(.*)(@uprm?\\.edu)($)")) {
             showSignupError(R.string.incorrectemailformattitle, R.string.incorrectemailformatmessage);
-        }
-        else if(!checkFormat(phone, "[0-9]{10}$")){
+        } else if (!checkFormat(phone, "[0-9]{10}$")) {
             showSignupError(R.string.incorrectphoneformattitle, R.string.incorrectphoneformatmessage);
-        }
-        else{
+        } else {
             //ideally this toast will be replaced soon
             //Toast.makeText(SignupActivity.this, R.string.sendverificationalerttitle, Toast.LENGTH_SHORT).show();
 
@@ -165,11 +176,27 @@ public class SignupActivity extends FragmentActivity {
 
             final CryptographyHandler crypto = new CryptographyHandler();
 
+            /*
+            InstanceID instanceID = InstanceID.getInstance(this);
+            String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+            */
+
+            //String token = getGCMToken();
+
             JSONObject registerJSON = new JSONObject();
-            registerJSON.put("email",email);
+            registerJSON.put("email", email);
             registerJSON.put("phone", phone);
             registerJSON.put("os", ValuesCollection.ANDROID_OS_STRING);
-            registerJSON.put("deviceID", Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID).toString());
+            registerJSON.put("deviceID", token);
+
+            final SharedPreferences.Editor credentialsEditor = credentials.edit();
+
+            credentialsEditor.putString(ValuesCollection.ANDROID_SENDER_ID, token);
+            credentialsEditor.commit();
+
+
+            //registerJSON.put("deviceID", Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID).toString());
+            //registerJSON.put("deviceID", instanceID.getToken(ValuesCollection.ANDROID_SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE));
 
             Ion.with(getBaseContext())
                     .load(ValuesCollection.REGISTER_URL)
@@ -236,8 +263,36 @@ public class SignupActivity extends FragmentActivity {
                             }
                             return null;
                         }
-
                     });
         }
     }
+
+
+    /*
+        Get the Instance ID From Google.
+     */
+    public void getRegId(){
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg = "";
+                instanceID = InstanceID.getInstance(getApplicationContext());
+                try {
+                    String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                    return token;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                token = msg;
+            }
+        }.execute(null, null, null);
+    }
+
 }

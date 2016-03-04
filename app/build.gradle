@@ -30,7 +30,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.5'
     compile 'com.koushikdutta.ion:ion:2.+'
     compile 'com.google.android.gms:play-services:8.4.0'
-    compile 'com.google.android.gms:play-services-location:6.5.87'
+    compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.google.android.gms:play-services-ads:8.4.0'
     compile 'com.google.android.gms:play-services-identity:8.4.0'
     compile 'com.google.android.gms:play-services-gcm:8.4.0'
