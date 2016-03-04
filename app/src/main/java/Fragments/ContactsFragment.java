@@ -1,11 +1,8 @@
 package Fragments;
 
+import android.content.SharedPreferences;
 import android.support.v4.app.ListFragment;
-import android.content.Context;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +26,6 @@ import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DateHandler;
 import OtherHandlers.JSONHandler;
 import OtherHandlers.ValuesCollection;
-
 
 public class ContactsFragment extends ListFragment{
 
@@ -59,7 +55,7 @@ public class ContactsFragment extends ListFragment{
         //TODO: Should we use AsyncTasks or does the Fragment take care of that?
 
         //all of this...
-        JSONArray jsonArray = new JSONArray();
+        final JSONArray jsonArray = new JSONArray();
         JSONObject jOb = new JSONObject();
         JSONObject jOb2 = new JSONObject();
 
@@ -70,6 +66,7 @@ public class ContactsFragment extends ListFragment{
             crypto = new CryptographyHandler();
 
             registerJSON.put("token", getToken());
+            System.out.println("lol");
 
             Ion.with(getContext())
                     .load(ValuesCollection.CONTACT_LIST_URL)
@@ -78,11 +75,26 @@ public class ContactsFragment extends ListFragment{
                     .setCallback(new FutureCallback<String>() {
                         @Override
                         public void onCompleted(Exception e, String receivedJSON) {
+
                             // Successful Request
                             if (requestIsSuccessful(e)) {
 
                                 JSONObject decryptedValue = getDecryptedValue(receivedJSON);
                                 System.out.println(decryptedValue);
+
+                                try {
+                                    JSONArray contacts = decryptedValue.getJSONArray("contact");
+
+                                    for(int i = 0; i < contacts.length(); i++) {
+                                        JSONObject tempJSON = new JSONObject();
+                                        tempJSON.put("name", contacts.getJSONObject(i).get("name"));
+                                        tempJSON.put("editedPhone", contacts.getJSONObject(i).get("phone"));
+                                        jsonArray.put(tempJSON);
+                                    }
+                                    setListAdapter(new ContactsAdapter(jsonArray, getActivity()));
+                                } catch (JSONException e1) {
+                                    e1.printStackTrace();
+                                }
 
                                 // Created a new session; there are no registered contacts yet.
                                 if(listIsEmpty(decryptedValue)) {
@@ -97,7 +109,6 @@ public class ContactsFragment extends ListFragment{
                             }
                             // Errors
                             else {
-
                             }
                         }
 
@@ -152,6 +163,7 @@ public class ContactsFragment extends ListFragment{
             e.printStackTrace();
         }
 
+        /*
         try {
             jOb.put("name","Fulano Detal");
             jOb.put("editedPhone", "7874531523");
@@ -166,12 +178,16 @@ public class ContactsFragment extends ListFragment{
         jsonArray.put(jOb2);
         //...is provisional
 
+        */
+
         setListAdapter(new ContactsAdapter(jsonArray, getActivity()));
         getListView();
     }
 
     private String getToken() {
-        return null;
+        SharedPreferences credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+        return storedToken;
     }
 
     @Override

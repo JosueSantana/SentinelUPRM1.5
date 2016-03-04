@@ -218,7 +218,6 @@ public class IncidentsFragment extends ListFragment {
     private class RefreshAdapter extends AsyncTask<Void,Long,IncidentsAdapter > {
         @Override
         protected void onPreExecute() {
-
             swipeRefreshLayout.setEnabled(true);
             swipeRefreshLayout.setRefreshing(true);
         }
