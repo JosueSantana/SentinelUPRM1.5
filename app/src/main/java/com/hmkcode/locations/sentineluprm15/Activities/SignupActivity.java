@@ -271,7 +271,7 @@ public class SignupActivity extends FragmentActivity {
     /*
         Get the Instance ID From Google.
      */
-    public void getRegId(){
+    public void getRegId() {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
@@ -294,5 +294,4 @@ public class SignupActivity extends FragmentActivity {
             }
         }.execute(null, null, null);
     }
-
 }

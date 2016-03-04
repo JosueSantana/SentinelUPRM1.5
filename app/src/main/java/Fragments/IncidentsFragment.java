@@ -90,7 +90,7 @@ public class IncidentsFragment extends ListFragment {
         mHandler = new Handler();
 
         //all of this...
-        final Runnable r = new Runnable(){
+        final Runnable r = new Runnable() {
 
             @Override
             public void run() {
