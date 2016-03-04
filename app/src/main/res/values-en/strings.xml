@@ -16,8 +16,8 @@
     <string name="okmessage">OK</string>
     <string name="emptyformatalerttitle">Empty Fields</string>
     <string name="emptyformatalertmessage">Please fill out all fields.</string>
-    <string name="incorrectemailformattitle">E-mail Not Valid</string>
-    <string name="incorrectemailformatmessage">The e-mail entered is not valid. Make sure your email belongs to the UPR or UPRM domain.</string>
+    <string name="incorrectemailformattitle">Email Not Valid</string>
+    <string name="incorrectemailformatmessage">The email entered is not valid. Make sure your email belongs to the UPR or UPRM domain.</string>
     <string name="incorrectphoneformattitle">Incorrect Format</string>
     <string name="incorrectphoneformatmessage">Please enter the right phone number format.</string>
     <string name="entercodelabel">Enter Code</string>
@@ -33,7 +33,7 @@
     
     <!--Sign up screen -->
     <string name="notificationTitle">El Incidente fue Localizado: </string>
-    <string name="notificationMessage">Refrescar la tabla de incidentes tirando hacia abajo para mostrar nuevos incidentes.</string>
+    <string name="notificationMessage">Refresh the table by pulling down to view new incidents.</string>
     <!-- -->
     
     
@@ -93,7 +93,7 @@
     <!-- -->
     
     <!--Settings Screen -->
-    <string name="emaillabel">E-mail</string>
+    <string name="emaillabel">Email</string>
     <string name="smslabel">Text Messaging</string>
     <string name="pushlabel">Push Notifications</string>
     <string name="fflabel">Family and Friends</string>
@@ -141,8 +141,8 @@
     <string name="alertcontactaddedtitle">New Contact Added</string>
     <string name="navigationtitle">Contact List</string>
     <string name="navcontacttitle">Contact</string>
-    <string name="cancelButton">Cancelar</string>
-    <string name="saveButton">Guardar</string>
+    <string name="cancelButton">Cancel</string>
+    <string name="saveButton">Save</string>
     <!-- -->
     
     <!--Request Messages -->
@@ -157,7 +157,7 @@
     <string name="gotologintitle">You Have an Open Session in Another Device</string>
     <string name="gotologinmessage">To reuse the app in this device, you need to register again.</string>
     <string name="unsubscribetitle">Subscription Cancellation Completed</string>
-    <string name="unsubscribemessage">La solicitud para la cancelación de su suscripción ha sido completada. Aún podrá recibir mensajes de texto en masa durante una emergencia.</string>
+    <string name="unsubscribemessage">The request for the cancelation of your subscription has been completed. You may still receive mass text messages during an emergency.</string>
     <string name="passwordhint">Password</string>
     <!-- -->
 

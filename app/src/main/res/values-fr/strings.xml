@@ -55,7 +55,6 @@
     <!--Pantalla de alerta enviada -->
     <string name="toplabelalerted">Por favor espere a que llegue la ayuda!</string>
     <string name="bottomlabelalerted">Para enviar otra alerta, tendrá que esperar %1$s minutos</string>
-    <string name="bottomlabelendingalerted">minutos</string>
     <string name="alerttimerend">Listo para alertar!</string>
     <!-- -->
     

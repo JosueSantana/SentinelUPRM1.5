@@ -51,6 +51,9 @@ public class ReportFragment extends Fragment {
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        SharedPreferences settings = this.getActivity().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+        System.out.println("APPLOCALE IS: " + settings.getString("appLocale", "no"));
         mButton = (ImageButton) getView().findViewById(R.id.alertButton);
 
         mButton.setOnClickListener(new OnClickListener() {

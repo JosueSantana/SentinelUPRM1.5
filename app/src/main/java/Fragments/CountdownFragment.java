@@ -205,8 +205,7 @@ public class CountdownFragment extends Fragment implements
     }
 
     private void goBackToAlertWaitFragment(){
-        getActivity().getSupportFragmentManager().popBackStack();
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, new AlertWaitFragment()).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().remove(this).replace(R.id.mainLayout, new AlertWaitFragment()).commit();;
     }
 
 

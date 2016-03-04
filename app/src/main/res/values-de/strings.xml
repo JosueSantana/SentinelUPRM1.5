@@ -4,159 +4,163 @@
 
     <!--Barra navegadora -->
     <string name="alert">Alarm</string>
-    <string name="incident">Incidentes</string>
-    <string name="call">Llamada</string>
-    <string name="settings">Ajustes</string>
-    <string name="noconnectiontitle">Sin conexión a Internet</string>
-    <string name="noconnectionmessage">Asegúrse que su dispositivo está conectado a Internet.</string>
+    <string name="incident">Vorfälle</string>
+    <string name="call">Anrufen</string>
+    <string name="settings">Einstellungen</string>
+    <string name="noconnectiontitle">Keine Internetverbindung</string>
+    <string name="noconnectionmessage">Stellen Sie sicher, dass Ihr Gerät ist mit dem Internet verbunden.</string>
     <!-- -->
     
     <!--Pantalla para registrarse -->
-    <string name="signuptitle">Registrarse</string>
+    <string name="signuptitle">Registrieren</string>
     <string name="okmessage">OK</string>
-    <string name="emptyformatalerttitle">Campos Vacíos</string>
-    <string name="emptyformatalertmessage">Por favor llene todos los campos.</string>
-    <string name="incorrectemailformattitle">El Correo Electrónico no es Válido</string>
-    <string name="incorrectemailformatmessage">El correo electrónico que ha entrado no es válido. Asegúrese que su correo electrónico pertenezca al dominio UPR o UPRM.</string>
-    <string name="entercodelabel">Introduzca el Código</string>
-    <string name="sendvalidationlabel">Validar</string>
-    <string name="sendverificationalerttitle">Código de Verificación Enviado</string>
-    <string name="sendverificationalertmessage">Un código de verificación fue enviado a su correo electrónico para legitimar la sesión.</string>
-    <string name="wrongcodetitle">Código Incorrecto</string>
-    <string name="wrongcodemessage">El código que usted ha sometido no concuerda. Verifique que haya entrado el código correctamente.</string>
-    <string name="emailhint">Correo Electrónico</string>
-    <string name="passwordhint">Contraseña</string>
+    <string name="emptyformatalerttitle">Leere Felder</string>
+    <string name="emptyformatalertmessage">Bitte füllen Sie alle Felder aus.</string>
+    <string name="incorrectemailformattitle">Die Email ist nicht Gültig</string>
+    <string name="incorrectemailformatmessage">Die email von Ihnen eingegebene ist nicht gültig. Achten Sie darauf, dass Ihre E-Mail gehört zu der Domäne UPR oder UPRM.</string>
+    <string name="entercodelabel">Geben Sie den Code ein</string>
+    <string name="sendvalidationlabel">Bestätigen</string>
+    <string name="sendverificationalerttitle">Verifikations-Code Gesandt</string>
+    <string name="sendverificationalertmessage">Ein Bestätigungscode wurde an Ihre E-Mail geschickt, um die Sitzung zu legitimieren.</string>
+    <string name="wrongcodetitle">Falscher Code</string>
+    <string name="wrongcodemessage">Der Code, den Sie vorgelegt haben nicht übereinstimmt . Stellen Sie, dass Sie den Code korrekt eingegeben haben.</string>
+    <string name="emailhint">Email</string>
+    <string name="passwordhint">Passwort</string>
     <!-- -->
     
     <!--Notificaciones -->
-    <string name="notificationTitle">El Incidente fue Localizado: </string>
-    <string name="notificationMessage">Refrescar la tabla de incidentes tirando hacia abajo para mostrar nuevos incidentes.</string>
+    <string name="notificationTitle">Der Vorfall wurde zu finden:</string>
+    <string name="notificationMessage">Aktualisieren Sie die Tabelle durch Herunterziehen Neue Vorfälle anzuzeigen.</string>
     <!-- -->
     
     <!--Pantalla de Alerta -->
     <string name="toplabel">Drücken zu Alarmieren</string>
-    <string name="bottomlabel">AVISO: Usted tendrá 5 segundos para detener la alerta antes de ser enviada</string>
-    <string name="locationtitle">Ver Ubicación Actual</string>
-    <string name="locationmessage">Por favor elija una opción.</string>
-    <string name="viewlocationtitle">Ver Ubicación</string>
+    <string name="bottomlabel">WARNUNG: Sie erhalten 5 Sekunden Zeit, um den Alarm zu stoppen bevor es gesendet werden.</string>
+    <string name="locationtitle">Siehe aktuellen Standort</string>
+    <string name="locationmessage">Bitte wählen Sie eine Option.</string>
+    <string name="viewlocationtitle">Siehe Standort</string>
     <string name="alertlocationdonelabel">Schließen</string>
-    <string name="setlocationtitle">Fijar Ubicación Manualmente</string>
-    <string name="unsetlocationtitle">Desfijar Ubicación Manualmente </string>
-    <string name="cancellocationtitle">Cancelar</string>
-    <string name="sendbutton">ENVIAR</string>
-    <string name="stopbutton">DETENER</string>
-    <string name="alertnoinlocationtitle">Fuera de los Predios de la Universidad</string>
-    <string name="alertnoinlocationmessage">Para enviar la alerta, debe estar dentro de los predios de la universidad.</string>
-    <string name="alertlocationnotavailabletitle">Ubicación No Disponible</string>
-    <string name="alertlocationnotavailablemessage">Usted puede encender el GPS o autorizar que la aplicación obtenga su ubicación en el menú de Ajustes.</string>
-    <string name="sendingalert">Enviando Alerta Solicitada... </string>
+    <string name="setlocationtitle">Set Standort Manuell</string>
+    <string name="unsetlocationtitle">Unpin Standort manuell</string>
+    <string name="cancellocationtitle">Stornieren</string>
+    <string name="sendbutton">SENDEN</string>
+    <string name="stopbutton">HALT</string>
+    <string name="alertnoinlocationtitle">Sie befinden sich außerhalb der Universität Grenzen</string>
+    <string name="alertnoinlocationmessage">Um die Alarm zu senden, müssen Sie in den Grenzen der Universität sein.</string>
+    <string name="alertlocationnotavailabletitle">Ort nicht verfügbar</string>
+    <string name="alertlocationnotavailablemessage">Sie können machen der GPS an oder autorisieren der Anwendung Ihren Standort im Einstellungsmenü zu gelangen.</string>
+    <string name="sendingalert">Senden Gewünscht Alarm...</string>
     <!-- -->
     
     <!--Pantalla de alerta enviada -->
-    <string name="toplabelalerted">Por favor espere a que llegue la ayuda!</string>
-    <string name="bottomlabelalerted">Para enviar otra alerta, tendrá que esperar %1$s minutos</string>
-    <string name="bottomlabelendingalerted">minutos</string>
-    <string name="alerttimerend">Listo para alertar!</string>
+    <string name="toplabelalerted">Bitte warten Sie, bis Hilfe eintrifft!</string>
+    <string name="bottomlabelalerted">Sie müssen bis %1$s Minuten warten, eine weitere Alarm zu senden.</string>
+    <string name="alerttimerend">Bereit zu Alarmieren!</string>
     <!-- -->
     
     <!--Pantalla para ver incidentes -->
-    <string name="viewmap">Ver Mapa</string>
-    <string name="markertap">Toque el Marcador para Obtener Información</string>
-    <string name="showall">Mostrar Todos</string>
+    <string name="viewmap">Ansehen Karte</string>
+    <string name="markertap">Tippen die Marker zu bekommen Informationen</string>
+    <string name="showall">Anzeigen Alles</string>
     <!-- -->
     
     <!--Pantalla de mapas de ubicación -->
-    <string name="invalidadjustmentalert">Ajuste Inválido</string>
-    <string name="invalidadjustmentmessage">Usted ha colocado el cursor fuera de los predios.</string>
-    <string name="unchangedalert">Su ubicación permanece igual</string>
-    <string name="distanceview">Distancia</string>
-    <string name="orangelabel">Ajuste la posición del cursor dentro de 1000 metros de su ubicación actual</string>
-    <string name="setbarbutton">Ajustar</string>
+    <string name="invalidadjustmentalert">Ungültige Einstellung</string>
+    <string name="invalidadjustmentmessage">Sie haben den Cursor außerhalb der Grenzen gesetzt.</string>
+    <string name="unchangedalert">der Standort bleibt gleich.</string>
+    <string name="distanceview">Entfernung</string>
+    <string name="orangelabel">Stellen Sie die Position des Cursors innerhalb von 1000 m von der aktuellen Position ein.</string>
+    <string name="setbarbutton">Einstellen</string>
     <!-- -->
     
     <!--Pantalla para Llamar -->
-    <string name="oncallalerttitle">Su dispositivo debe ser un teléfono para llamar</string>
-    <string name="oncallalertmessage">Esta función no está disponible para tabletas.</string>
-    <string name="campussecurityheader">Guardia Universitaria</string>
-    <string name="medicalservicesheader">Servicios Médicos</string>
-    <string name="healthnsafetyheader">Salud y Seguridad</string>
-    <string name="medicalemergenciesheader">Emergencias Médicas</string>
-    <string name="municipalpoliceheader">Policía Municipal</string>
-    <string name="statepoliceheader">Policía Estatal</string>
-    <string name="bellavistahospitalheader">Hospital Bella Vista</string>
-    <string name="sanantoniohospitalheader">Hospital San Antonio</string>
-    <string name="pereahospitalheader">Hospital Perea</string>
+    <string name="oncallalerttitle">Ihr Gerät muss ein Telefon sein zu tätigen Anrufe.</string>
+    <string name="oncallalertmessage">Diese Funktion ist für Tabletten nicht zur Verfügung.</string>
+    <string name="campussecurityheader">Universitat Wache</string>
+    <string name="medicalservicesheader">Medizinische Dienstleistungen</string>
+    <string name="healthnsafetyheader">Gesundheit und Sicherheit</string>
+    <string name="medicalemergenciesheader">Medizinische Notfälle</string>
+    <string name="municipalpoliceheader">Stadtpolizei</string>
+    <string name="statepoliceheader">Staatspolizei</string>
+    <string name="bellavistahospitalheader">Bella Vista Krankenhaus</string>
+    <string name="sanantoniohospitalheader">San Antonio Krankenhaus</string>
+    <string name="pereahospitalheader">Perea Krankenhaus</string>
     <!-- -->
     
     <!--Pantalla de Ajustes -->
-    <string name="emaillabel">Correo Electrónico</string>
-    <string name="smslabel">Mensajes de Texto</string>
-    <string name="pushlabel">Notificaciones Push</string>
-    <string name="fflabel">Familia y Amigos</string>
-    <string name="languagelabel">Español</string>
-    <string name="contactlabel">Contactos</string>
-    <string name="langlabel">Idiomas</string>
-    <string name="notificationheader">Notificaciones</string>
-    <string name="notificationfooter">Las notificaciones push también pueden ser ajustadas desde el menú de configuración de su dispositivo móvil.</string>
-    <string name="contactcountlabel"> de 5</string>
-    <string name="familylabel">Familiares y Amigos</string>
-    <string name="familyheader">Puede agregar 5 números de telefono de familiares o amigos</string>
-    <string name="familyfooter">Ellos recibirán un mensaje de texto en caso de que tenga una emergencia.</string>
-    <string name="languageheader">Opciones</string>
-    <string name="supportheader">Apoyo</string>
-    <string name="privacylabel">Política de Privacidad y Normas</string>
-    <string name="feedbacklabel">Opinar</string>
+    <string name="emaillabel">Email</string>
+    <string name="smslabel">Textnachrichten</string>
+    <string name="pushlabel">Push-Benachrichtigungen</string>
+    <string name="fflabel">Familie und Freunde</string>
+    <string name="languagelabel">Deutsch</string>
+    <string name="contactlabel">Kontakte</string>
+    <string name="langlabel">Sprachen</string>
+    <string name="notificationheader">Benachrichtigungen</string>
+    <string name="notificationfooter">Push-Benachrichtigungen können auch aus dem Gerät Einstellungsmenü eingestellt werden.</string>
+    <string name="contactcountlabel">von 5</string>
+    <string name="familylabel">Familie und Freunde</string>
+    <string name="familyheader">Sie können 5 Telefonnummern aus der Familie oder Freunden hinzufügen</string>
+    <string name="familyfooter">Sie werden eine Text Nachricht erhalten wenn Sie einen Notfall Hatte.</string>
+    <string name="languageheader">Optionen</string>
+    <string name="supportheader">Unterstützen</string>
+    <string name="privacylabel">Datenschutz und Standards</string>
+    <string name="feedbacklabel">Rückmeldung</string>
     <string name="aboutuslabel">Über Uns</string>
     <!-- -->
     
     <!--Pantalla de Idiomas -->
-    <string name="languageselectlabel">Seleccione el idioma</string>
+    <string name="languageselectlabel">Wählen Sie die Sprache</string>
     <!-- -->
     
     <!--Pantalla de Reportes -->
-    <string name="reportsendbutton">ENVIAR</string>
-    <string name="reportlabel">Reportar Problema</string>
-    <string name="reportfeedback">Opinión General</string>
-    <string name="reportproblem">Algo no está funcionando</string>
-    <string name="reportcancel">Cancelar</string>
-    <string name="reportproblemfooter">Si está seguro de que usted está lidiando con un error, por favor complete el formulario. Asegúrese de describir su problema con el mayor detalle posible. Utilice su juicio.</string>
-    <string name="reportfeedbackfooter">Si tiene alguna sugerencia para mejorar la aplicación, háganoslo saber. Queremos darle una experiencia grata a través de Sentinel. </string>
-    <string name="reportalertonsendtitle">Enviado</string>
-    <string name="reportalertonsendmessage">Gracias por ayudarnos a mejorar!</string>
+    <string name="reportsendbutton">SENDEN</string>
+    <string name="reportlabel">Problem Melden</string>
+    <string name="reportfeedback">Generelle Rückmeldung</string>
+    <string name="reportproblem">Etwas funktionert nicht</string>
+    <string name="reportcancel">Stornieren</string>
+    <string name="reportproblemfooter">Wenn Sie sicher sind, dass Sie mit einem Fehler zu tun haben, füllen Sie bitte das Formular aus. Achten Sie darauf, Ihr Problem so detailliert wie möglich zu beschreiben. Verwenden Sie Ihr Urteil.</string>
+    <string name="reportfeedbackfooter">Wenn Sie Vorschläge haben, um die Anwendung zu verbessern, Lassen Sie uns wissen bitte. Wir wollen dich eine angenehme Erfahrung durch Sentinel zu geben.</string>
+    <string name="reportalertonsendtitle">Geschickt</string>
+    <string name="reportalertonsendmessage">Danke für das Helfen Sie uns, besser!</string>
     <!-- -->
     
     <!--Pantalla de Contactos -->
-    <string name="alertoverloadtitle">Desafortunadamente, No se le Puede Autorizar Más Contactos</string>
-    <string name="alertoverloadmessage">Por favor editar o eliminar algún contacto presente.</string>
-    <string name="alertphonevalidtitle">Formato incorrecto</string>
-    <string name="alertphonevalidmessage">Por favor, introduzca el formato correcto para el número de teléfono.</string>
+    <string name="alertoverloadtitle">Unglücklicherweise, Keine weiteren Kontakte können zugelassen werden.</string>
+    <string name="alertoverloadmessage">Bearbeiten oder löschen einige aktuelle Kontakt Bitte.</string>
+    <string name="alertphonevalidtitle">Falsches Format</string>
+    <string name="alertphonevalidmessage">Bitte, geben Sie das richtige Format für die Telefonnummer.</string>
     <string name="alertcontactaddtitle">Leerfelder</string>
     <string name="alertcontactaddmessage">Füllen Sie alle Felder aus bitte.</string>
     <string name="alertcontactaddedtitle">Neuer Kontakt Hinzugefügt</string>
-    <string name="navigationtitle">Lista de Contactos</string>
-    <string name="navcontacttitle">Contacto</string>
-    <string name="cancelButton">Cancel</string>
-    <string name="saveButton">Save</string>
+    <string name="navigationtitle">Kontakliste</string>
+    <string name="navcontacttitle">Kontakt</string>
+    <string name="cancelButton">Stornieren</string>
+    <string name="saveButton">Speichern</string>
     <!-- -->
     
     <!--Mensajes de Solicitud -->
-    <string name="errorconnectiontitle">Error de conexión</string>
-    <string name="errorconnectionmessage">Solicitud suspendida.</string>
-    <string name="errorretrievingtitle">Error de Información</string>
-    <string name="errorretrievingmessage">Se encontró un problema al momento de obtener información.</string>
-    <string name="tableplaceholder">Ningún Contacto Añadido</string>
+    <string name="errorconnectiontitle">Verbindungsfehler</string>
+    <string name="errorconnectionmessage">Anforderungsfehler.</string>
+    <string name="errorretrievingtitle">Informationen Fehler</string>
+    <string name="errorretrievingmessage">Ein Problem ist aufgetreten auf Informationsanfrage.</string>
+    <string name="tableplaceholder">Kein Kontact Hinzufügen</string>
     <!-- -->
 
     <!--Ir a registrarse -->
-    <string name="gotologintitle">Haz abierto una sesión en otro dispositivo</string>
-    <string name="gotologinmessage">Para reusar la aplicación en est dispositivo, necesita registrarse nuevamente</string>
-    <string name="unsubscribetitle">Cancelación de Suscripción Completada</string>
-    <string name="unsubscribemessage">La solicitud para la cancelación de su suscripción ha sido completada. Aún podrá recibir mensajes de texto en masa durante una emergencia.</string>
-    <string name="distancelabel">Distancia:</string>
-    <string name="incorrectphoneformattitle">Formato Incorrecto</string>
-    <string name="incorrectphoneformatmessage">Por favor, introduzca el formato de número de teléfono correcto.</string>
-    <string name="phonehint">Número Telefónico</string>
-    <string name="codenotreceivedmessage">No he recibido mi código</string>
+    <string name="gotologintitle">Sie haben eine Sitzung auf einem anderen Gerät geöffnet.</string>
+    <string name="gotologinmessage">Zur Wiederverwendung der App in diesem Gerät, Sie müssen sich erneut registrieren.</string>
+    <string name="unsubscribetitle">Abonnement Stornierung Fertiggestellt</string>
+    <string name="unsubscribemessage">Der Antrag für die Kündigung Ihres Abonnements abgeschlossen ist. Sie können immer noch Massentextnachrichten während eines Notfalls erhalten.</string>
+    <string name="distancelabel">Entfernung:</string>
+    <string name="incorrectphoneformattitle">Falsches Format</string>
+    <string name="incorrectphoneformatmessage">Bitte geben Sie das richtige Telefonnummer Format.</string>
+    <string name="phonehint">Telefonnumer</string>
+    <string name="codenotreceivedmessage">Ich habe meinen Code nicht empfangen.</string>
+    <string name="feedbackhint">Dafürhalten</string>
+    <string name="problemhint">Beschreibe das Problem...</string>
+    <string name="aboutusblurbp1">Das Engagement, mit der Sicherheit unserer Einrichtung wird durch die Schaffung von Werkzeugen gezeigt, dass unsere Qualität der Koexistenz zu verbessern. Am 14. August 2014 wurde ein Professor von einem Täter erstochen, ihn an den Rand des Todes zu verlassen. Diese Tatsache zeigte die Notwendigkeit eines Mechanismus, mit dem die Menschen ihre Not an die Gemeinschaft unverzüglich kommunizieren können.</string>
+    <string name="aboutusblurbp2">Im Anschluss an diese schreckliche Ereignis, das Studentenrat und die Verwaltungsbüros suchten Lösungen. Unter der Billigung dieser Einheiten, Co-Gründer Joel R. Corporán, Jean C. Méndez und Josué A. Santana entwickelte Sentinel, eine Anwendung für den Notfall Warnungen innerhalb der Universität von Puerto Rico Mayagüez Campus. Sentinel zielt darauf ab, eine effiziente und zuverlässige sofortige Reaktionssystem zu etablieren, die Offiziere und die Campus-Gemeinschaft zu lösen kritische Ereignisse mobilisiert.</string>
+    <string name="sentinelspecs">® Sentinel, für UPRM | Version 1.0.0</string>
     <!-- -->
 
 </resources>

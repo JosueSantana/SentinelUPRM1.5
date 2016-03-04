@@ -47,6 +47,7 @@ public class SettingsFragment extends Fragment {
 
     @Override
     public void onStop() {
+        super.onStop();
         Context context = getContext();
         CharSequence text = "left fragment";
         int duration = Toast.LENGTH_SHORT;
@@ -56,6 +57,7 @@ public class SettingsFragment extends Fragment {
     }
 
     public void onPause() {
+        super.onPause();
         Context context = getContext();
         CharSequence text = "left fragment";
         int duration = Toast.LENGTH_SHORT;
@@ -146,45 +148,6 @@ public class SettingsFragment extends Fragment {
 
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
-
-                /*
-                final CryptographyHandler crypto;
-
-                try {
-                    crypto = new CryptographyHandler();
-
-                    JSONObject alertJSON = new JSONObject();
-
-                    alertJSON.put("token", getToken());
-
-                    Ion.with(getContext())
-                            .load(ValuesCollection.SETTINGS_URL)
-                            .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(alertJSON))
-                            .asString()
-                            .setCallback(new FutureCallback<String>() {
-                                @Override
-                                public void onCompleted(Exception e, String result) {
-                                    System.out.println(result);
-                                    try {
-                                        JSONObject receivedSentinelMessage = JSONHandler.convertStringToJSON(result);
-                                        String encryptedJSONReceived = JSONHandler.getSentinelMessage(receivedSentinelMessage);
-                                        String decryptedJSONReceived = crypto.decryptString(encryptedJSONReceived);
-
-                                        JSONObject receivedJSON = JSONHandler.convertStringToJSON(decryptedJSONReceived);
-
-                                    } catch (JSONException e1) {
-                                        e1.printStackTrace();
-                                    } catch (CryptorException e1) {
-                                        e1.printStackTrace();
-                                    }
-                                }
-                            });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (CryptorException e) {
-                    e.printStackTrace();
-                }
-                */
             }
         });
     }

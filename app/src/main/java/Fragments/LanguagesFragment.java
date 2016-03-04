@@ -2,6 +2,7 @@ package Fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -20,6 +21,8 @@ import com.hmkcode.locations.sentineluprm15.R;
 
 import java.util.Locale;
 
+import OtherHandlers.ValuesCollection;
+
 public class LanguagesFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,20 +38,11 @@ public class LanguagesFragment extends Fragment {
     private TableRow deRow;
     private TableRow ptRow;
     private TableRow frRow;
+    private SharedPreferences settings;
 
     public LanguagesFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LanguagesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static LanguagesFragment newInstance(String param1, String param2) {
         LanguagesFragment fragment = new LanguagesFragment();
         Bundle args = new Bundle();
@@ -78,6 +72,9 @@ public class LanguagesFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
+        settings = getContext().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+        final SharedPreferences.Editor editor = settings.edit();
+
         enRow = (TableRow) getView().findViewById(R.id.englishRow);
         esRow = (TableRow) getView().findViewById(R.id.espanolRow);
         frRow = (TableRow) getView().findViewById(R.id.francaisRow);
@@ -90,6 +87,7 @@ public class LanguagesFragment extends Fragment {
                 Toast.makeText(getContext(),
                         "You have selected English", Toast.LENGTH_SHORT)
                         .show();
+                editor.putString("appLocale","en").commit();
                 setLocale("en");
                 return true;
             }
@@ -102,6 +100,7 @@ public class LanguagesFragment extends Fragment {
                 Toast.makeText(getContext(),
                         "Ha seleccionado español", Toast.LENGTH_SHORT)
                         .show();
+                editor.putString("appLocale", "es").commit();
                 setLocale("es");
                 return true;
             }
@@ -113,6 +112,7 @@ public class LanguagesFragment extends Fragment {
                 Toast.makeText(getContext(),
                         "Ha seleccionado español", Toast.LENGTH_SHORT)
                         .show();
+                editor.putString("appLocale", "fr").commit();
                 setLocale("fr");
                 return true;
             }
@@ -124,6 +124,7 @@ public class LanguagesFragment extends Fragment {
                 Toast.makeText(getContext(),
                         "Ha seleccionado español", Toast.LENGTH_SHORT)
                         .show();
+                editor.putString("appLocale", "de").commit();
                 setLocale("de");
                 return true;
             }
@@ -135,6 +136,7 @@ public class LanguagesFragment extends Fragment {
                 Toast.makeText(getContext(),
                         "Ha seleccionado español", Toast.LENGTH_SHORT)
                         .show();
+                editor.putString("appLocale", "pt").commit();
                 setLocale("pt");
                 return true;
             }

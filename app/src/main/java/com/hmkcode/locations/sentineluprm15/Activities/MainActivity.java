@@ -49,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
             //getSupportActionBar().setHomeButtonEnabled(true);
             //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        //SharedPreferences credentials = getBaseContext().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        //SharedPreferences.Editor editor = credentials.edit();
+        //editor.clear().commit();
+
     }
 
 }

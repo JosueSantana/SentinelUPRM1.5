@@ -2,13 +2,17 @@ package com.hmkcode.locations.sentineluprm15.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 
 import com.hmkcode.locations.sentineluprm15.R;
 
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import Fragments.AlertWaitFragment;
@@ -23,6 +27,14 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences settings = getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+        if(settings.getString("appLocale", null) != null) {
+            setLocale(settings.getString("appLocale", null));
+        }
+
+
+
         setContentView(R.layout.activity_splash);
 
         //get the credentials
@@ -30,57 +42,32 @@ public class SplashActivity extends AppCompatActivity {
 
         checkSession(credentials);
     }
-
+    //TODO: Add Code to go verification screen when necessary
     private boolean checkSession(SharedPreferences credentials){
         SharedPreferences.Editor editor = credentials.edit();
 
         //verify token is saved
         if(credentials.contains("token")) {
-
             //verify verification code
-            if (credentials.contains("isVerified") || credentials.getBoolean("isVerified", false)) {
 
-                System.out.println("Credentials contains alertDisabled?: " + String.valueOf(credentials.contains("alertDisabled")));
-                    if(credentials.contains("alertDisabled")){
-                        System.out.println("value of alertDisabled?: " + String.valueOf(credentials.getBoolean("alertDisabled", false)));
-                        if(credentials.getBoolean("alertDisabled", false)){
-                            long alertTime = credentials.getLong("alertTime", 0);
+            if (credentials.contains("alertDisabled") && credentials.getBoolean("alertDisabled", false)) {
+                long alertTime = credentials.getLong("alertTime", 0);
+                if (TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - alertTime) < ValuesCollection.TIMER_PERIOD) {
+                    getSupportFragmentManager().beginTransaction().add(R.id.splashRelative, new AlertWaitFragment()).commit();
+                } else {
+                    editor.putLong("alertTime", 0);
+                    editor.putBoolean("alertDisabled", false);
+                    editor.commit();
+                    //go directly to alert view
+                    Intent mainIntent = new Intent(this, MainActivity.class);
+                    startActivity(mainIntent);
+                    finish();
 
-                            System.out.println("Time Elapsed: " + String.valueOf(TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - alertTime)));
-
-                            if(TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - alertTime) < ValuesCollection.TIMER_PERIOD){
-                                getSupportFragmentManager().beginTransaction().add(R.id.splashRelative, new AlertWaitFragment()).commit();
-                            }
-                            else{
-                                editor.putLong("alertTime", 0);
-                                editor.putBoolean("alertDisabled", false);
-                                editor.commit();
-                                //go directly to alert view
-                                Intent mainIntent = new Intent(this, MainActivity.class);
-                                startActivity(mainIntent);
-                                finish();
-
-                            }
-                        }
-                        else{
-                            //go directly to alert view
-                            Intent mainIntent = new Intent(this, MainActivity.class);
-                            startActivity(mainIntent);
-                            finish();
-                        }
-                    }
-                else{
-                        //go directly to alert view
-                        Intent mainIntent = new Intent(this, MainActivity.class);
-                        startActivity(mainIntent);
-                        finish();
-                    }
-;
-            }
-            else {
-                //go to verification view instead
-                Intent veriIntent = new Intent(this, VerificationActivity.class);
-                startActivity(veriIntent);
+                }
+            } else {
+                //go directly to alert view
+                Intent mainIntent = new Intent(this, MainActivity.class);
+                startActivity(mainIntent);
                 finish();
             }
         }
@@ -99,6 +86,12 @@ public class SplashActivity extends AppCompatActivity {
                     }
                 }, 3000);
             }
+            else if(credentials.contains("atSignup") && (credentials.getBoolean("atSignup", false))) {
+                //go directly to alert view
+                Intent mainIntent = new Intent(SplashActivity.this, VerificationActivity.class);
+                startActivity(mainIntent);
+                finish();
+            }
             else{
                 Intent signupIntent = new Intent(SplashActivity.this, SignupActivity.class);
                 startActivity(signupIntent);
@@ -108,5 +101,15 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    public void setLocale(String lang) {
+
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
     }
 }

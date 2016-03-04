@@ -133,11 +133,6 @@ public class AlertWaitFragment extends Fragment {
                 }
             });
         }
-
-        /*// Inflate the layout for this fragment
-        updateTimer = new Timer();
-        tTask = produceTimerTask();
-        updateTimer.scheduleAtFixedRate(tTask, 0, 60000);*/
     }
 
 

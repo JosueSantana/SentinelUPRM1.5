@@ -5,10 +5,10 @@
     <!--Barra navegadora -->
     <string name="alert">Alerta</string>
     <string name="incident">Incidentes</string>
-    <string name="call">Llamada</string>
+    <string name="call">Llamar</string>
     <string name="settings">Ajustes</string>
     <string name="noconnectiontitle">Sin conexión a Internet</string>
-    <string name="noconnectionmessage">Asegúrse que su dispositivo está conectado a Internet.</string>
+    <string name="noconnectionmessage">Asegúrese que su dispositivo está conectado a Internet.</string>
     <!-- -->
     
     <!--Pantalla para registrarse -->
@@ -134,8 +134,8 @@
     <string name="alertcontactaddedtitle">Nuevo Contacto Añadido</string>
     <string name="navigationtitle">Lista de Contactos</string>
     <string name="navcontacttitle">Contacto</string>
-    <string name="cancelButton">Cancel</string>
-    <string name="saveButton">Save</string>
+    <string name="cancelButton">Cancelar</string>
+    <string name="saveButton">Guardar</string>
     <!-- -->
     
     <!--Mensajes de Solicitud -->
@@ -147,8 +147,8 @@
     <!-- -->
 
     <!--Ir a registrarse -->
-    <string name="gotologintitle">Haz abierto una sesión en otro dispositivo</string>
-    <string name="gotologinmessage">Para reusar la aplicación en est dispositivo, necesita registrarse nuevamente</string>
+    <string name="gotologintitle">Has abierto una sesión en otro dispositivo</string>
+    <string name="gotologinmessage">Para reusar la aplicación en este dispositivo, necesita registrarse nuevamente</string>
     <string name="unsubscribetitle">Cancelación de Suscripción Completada</string>
     <string name="unsubscribemessage">La solicitud para la cancelación de su suscripción ha sido completada. Aún podrá recibir mensajes de texto en masa durante una emergencia.</string>
     <string name="distancelabel">Distancia:</string>
@@ -161,6 +161,7 @@
     <string name="sentinelspecs">® Sentinel, para UPRM | Versión 1.0.0</string>
     <string name="feedbackhint">Déjenos saber que piensa...</string>
     <string name="problemhint">Describa su situación...</string>
+    <string name="bottomlabelendingalerted"></string>
     <!-- -->
 
 </resources>
