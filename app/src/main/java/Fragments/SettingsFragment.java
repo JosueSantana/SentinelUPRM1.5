@@ -132,7 +132,6 @@ public class SettingsFragment extends Fragment {
 
                 System.out.println("Current " + name + " status: " + settings.getBoolean(name, false));
 
-
                 // Thread to Update the Settings.
                 final Runnable updateSettingsThread = new Runnable() {
                     @Override
@@ -144,13 +143,11 @@ public class SettingsFragment extends Fragment {
                         try {
                             crypto = new CryptographyHandler();
 
-                            SharedPreferences credentials = getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
-
                             registerJSON.put("token", getToken());
-                            registerJSON.put(ValuesCollection.EMAIL_KEY, credentials.getBoolean(ValuesCollection.EMAIL_KEY, false));
-                            registerJSON.put(ValuesCollection.SMS_KEY, credentials.getBoolean(ValuesCollection.SMS_KEY, false));
-                            registerJSON.put(ValuesCollection.PUSH_KEY, credentials.getBoolean(ValuesCollection.PUSH_KEY, false));
-                            registerJSON.put(ValuesCollection.FAMILY_KEY, credentials.getBoolean(ValuesCollection.FAMILY_KEY, false));
+                            registerJSON.put(ValuesCollection.EMAIL_KEY, settings.getBoolean("mail", false));
+                            registerJSON.put(ValuesCollection.SMS_KEY, settings.getBoolean("sms", false));
+                            registerJSON.put(ValuesCollection.PUSH_KEY, settings.getBoolean("push", false));
+                            registerJSON.put(ValuesCollection.FAMILY_KEY, settings.getBoolean("family", false));
 
                             Ion.with(getContext())
                                     .load(ValuesCollection.SETTINGS_URL)
@@ -217,7 +214,6 @@ public class SettingsFragment extends Fragment {
                                             return null;
                                         }
                                     });
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         } catch (CryptorException e) {
