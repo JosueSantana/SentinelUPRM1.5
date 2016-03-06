@@ -10,9 +10,8 @@ import android.support.v4.content.CursorLoader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
-import com.hmkcode.locations.sentineluprm15.R;
+import edu.uprm.Sentinel.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,7 +20,6 @@ import org.json.JSONObject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ListViewHelpers.ContactsAdapter;
 import ListViewHelpers.PhonebookAdapter;
 
 /**
@@ -102,11 +100,4 @@ public class PhonebookFragment extends ListFragment{
         setListAdapter(new PhonebookAdapter(contactsList, getActivity()));
         getListView();
     }
-
-    public void onListItemClick(ListView l, View v, int position, long id){
-        
-    }
-
-
-
 }

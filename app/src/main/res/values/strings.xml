@@ -1,25 +1,189 @@
 <resources>
     <string name="app_name">Sentinel</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_main">Main</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="title_activity_main" translatable="false">Main</string>
+    <string name="section_format" translatable="false">Hello World from section: %1$d</string>
     <string name="font_fontFamily_medium">Arial</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="action_add_contact">Add Contact</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
+    <string name="prompt_email" translatable="false">Email</string>
+    <string name="prompt_password" translatable="false">Password (optional)</string>
+    <string name="action_sign_in" translatable="false">Sign in or register</string>
+    <string name="action_sign_in_short" translatable="false">Sign in</string>
+    <string name="action_add_contact" translatable="false">Add Contact</string>
+    <string name="error_invalid_email" translatable="false">This email address is invalid</string>
+    <string name="error_invalid_password" translatable="false">This password is too short</string>
+    <string name="error_incorrect_password" translatable="false">This password is incorrect</string>
+    <string name="error_field_required" translatable="false">This field is required</string>
+    <string name="permission_rationale" translatable="false">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="incident">Incidents</string>
+    <string name="call">Call</string>
+    <string name="settings">Settings</string>
+    <string name="noconnectiontitle">No Internet Connection</string>
+    <string name="noconnectionmessage">Make sure your device is connected to the Internet.</string>
+    <!-- -->
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--Sign up screen -->
+    <string name="signuptitle">Sign Up</string>
+    <string name="okmessage">OK</string>
+    <string name="emptyformatalerttitle">Empty Fields</string>
+    <string name="emptyformatalertmessage">Please fill out all fields.</string>
+    <string name="incorrectemailformattitle">Email Not Valid</string>
+    <string name="incorrectemailformatmessage">The email entered is not valid. Make sure your email belongs to the UPR or UPRM domain.</string>
+    <string name="incorrectphoneformattitle">Incorrect Format</string>
+    <string name="incorrectphoneformatmessage">Please enter the right phone number format.</string>
+    <string name="entercodelabel">Enter Code</string>
+    <string name="sendvalidationlabel">Validate</string>
+    <string name="sendverificationalerttitle">Verification Code Sent</string>
+    <string name="sendverificationalertmessage">A verification code has been sent to your email in order to legitimize the session.</string>
+    <string name="wrongcodetitle">Wrong Code</string>
+    <string name="wrongcodemessage">The code you have submitted does not match. Verify you have typed the code correctly.</string>
+    <string name="codenotreceivedmessage">I did not receive my code</string>
+    <string name="emailhint">Email</string>
+    <string name="phonehint">Phone Number</string>
+    <!-- -->
 
-</resources>
+    <!--Sign up screen -->
+    <string name="notificationTitle">El Incidente fue Localizado: </string>
+    <string name="notificationMessage">Refresh the table by pulling down to view new incidents.</string>
+    <!-- -->
+
+
+    <!--Alert Screen -->
+    <string name="toplabel">Tap to Alert</string>
+    <string name="bottomlabel">WARNING: You will have 5 seconds to stop the alert from being sent</string>
+    <string name="locationtitle">View Current Location</string>
+    <string name="locationmessage">Please select an option.</string>
+    <string name="viewlocationtitle">View Location</string>
+    <string name="setlocationtitle">Set Location Manually</string>
+    <string name="unsetlocationtitle">Unset Location Manually </string>
+    <string name="cancellocationtitle">Cancel</string>
+    <string name="sendbutton">SEND</string>
+    <string name="stopbutton">STOP</string>
+    <string name="sendingalert">Sending Requested Alert...</string>
+    <string name="distancelabel">Distance:</string>
+    <!-- -->
+
+    <!--Alert sent screen -->
+    <string name="toplabelalerted">Please wait for help to come!</string>
+    <string name="bottomlabelalerted">To send another alert, you will have to wait %1$s minutes</string>
+
+    <!-- -->
+
+    <!--Incident view Screen -->
+    <string name="viewmap">View Map</string>
+    <string name="markertap">Tap Marker to Get Info</string>
+    <string name="showall">Show All</string>
+    <!-- -->
+
+    <!--Location Map Screen -->
+    <string name="invalidadjustmentalert">Invalid Adjustment</string>
+    <string name="invalidadjustmentmessage">You have placed the cursor out of bounds.</string>
+    <string name="unchangedalert">Your location remains unchanged</string>
+    <string name="distanceview">Distance</string>
+    <string name="orangelabel">Set the pin\'s position within 1000m of your current location</string>
+    <string name="setbarbutton">Set</string>
+    <!-- -->
+
+    <!--Call Screen -->
+    <string name="oncallalerttitle">Your Device Must Be a Phone to Call</string>
+    <string name="oncallalertmessage">This feature is not available for tablets.</string>
+    <string name="campussecurityheader">Campus Security</string>
+    <string name="medicalservicesheader">Medical Services</string>
+    <string name="healthnsafetyheader">Health and Safety</string>
+    <string name="medicalemergenciesheader">Medical Emergencies</string>
+    <string name="municipalpoliceheader">Municipal Police</string>
+    <string name="statepoliceheader">State Police</string>
+    <string name="bellavistahospitalheader">Bella Vista Hospital</string>
+    <string name="sanantoniohospitalheader">San Antonio Hospital</string>
+    <string name="pereahospitalheader">Perea Hospital</string>
+    <!-- -->
+
+    <!--Settings Screen -->
+    <string name="emaillabel">Email</string>
+    <string name="smslabel">Text Messaging</string>
+    <string name="pushlabel">Push Notifications</string>
+    <string name="fflabel">Family and Friends</string>
+    <string name="languagelabel">English</string>
+    <string name="contactlabel">Contacts</string>
+    <string name="langlabel">Languages</string>
+    <string name="notificationheader">Notifications</string>
+    <string name="notificationfooter">Push notifications can also be set from Settings on your mobile devices.</string>
+    <string name="contactcountlabel"> out of 5</string>
+    <string name="familylabel">Family members and Friends</string>
+    <string name="familyheader">You may add 5 mobile phone numbers belonging to family members or friends</string>
+    <string name="familyfooter">They will receive a text message if you were to have an emergency.</string>
+    <string name="languageheader">Options</string>
+    <string name="supportheader">Support</string>
+    <string name="privacylabel">Privacy Policy and Terms</string>
+    <string name="feedbacklabel">Feedback</string>
+    <string name="aboutuslabel">About Us</string>
+    <!-- -->
+
+    <!--Languages Screen -->
+    <string name="languageselectlabel">Select Language</string>
+    <!-- -->
+
+    <!--Report Screen -->
+    <string name="reportsendbutton">SEND</string>
+    <string name="reportlabel">Report Problem</string>
+    <string name="reportfeedback">General Feedback</string>
+    <string name="reportproblem">Something Isn\'t Working</string>
+    <string name="reportcancel">Cancel</string>
+    <string name="reportproblemfooter">If you are sure that you are dealing with a bug, please fill out the form. Be sure to fill in as many details about your problem as possible. Please use your best judgment.  </string>
+    <string name="reportfeedbackfooter">If you have any suggestions to improve the application, please let us know. We want to give you a great experience through Sentinel.  </string>
+    <string name="reportalertonsendtitle">Sent</string>
+    <string name="reportalertonsendmessage">Thanks for helping us improve!</string>
+    <string name="problemhint">Describe the problem...</string>
+    <string name="feedbackhint">Let us know what you think...</string>
+    <!-- -->
+
+    <!--Contacts Screen -->
+    <string name="navigationtitle">Contact List</string>
+    <string name="navcontacttitle">Contact</string>
+    <string name="cancelButton">Cancel</string>
+    <string name="saveButton">Save</string>
+    <!-- -->
+
+    <!--Request Messages -->
+    <string name="errorconnectiontitle">Connection Error</string>
+    <string name="errorconnectionmessage">Failed Request.</string>
+    <string name="errorretrievingtitle">Information Error</string>
+    <string name="errorretrievingmessage">A problem was encountered upon information request.</string>
+    <string name="tableplaceholder">No Contacts Added</string>
+    <!-- -->
+
+    <!--Go to Sign Up -->
+    <string name="gotologintitle">You Have an Open Session in Another Device</string>
+    <string name="gotologinmessage">To reuse the app in this device, you need to register again.</string>
+    <string name="unsubscribetitle">Subscription Cancellation Completed</string>
+    <string name="unsubscribemessage">The request for the cancelation of your subscription has been completed. You may still receive mass text messages during an emergency.</string>
+    <string name="passwordhint">Password</string>
+    <!-- -->
+
+
+    <!-- -->
+    <string name="sentinelspecs">® Sentinel, for UPRM | Version 1.0.0</string>
+
+
+<!-- TODO: Remove or change this placeholder text -->
+<string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+<string name="aboutusblurbp1">The commitment with the security of our institution is demonstrated by the creation of tools that improve our quality of coexistence. On August 14, 2014, a professor was stabbed by an offender, leaving him at the brink of death. This fact demonstrated the need of a mechanism by which people can communicate their emergency to the community without delay.</string>
+<string name="aboutusblurbp2">Following this terrible event, the Student Council and the Administrative Offices sought out solutions. Under the endorsement of these entities, co-founders Joel R. Corporán, Jean C. Méndez and Josué A. Santana developed Sentinel, an application for emergency alerts within the University of Puerto Rico Mayagüez Campus. Sentinel aims to establish an efficient and reliable immediate reaction system that mobilizes officers and the campus community to resolve critical events.</string>
+<string name="alert">Alert</string>
+<string name="alertcontactaddedtitle">New Contact Added</string>
+<string name="alertcontactaddmessage">Please fill out all fields.</string>
+<string name="alertcontactaddtitle">Empty Fields</string>
+<string name="alertlocationdonelabel">Done</string>
+<string name="alertlocationnotavailablemessage">You can turn on the GPS or authorize the app to get your location in Settings</string>
+<string name="alertlocationnotavailabletitle">Location Not Available</string>
+<string name="alertnoinlocationmessage">Para enviar la alerta, debe estar dentro de los predios de la universidad.</string>
+<string name="alertnoinlocationtitle">Fuera de los Predios de la Universidad</string>
+<string name="alertoverloadmessage">Por favor editar o eliminar algún contacto presente.</string>
+<string name="alertoverloadtitle">Desafortunadamente, No se le Puede Autorizar Más Contactos</string>
+<string name="alertphonevalidmessage">Por favor, introduzca el formato correcto para el número de teléfono.</string>
+<string name="alertphonevalidtitle">Formato incorrecto</string>
+<string name="alerttimerend">Listo para alertar!</string>
+    </resources>

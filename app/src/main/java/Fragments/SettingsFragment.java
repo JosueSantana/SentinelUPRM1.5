@@ -17,22 +17,15 @@ import android.widget.Switch;
 import android.widget.TableRow;
 import android.widget.Toast;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
-import com.hmkcode.locations.sentineluprm15.R;
+import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import org.cryptonode.jncryptor.CryptorException;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-
-import ListViewHelpers.IncidentsAdapter;
 import OtherHandlers.CryptographyHandler;
-import OtherHandlers.DateHandler;
 import OtherHandlers.JSONHandler;
 import OtherHandlers.ValuesCollection;
 

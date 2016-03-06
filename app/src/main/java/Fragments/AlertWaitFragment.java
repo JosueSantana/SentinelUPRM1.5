@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +12,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hmkcode.locations.sentineluprm15.Activities.MainActivity;
-import com.hmkcode.locations.sentineluprm15.Activities.SplashActivity;
-import com.hmkcode.locations.sentineluprm15.R;
+import edu.uprm.Sentinel.MainActivity;
+import edu.uprm.Sentinel.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import OtherHandlers.ValuesCollection;
+import edu.uprm.Sentinel.SplashActivity;
 
 /**
  * A simple {@link Fragment} subclass.

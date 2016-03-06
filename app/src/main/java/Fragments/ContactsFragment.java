@@ -1,11 +1,7 @@
 package Fragments;
 
 import android.support.v4.app.ListFragment;
-import android.content.Context;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.hmkcode.locations.sentineluprm15.R;
+import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -24,9 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ListViewHelpers.ContactsAdapter;
-import ListViewHelpers.IncidentsAdapter;
 import OtherHandlers.CryptographyHandler;
-import OtherHandlers.DateHandler;
 import OtherHandlers.JSONHandler;
 import OtherHandlers.ValuesCollection;
 

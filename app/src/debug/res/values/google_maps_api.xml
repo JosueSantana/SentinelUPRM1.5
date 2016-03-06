@@ -1,6 +1,6 @@
 <resources>
     <string name="google_maps_key" translatable="false" templateMergeStrategy="preserve">
-        AIzaSyDCmyemESCkEn-_tSFmAqXkEr8bj7QDofE
+       AIzaSyCFybKHsd8Vpxj63UZi1TNT74B6XMQ8CJI
     </string>
 
     <integer name="google_play_services_version">8487000</integer>

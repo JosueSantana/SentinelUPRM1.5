@@ -1,6 +1,5 @@
 package Fragments;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.View.OnClickListener;
 import android.os.Bundle;
@@ -8,22 +7,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import com.hmkcode.locations.sentineluprm15.R;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
+import edu.uprm.Sentinel.R;
 
-import org.cryptonode.jncryptor.CryptorException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import OtherHandlers.CryptographyHandler;
-import OtherHandlers.JSONHandler;
 import OtherHandlers.ValuesCollection;
 
 /**

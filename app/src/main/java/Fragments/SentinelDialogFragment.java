@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
-import com.hmkcode.locations.sentineluprm15.R;
+import edu.uprm.Sentinel.R;
 
 /**
  * Created by a136803 on 2/12/16.

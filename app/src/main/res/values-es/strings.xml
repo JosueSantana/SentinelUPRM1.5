@@ -161,7 +161,6 @@
     <string name="sentinelspecs">® Sentinel, para UPRM | Versión 1.0.0</string>
     <string name="feedbackhint">Déjenos saber que piensa...</string>
     <string name="problemhint">Describa su situación...</string>
-    <string name="bottomlabelendingalerted"></string>
     <!-- -->
 
 </resources>

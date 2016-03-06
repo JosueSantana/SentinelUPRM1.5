@@ -1,11 +1,8 @@
 package Fragments;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
@@ -16,8 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TableRow;
 import android.widget.Toast;
 
-import com.hmkcode.locations.sentineluprm15.Activities.MainActivity;
-import com.hmkcode.locations.sentineluprm15.R;
+import edu.uprm.Sentinel.R;
 
 import java.util.Locale;
 

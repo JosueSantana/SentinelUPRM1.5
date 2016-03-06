@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 
-import android.provider.Settings;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -14,7 +13,14 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
-import com.hmkcode.locations.sentineluprm15.R;
+import edu.uprm.Sentinel.R;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -32,7 +38,7 @@ import OtherHandlers.ValuesCollection;
 /**
  * This fragment controls the incidents to be manipulated into the table.
  */
-public class IncidentsFragment extends ListFragment {
+public class IncidentsFragment extends ListFragment implements OnMapReadyCallback {
 
     SwipeRefreshLayout swipeRefreshLayout;
     private Handler handler = new Handler();
@@ -40,6 +46,10 @@ public class IncidentsFragment extends ListFragment {
     ListView mList;
     private int numberOfIncidents;
     private Handler mHandler;
+    private GoogleMap mMap;
+    private Double longitude;
+    private Double latitude;
+    private String placeName;
 
     public IncidentsFragment() {
         // Required empty public constructor
@@ -76,7 +86,6 @@ public class IncidentsFragment extends ListFragment {
 
         // sets the colors used in the refresh animation
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
-
     }
 
     public void onResume(){
@@ -123,6 +132,8 @@ public class IncidentsFragment extends ListFragment {
                                                 tempJSON.put("name", incidents.getJSONObject(i).get("regionName"));
                                                 tempJSON.put("date", date.getDisplayDate());
                                                 tempJSON.put("time", date.getDisplayTime());
+                                                tempJSON.put("latitude", incidents.getJSONObject(i).get("latitude"));
+                                                tempJSON.put("longitude", incidents.getJSONObject(i).get("longitude"));
                                                 jsonArray.put(tempJSON);
                                             }
 
@@ -263,6 +274,8 @@ public class IncidentsFragment extends ListFragment {
                                                 tempJSON.put("name", incidents.getJSONObject(i).get("regionName"));
                                                 tempJSON.put("date", date.getDisplayDate());
                                                 tempJSON.put("time", date.getDisplayTime());
+                                                tempJSON.put("latitude", incidents.getJSONObject(i).get("latitude"));
+                                                tempJSON.put("longitude", incidents.getJSONObject(i).get("longitude"));
                                                 jsonArray.put(tempJSON);                                                    }
 
                                         } else {
@@ -368,14 +381,33 @@ public class IncidentsFragment extends ListFragment {
     }
 
     public void onListItemClick(ListView l, View v, int position, long id){
-        //TODO: Do stuff when you click
+        super.onListItemClick(l, v, position, id);
+
+        try {
+            System.out.println("lat: " + ((JSONObject) jsonArray.get(position)).getString("latitude") + "long: " + ((JSONObject) jsonArray.get(position)).getString("latitude"));
+            latitude = Double.parseDouble(((JSONObject) jsonArray.get(position)).getString("latitude"));
+            longitude = Double.parseDouble(((JSONObject) jsonArray.get(position)).getString("longitude"));
+            placeName = ((JSONObject) jsonArray.get(position)).getString("name");
+            SupportMapFragment mapFragment = new SupportMapFragment();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, mapFragment, "mapFrag").addToBackStack("mapFrag").commit();
+            mapFragment.getMapAsync(this);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    private void openIncidentMap(){
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
 
-    }
+        // Add a marker in Sydney and move the camera
+        LatLng myLocation = new LatLng(latitude, longitude);
 
-    private void openIncidentMapAll(){
+        Float zoom = new Float(mMap.getMaxZoomLevel() * .90);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoom.floatValue()));
+        mMap.addMarker(new MarkerOptions().position(myLocation).title(placeName).visible(true));
 
     }
 
