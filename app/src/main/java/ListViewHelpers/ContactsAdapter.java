@@ -2,11 +2,16 @@ package ListViewHelpers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import edu.uprm.Sentinel.R;
 
@@ -59,6 +64,13 @@ public class ContactsAdapter extends BaseAdapter {
 
             row.contactName = (TextView) view.findViewById(R.id.myContactName);
             row.contactPhone = (TextView) view.findViewById(R.id.myContactPhone);
+
+            ((RelativeLayout) view ).getChildAt(2).setOnClickListener(new View.OnClickListener() {
+                                                                          public void onClick(View arg) {
+                                                                              //do stuff
+                                                                              System.out.println("DOING DELETING STUFF!!!");
+                                                                          }
+                                                                      });
 
             view.setTag(row);
         }

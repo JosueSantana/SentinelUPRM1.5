@@ -13,8 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import edu.uprm.Sentinel.R;
@@ -69,6 +72,18 @@ public class SettingsFragment extends Fragment {
 
         //get reference to row objects
         contactsRow = (TableRow) getView().findViewById(R.id.contactsrow);
+
+        //set the contacts count
+        TextView contactsText = (TextView) contactsRow.getChildAt(1);
+        SharedPreferences settings = this.getActivity().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+        String text;
+
+        if(settings.contains("contactsCount"))
+             text = String.format(getResources().getString(R.string.contactcountlabel), settings.getInt("contactsCount", 0));
+        else text = "0";
+
+        contactsText.setText(text);
+
         languagesRow = (TableRow) getView().findViewById(R.id.languagesrow);
         feedbackRow = (TableRow) getView().findViewById(R.id.feedbackrow);
         policiesRow = (TableRow) getView().findViewById(R.id.policiesrow);
@@ -86,9 +101,6 @@ public class SettingsFragment extends Fragment {
         smsSwitch = (Switch) getView().findViewById(R.id.notificationssmsswitch);
         pushSwitch = (Switch) getView().findViewById(R.id.notificationspushswitch);
         familySwitch = (Switch) getView().findViewById(R.id.notificationsfamilyswitch);
-
-        //get reference to settings shared preferences
-        SharedPreferences settings = getContext().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
 
         //check switch states
         switchToggle(settings, emailSwitch, "mail");

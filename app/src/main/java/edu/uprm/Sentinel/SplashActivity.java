@@ -1,22 +1,19 @@
-package com.hmkcode.locations.sentineluprm15.Activities;
+package edu.uprm.Sentinel;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-
-import edu.uprm.Sentinel.R;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+import edu.uprm.Sentinel.R;
 
 import Fragments.AlertWaitFragment;
 import OtherHandlers.ValuesCollection;
+import edu.uprm.Sentinel.R;
 
 /**
  * This class verifies the user data and checks whether it is the first time accessing the app, if
@@ -32,8 +29,6 @@ public class SplashActivity extends AppCompatActivity {
         if(settings.getString("appLocale", null) != null) {
             setLocale(settings.getString("appLocale", null));
         }
-
-
 
         setContentView(R.layout.activity_splash);
 

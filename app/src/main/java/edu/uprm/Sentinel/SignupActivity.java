@@ -1,16 +1,13 @@
-package com.hmkcode.locations.sentineluprm15.Activities;
+package edu.uprm.Sentinel;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
-import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 
 import android.view.View;
@@ -22,7 +19,6 @@ import android.widget.ImageButton;
 
 import android.widget.TextView;
 import android.view.View.OnClickListener;
-import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;

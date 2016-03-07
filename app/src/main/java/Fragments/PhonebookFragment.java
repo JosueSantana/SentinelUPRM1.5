@@ -1,5 +1,6 @@
 package Fragments;
 
+import android.content.SharedPreferences;
 import android.support.v4.app.ListFragment;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
@@ -25,7 +25,6 @@ import org.json.JSONObject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ListViewHelpers.ContactsAdapter;
 import ListViewHelpers.PhonebookAdapter;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.JSONHandler;
@@ -67,7 +66,6 @@ public class PhonebookFragment extends ListFragment{
             do{
                 try {
                     if(cursor.getInt(cursor.getColumnIndex(projection[2])) == 1){
-                        System.out.println("DOING PHONE STUFF");
 
                         JSONObject item = new JSONObject();
 
@@ -103,8 +101,7 @@ public class PhonebookFragment extends ListFragment{
             }
             while(cursor.moveToNext());
         }
-
-        System.out.println("JSONARRAY: " + contactsList.toString());
+        cursor.close();
 
         setListAdapter(new PhonebookAdapter(contactsList, getActivity()));
         getListView();
@@ -184,6 +181,8 @@ public class PhonebookFragment extends ListFragment{
                                 return null;
                             }
                         });
+
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (CryptorException e) {

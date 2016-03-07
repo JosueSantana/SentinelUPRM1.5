@@ -102,7 +102,7 @@
     <string name="langlabel">Languages</string>
     <string name="notificationheader">Notifications</string>
     <string name="notificationfooter">Push notifications can also be set from Settings on your mobile devices.</string>
-    <string name="contactcountlabel"> out of 5</string>
+    <string name="contactcountlabel">%1$d out of 5</string>
     <string name="familylabel">Family members and Friends</string>
     <string name="familyheader">You may add 5 mobile phone numbers belonging to family members or friends</string>
     <string name="familyfooter">They will receive a text message if you were to have an emergency.</string>

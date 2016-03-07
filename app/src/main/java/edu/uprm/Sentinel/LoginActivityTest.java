@@ -1,4 +1,4 @@
-package com.hmkcode.locations.sentineluprm15.Activities;
+package edu.uprm.Sentinel;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

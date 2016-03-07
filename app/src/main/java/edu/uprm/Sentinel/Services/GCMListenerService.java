@@ -1,4 +1,4 @@
-package com.hmkcode.locations.sentineluprm15.Activities.Services;
+package edu.uprm.Sentinel.Services;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,7 +10,8 @@ import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GcmListenerService;
-import com.hmkcode.locations.sentineluprm15.Activities.MainActivity;
+
+import edu.uprm.Sentinel.MainActivity;
 import edu.uprm.Sentinel.R;
 
 import org.json.JSONObject;

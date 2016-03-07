@@ -1,6 +1,8 @@
 package Fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,7 +29,7 @@ import OtherHandlers.ValuesCollection;
 
 public class ContactsFragment extends ListFragment{
 
-    private ListView contactsListView;
+    private JSONArray jsonArray;
 
     public ContactsFragment() {
         // Required empty public constructor
@@ -53,9 +55,7 @@ public class ContactsFragment extends ListFragment{
         //TODO: Should we use AsyncTasks or does the Fragment take care of that?
 
         //all of this...
-        final JSONArray jsonArray = new JSONArray();
-        JSONObject jOb = new JSONObject();
-        JSONObject jOb2 = new JSONObject();
+        jsonArray = new JSONArray();
 
         final CryptographyHandler crypto;
 
@@ -90,6 +90,16 @@ public class ContactsFragment extends ListFragment{
                                         jsonArray.put(tempJSON);
                                     }
                                     setListAdapter(new ContactsAdapter(jsonArray, getActivity()));
+
+                                    //setting up the amount of contacts for the settings
+                                    SharedPreferences settings = ContactsFragment.this.getActivity().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+                                    SharedPreferences.Editor editor = settings.edit();
+
+                                    editor.putInt("contactsCount", jsonArray.length()).commit();
+
+                                    System.out.println("COUNT OF JSON ARRAY LENGTH " + jsonArray.length());
+
+
                                 } catch (JSONException e1) {
                                     e1.printStackTrace();
                                 }
@@ -161,23 +171,6 @@ public class ContactsFragment extends ListFragment{
             e.printStackTrace();
         }
 
-        /*
-        try {
-            jOb.put("name","Fulano Detal");
-            jOb.put("editedPhone", "7874531523");
-            jOb2.put("name","Mengano Talcual");
-            jOb2.put("editedPhone", "7871093123");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        jsonArray.put(jOb);
-        jsonArray.put(jOb2);
-        //...is provisional
-
-        */
-
         setListAdapter(new ContactsAdapter(jsonArray, getActivity()));
         getListView();
     }
@@ -199,7 +192,14 @@ public class ContactsFragment extends ListFragment{
         switch (item.getItemId()) {
             case R.id.action_add_contacts:
                 // User chose the "Settings" item, show the app settings UI...
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, new PhonebookFragment()).addToBackStack(null).commit();;
+                if(jsonArray.length() > 5){
+                    showSignupError(R.string.alertoverloadtitle,R.string.alertoverloadmessage);
+                }
+                else{
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,
+                    new PhonebookFragment()).addToBackStack(null).commit();;
+                }
+
                 return true;
 
             default:
@@ -208,11 +208,6 @@ public class ContactsFragment extends ListFragment{
                 return super.onOptionsItemSelected(item);
 
         }
-    }
-
-
-    public void onListItemClick(ListView l, View v, int position, long id){
-        //TODO: Do stuff when you click
     }
 
     /*
@@ -238,5 +233,16 @@ public class ContactsFragment extends ListFragment{
         }
     }*/
 
+    private void showSignupError(int titleID, int messageID) {
+        //prepare strings to pass to Fragment through Bundle
+        Bundle bundle = new Bundle();
+        bundle.putInt("dialogtitle", titleID);
+        bundle.putInt("dialogmessage", messageID);
+
+        //Call up AlertDialog
+        SentinelDialogFragment dialogFragment = new SentinelDialogFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(getChildFragmentManager(), "Alert Dialog Fragment");
+    }
 
 }

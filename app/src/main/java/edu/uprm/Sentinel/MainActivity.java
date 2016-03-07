@@ -1,4 +1,4 @@
-package com.hmkcode.locations.sentineluprm15.Activities;
+package edu.uprm.Sentinel;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;

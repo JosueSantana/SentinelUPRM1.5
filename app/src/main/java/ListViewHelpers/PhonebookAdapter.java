@@ -73,6 +73,7 @@ public class PhonebookAdapter extends BaseAdapter {
             System.out.println("WHAT IS IN JSONOBJECT: " + jsonObject.toString());
 
             row.contactName.setText(jsonObject.getString("name"));
+            row.contactPhone.setText(jsonObject.getString("phone"));
 
         }
         catch (JSONException e){
