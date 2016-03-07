@@ -29,6 +29,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+
 import ListViewHelpers.IncidentsAdapter;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DateHandler;
@@ -139,6 +141,8 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
 
                                             setListAdapter(new IncidentsAdapter(jsonArray, getActivity()));
                                         } catch (JSONException e1) {
+                                            e1.printStackTrace();
+                                        } catch (ParseException e1) {
                                             e1.printStackTrace();
                                         }
                                         // Received Success Message
@@ -282,6 +286,8 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
                                         }
 
                                     } catch (JSONException e1) {
+                                        e1.printStackTrace();
+                                    } catch (ParseException e1) {
                                         e1.printStackTrace();
                                     }
 

@@ -27,7 +27,6 @@ task clean(type: Delete) {
 /*
 if gradle blows up, use this as your google-package.json:
 
-
 {
             "project_info": {
             "project_id": "third-light-760",

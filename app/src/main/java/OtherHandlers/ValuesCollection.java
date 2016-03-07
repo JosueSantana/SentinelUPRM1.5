@@ -24,6 +24,7 @@ public class ValuesCollection {
     // Contacts
     public static final String CONTACT_LIST_URL = INITIAL_URL + "1123c1a441f7dfef5eb/contact/408d27f6ce0a895c8f/contacts";
     public static final String ADD_CONTACT_URL = INITIAL_URL + "f3df283311e4e7bffd/contact/194d10f311e4e7bffd/add";
+    public static final String DELETE_CONTACT_URL = INITIAL_URL + "580b3b11e4e7bffd/contact/133757f42b99c7903/delete";
 
     /*
     public static final String SEND_INCIDENT_URL = INITIAL_URL + "incident/31923faa-340c-4707-8c93-df528e65aa41/incident-request/7c0d78d4-4b78-4ee2-9e8e-4b4d6988a855";
