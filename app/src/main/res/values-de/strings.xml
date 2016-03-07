@@ -97,7 +97,7 @@
     <string name="langlabel">Sprachen</string>
     <string name="notificationheader">Benachrichtigungen</string>
     <string name="notificationfooter">Push-Benachrichtigungen können auch aus dem Gerät Einstellungsmenü eingestellt werden.</string>
-    <string name="contactcountlabel">von 5</string>
+    <string name="contactcountlabel">%1$d von 5</string>
     <string name="familylabel">Familie und Freunde</string>
     <string name="familyheader">Sie können 5 Telefonnummern aus der Familie oder Freunden hinzufügen</string>
     <string name="familyfooter">Sie werden eine Text Nachricht erhalten wenn Sie einen Notfall Hatte.</string>

@@ -97,7 +97,7 @@
     <string name="langlabel">Idiomas</string>
     <string name="notificationheader">Notificaciones</string>
     <string name="notificationfooter">Las notificaciones push también pueden ser ajustadas desde el menú de configuración de su dispositivo móvil.</string>
-    <string name="contactcountlabel"> de 5</string>
+    <string name="contactcountlabel">%1$d de 5</string>
     <string name="familylabel">Familiares y Amigos</string>
     <string name="familyheader">Puede agregar 5 números de telefono de familiares o amigos</string>
     <string name="familyfooter">Ellos recibirán un mensaje de texto en caso de que tenga una emergencia.</string>
