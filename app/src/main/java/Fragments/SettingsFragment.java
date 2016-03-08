@@ -13,8 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -232,7 +230,6 @@ public class SettingsFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
-
                 };
 
                 handler.post(updateSettingsThread);
