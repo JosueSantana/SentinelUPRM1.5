@@ -125,14 +125,7 @@ public class CountdownFragment extends Fragment implements
             }
 
             public void onFinish() {
-                // Send the Alert.
-                try {
-                    sendAlert();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (CryptorException e) {
-                    e.printStackTrace();
-                }
+                return;
             }
         }.start();
 
@@ -212,6 +205,14 @@ public class CountdownFragment extends Fragment implements
     }
 
     private void goBackToAlertWaitFragment(){
+        // Send the Alert.
+        try {
+            sendAlert();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (CryptorException e) {
+            e.printStackTrace();
+        }
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).replace(R.id.mainLayout, new AlertWaitFragment()).commit();;
     }
 
