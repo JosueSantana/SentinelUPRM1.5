@@ -16,6 +16,7 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:background="@drawable/alert_button"
+            android:clickable="true"
             android:layout_below="@+id/alertHeader" />
 
         <TextView

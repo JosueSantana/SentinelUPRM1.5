@@ -9,6 +9,7 @@ import com.google.android.gms.location.LocationListener;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -143,6 +144,7 @@ public class CountdownFragment extends Fragment implements
                 // Send the Alert.
                 try {
                     sendAlert();
+                    goBackToAlertWaitFragment();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (CryptorException e) {
@@ -171,37 +173,50 @@ public class CountdownFragment extends Fragment implements
     private void sendAlert() throws JSONException, CryptorException {
 
         final CryptographyHandler crypto = new CryptographyHandler();
+        final JSONObject alertJSON = new JSONObject();
 
-        JSONObject alertJSON = new JSONObject();
+        Runnable r = new Runnable(){
+            @Override
+            public void run() {
 
-        alertJSON.put("token", getToken());
-        alertJSON.put("latitude", mLastLocation.getLatitude());
-        alertJSON.put("longitude", mLastLocation.getLongitude());
 
-        Ion.with(getContext())
-                .load(ValuesCollection.SEND_ALERT_URL)
-                .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(alertJSON))
-                .asString()
-                .setCallback(new FutureCallback<String>() {
-                    @Override
-                    public void onCompleted(Exception e, String result) {
-                        System.out.println(result);
-                        try {
-                            JSONObject receivedSentinelMessage = JSONHandler.convertStringToJSON(result);
-                            String encryptedJSONReceived = JSONHandler.getSentinelMessage(receivedSentinelMessage);
-                            String decryptedJSONReceived = crypto.decryptString(encryptedJSONReceived);
+                try {
+                alertJSON.put("token", getToken());
+                alertJSON.put("latitude", mLastLocation.getLatitude());
+                alertJSON.put("longitude", mLastLocation.getLongitude());
 
-                            JSONObject receivedJSON = JSONHandler.convertStringToJSON(decryptedJSONReceived);
+                    Ion.with(getContext())
+                            .load(ValuesCollection.SEND_ALERT_URL)
+                            .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(alertJSON))
+                            .asString()
+                            .setCallback(new FutureCallback<String>() {
+                                @Override
+                                public void onCompleted(Exception e, String result) {
+                                    System.out.println(result);
+                                    try {
+                                        JSONObject receivedSentinelMessage = JSONHandler.convertStringToJSON(result);
+                                        String encryptedJSONReceived = JSONHandler.getSentinelMessage(receivedSentinelMessage);
+                                        String decryptedJSONReceived = crypto.decryptString(encryptedJSONReceived);
 
-                            goBackToAlertWaitFragment();
+                                        JSONObject receivedJSON = JSONHandler.convertStringToJSON(decryptedJSONReceived);
 
-                        } catch (JSONException e1) {
-                            e1.printStackTrace();
-                        } catch (CryptorException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                });
+                                    } catch (JSONException e1) {
+                                        e1.printStackTrace();
+                                    } catch (CryptorException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                }
+                            });
+                } catch (CryptorException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        };
+
+        new Thread(r).start();
     }
 
     private void goBackToAlertWaitFragment(){

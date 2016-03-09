@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 
+import android.os.Message;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -68,41 +69,12 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_incidents, container, false);
-    }
-
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipe_container);
-        //listener for when you try to refresh the list
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                // our swipeRefreshLayout needs to be notified when the data is returned in order for it to stop the animation
-                //handler.post(refreshing);
-                new RefreshAdapter().execute();
-            }
-        });
-
-        // sets the colors used in the refresh animation
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
-    }
-
-    public void onResume(){
-        super.onResume();
-
-        mList = this.getListView();
-
-        //TODO: Get JSONArray from Handler
-        //TODO: Should we use AsyncTasks or does the Fragment take care of that?
+        View rootView = inflater.inflate(R.layout.fragment_incidents, container, false);
 
         mHandler = new Handler();
 
-        //all of this...
+        //runnable of the list filling
         final Runnable r = new Runnable() {
-
             @Override
             public void run() {
                 final CryptographyHandler crypto;
@@ -122,11 +94,11 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
                                     // Successful Request
                                     if (requestIsSuccessful(e)) {
                                         JSONObject decryptedValue = getDecryptedValue(receivedJSON);
-                                        System.out.println(decryptedValue);
+                                        //System.out.println(decryptedValue);
                                         try {
                                             JSONArray incidents = decryptedValue.getJSONArray("incident");
                                             numberOfIncidents = incidents.length();
-                                            System.out.println(incidents);
+                                            //System.out.println(incidents);
 
                                             for(int i = 0; i < incidents.length(); i++) {
                                                 JSONObject tempJSON = new JSONObject();
@@ -139,7 +111,12 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
                                                 jsonArray.put(tempJSON);
                                             }
 
-                                            setListAdapter(new IncidentsAdapter(jsonArray, getActivity()));
+                                            mList.post(new Runnable(){
+                                                public void run(){
+                                                    mList.setAdapter(new IncidentsAdapter(jsonArray, getActivity()));
+                                                }
+                                            });
+
                                         } catch (JSONException e1) {
                                             e1.printStackTrace();
                                         } catch (ParseException e1) {
@@ -199,29 +176,58 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
                 } catch (CryptorException e) {
                     e.printStackTrace();
                 }
-
-                //makes sure it doesn't try to refresh the list while the visible list is not at the top
-                mList.setOnScrollListener(new AbsListView.OnScrollListener() {
-
-                    public void onScrollStateChanged(AbsListView view, int scrollState) {
-                    }
-
-                    public void onScroll(AbsListView view, int firstVisibleItem,
-                                         int visibleItemCount, int totalItemCount) {
-                        swipeRefreshLayout.setEnabled(mList != null &&
-                                        (mList.getChildCount() == 0 || mList.getChildCount() > 0
-                                                && mList.getFirstVisiblePosition() == 0
-                                                && mList.getChildAt(0).getTop() == 0)
-                        );
-                    }
-                });
             }
         };
 
         if(jsonArray.length() == 0) {
-            mHandler.post(r);
+            Thread mythread = new Thread(r);
+            mythread.start();
         }
+
+        return rootView;
     }
+
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipe_container);
+        //listener for when you try to refresh the list
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                // our swipeRefreshLayout needs to be notified when the data is returned in order for it to stop the animation
+                //handler.post(refreshing);
+                new RefreshAdapter().execute();
+            }
+        });
+
+        // sets the colors used in the refresh animation
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
+
+        mList = this.getListView();
+
+        //TODO: Get JSONArray from Handler
+        //TODO: Should we use AsyncTasks or does the Fragment take care of that?
+
+        //makes sure it doesn't try to refresh the list while the visible list is not at the top
+        mList.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+        }
+
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+                swipeRefreshLayout.setEnabled(mList != null &&
+                                (mList.getChildCount() == 0 || mList.getChildCount() > 0
+                                        && mList.getFirstVisiblePosition() == 0
+                                        && mList.getChildAt(0).getTop() == 0)
+                );
+            }
+        });
+
+    }
+
 
     private String getToken() {
         SharedPreferences credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
@@ -260,7 +266,7 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
                                 // Successful Request
                                 if (requestIsSuccessful(e)) {
                                     JSONObject decryptedValue = getDecryptedValue(receivedJSON);
-                                    System.out.println(decryptedValue);
+                                    //System.out.println(decryptedValue);
 
                                     try {
                                         JSONArray incidents = decryptedValue.getJSONArray("incident");

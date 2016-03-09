@@ -26,6 +26,7 @@
             android:layout_height="80dp"
             android:id="@+id/sendButton"
             android:background="@drawable/send_button"
+            android:clickable="true"
             android:layout_below="@+id/countDownDisplay"
             android:layout_toStartOf="@+id/countDownDisplay" />
 
@@ -33,6 +34,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:id="@+id/cancelButton"
+            android:clickable="true"
             android:layout_alignBottom="@+id/sendButton"
             android:layout_toEndOf="@+id/countDownDisplay"
             android:background="@drawable/cancel_button" />

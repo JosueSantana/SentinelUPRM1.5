@@ -1,5 +1,7 @@
 package Fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,7 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
+import org.cryptonode.jncryptor.CryptorException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import OtherHandlers.CryptographyHandler;
+import OtherHandlers.JSONHandler;
+import OtherHandlers.ValuesCollection;
 import edu.uprm.Sentinel.R;
 
 import java.util.ArrayList;
@@ -26,6 +39,7 @@ public class ViewPagerFragment extends Fragment {
     IncidentsFragment incident;
     EmergencyFragment emergency;
     SettingsFragment settings;
+    SharedPreferences settingsSP;
 
     public ViewPagerFragment() {
         // Required empty public constructor
@@ -39,6 +53,8 @@ public class ViewPagerFragment extends Fragment {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(this.getChildFragmentManager());
 
+        viewPager.addOnPageChangeListener(adapter);
+
         adapter.addFragment(report, "Alert");
 
         adapter.addFragment(incident, "Incidents");
@@ -49,23 +65,6 @@ public class ViewPagerFragment extends Fragment {
 
         viewPager.setAdapter(adapter);
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
     }
 
     @Override
@@ -119,9 +118,10 @@ public class ViewPagerFragment extends Fragment {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    class ViewPagerAdapter extends FragmentStatePagerAdapter {
+    class ViewPagerAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
+        private int lastPosition = 0;
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
@@ -145,6 +145,125 @@ public class ViewPagerFragment extends Fragment {
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
+        }
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            System.out.println("PAGE SCROLLING FROM POSITION:: " + String.valueOf(lastPosition));
+            if(lastPosition == 3) {
+                Thread postSettingsThread = new Thread(postSettings());
+                postSettingsThread.start();
+            }
+            lastPosition = position;
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+        }
+
+        public Runnable postSettings(){
+
+           return new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("IS THIS RUNNING?!?!?!");
+                    final CryptographyHandler crypto;
+
+                    settingsSP = ViewPagerFragment.this.getActivity().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+
+                    JSONObject registerJSON = new JSONObject();
+                    try {
+                        crypto = new CryptographyHandler();
+
+                        registerJSON.put("token", getToken());
+                        registerJSON.put(ValuesCollection.EMAIL_KEY, settingsSP.getBoolean("mail", false));
+                        registerJSON.put(ValuesCollection.SMS_KEY, settingsSP.getBoolean("sms", false));
+                        registerJSON.put(ValuesCollection.PUSH_KEY, settingsSP.getBoolean("push", false));
+                        registerJSON.put(ValuesCollection.FAMILY_KEY, settingsSP.getBoolean("family", false));
+
+                        Ion.with(getContext())
+                                .load(ValuesCollection.SETTINGS_URL)
+                                .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                                .asString()
+                                .setCallback(new FutureCallback<String>() {
+                                    @Override
+                                    public void onCompleted(Exception e, String receivedJSON) {
+                                        // Successful Request
+                                        if (requestIsSuccessful(e)) {
+
+                                            //JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+                                            //System.out.println(decryptedValue);
+
+                                            //Context context = getContext();
+                                            //CharSequence text = "";
+                                            // Received Success Message
+                                            /*if (receivedSuccessMessage(decryptedValue)) {
+                                                text = "Settings Successfully Updated ";
+                                            }
+                                            // Message Was Not Successful.
+                                            else {
+                                                text = "There was an Error Updating Your Settings";
+                                            }
+                                            int duration = Toast.LENGTH_SHORT;
+                                            Toast toast = Toast.makeText(context, text, duration);
+                                            toast.show();*/
+                                        }
+                                        // Errors
+                                        else {
+
+                                        }
+                                    }
+
+                                    // Extract Success Message From Received JSON.
+                                    private boolean receivedSuccessMessage(JSONObject decryptedValue) {
+                                        String success = null;
+                                        try {
+                                            success = decryptedValue.getString("success");
+                                            return success.equals("1");
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return false;
+                                    }
+
+                                    // Verify if there was an Error in the Request.
+                                    private boolean requestIsSuccessful(Exception e) {
+                                        return e == null;
+                                    }
+
+                                    // Convert received JSON String into a Decrypted JSON.
+                                    private JSONObject getDecryptedValue(String receivedJSONString) {
+                                        try {
+                                            JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
+                                            String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
+                                            String decryptedStringValue = crypto.decryptString(encryptedStringValue);
+                                            JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
+                                            return decryptedJSON;
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        } catch (CryptorException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return null;
+                                    }
+                                });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (CryptorException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+        }
+
+        private String getToken() {
+            SharedPreferences credentials = ViewPagerFragment.this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+            String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+            return storedToken;
         }
     }
 }

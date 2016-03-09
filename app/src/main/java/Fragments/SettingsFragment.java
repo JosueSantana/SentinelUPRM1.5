@@ -3,6 +3,7 @@ package Fragments;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.support.v4.view.ViewPager;
 import android.view.View.OnClickListener;
 import android.content.SharedPreferences;
 
@@ -33,7 +34,7 @@ import OtherHandlers.ValuesCollection;
 /**
  * This fragment manages the toggles in the settings.
  */
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment{
 
     private TableRow contactsRow;
     private TableRow languagesRow;
@@ -46,6 +47,7 @@ public class SettingsFragment extends Fragment {
     private Switch pushSwitch;
     private Switch familySwitch;
 
+    SharedPreferences settings;
     private Handler handler;
 
     public SettingsFragment() {
@@ -73,7 +75,7 @@ public class SettingsFragment extends Fragment {
 
         //set the contacts count
         TextView contactsText = (TextView) contactsRow.getChildAt(1);
-        SharedPreferences settings = this.getActivity().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+        settings = this.getActivity().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
         String text;
 
         if(settings.contains("contactsCount"))
@@ -142,114 +144,8 @@ public class SettingsFragment extends Fragment {
 
                 System.out.println("Current " + name + " status: " + settings.getBoolean(name, false));
 
-                // Thread to Update the Settings.
-                final Runnable updateSettingsThread = new Runnable() {
-                    @Override
-                    public void run() {
-
-                        final CryptographyHandler crypto;
-
-                        JSONObject registerJSON = new JSONObject();
-                        try {
-                            crypto = new CryptographyHandler();
-
-                            registerJSON.put("token", getToken());
-                            registerJSON.put(ValuesCollection.EMAIL_KEY, settings.getBoolean("mail", false));
-                            registerJSON.put(ValuesCollection.SMS_KEY, settings.getBoolean("sms", false));
-                            registerJSON.put(ValuesCollection.PUSH_KEY, settings.getBoolean("push", false));
-                            registerJSON.put(ValuesCollection.FAMILY_KEY, settings.getBoolean("family", false));
-
-                            Ion.with(getContext())
-                                    .load(ValuesCollection.SETTINGS_URL)
-                                    .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
-                                    .asString()
-                                    .setCallback(new FutureCallback<String>() {
-                                        @Override
-                                        public void onCompleted(Exception e, String receivedJSON) {
-                                            // Successful Request
-                                            if (requestIsSuccessful(e)) {
-                                                JSONObject decryptedValue = getDecryptedValue(receivedJSON);
-                                                System.out.println(decryptedValue);
-
-                                                Context context = getContext();
-                                                CharSequence text = "";
-                                                // Received Success Message
-                                                if (receivedSuccessMessage(decryptedValue)) {
-                                                    text = "Settings Successfully Updated ";
-                                                }
-                                                // Message Was Not Successful.
-                                                else {
-                                                    text = "There was an Error Updating Your Settings";
-                                                }
-                                                int duration = Toast.LENGTH_SHORT;
-                                                Toast toast = Toast.makeText(context, text, duration);
-                                                toast.show();
-                                            }
-                                            // Errors
-                                            else {
-
-                                            }
-                                        }
-
-                                        // Extract Success Message From Received JSON.
-                                        private boolean receivedSuccessMessage(JSONObject decryptedValue) {
-                                            String success = null;
-                                            try {
-                                                success = decryptedValue.getString("success");
-                                                return success.equals("1");
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                            return false;
-                                        }
-
-                                        // Verify if there was an Error in the Request.
-                                        private boolean requestIsSuccessful(Exception e) {
-                                            return e == null;
-                                        }
-
-                                        // Convert received JSON String into a Decrypted JSON.
-                                        private JSONObject getDecryptedValue(String receivedJSONString) {
-                                            try {
-                                                JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                                String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                                String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                                JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                                return decryptedJSON;
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            } catch (CryptorException e) {
-                                                e.printStackTrace();
-                                            }
-                                            return null;
-                                        }
-                                    });
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (CryptorException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-
-                handler.post(updateSettingsThread);
             }
         });
-    }
-
-    public void updateSettings(final String settingType) {
-        new AsyncTask<Void, Void, String>() {
-
-            @Override
-            protected String doInBackground(Void... params) {
-                return settingType;
-            }
-
-            @Override
-            protected void onPostExecute(String msg) {
-                String token = msg;
-            }
-        }.execute(null, null, null);
     }
 
     private void rowListener(TableRow row, final Fragment frag) {

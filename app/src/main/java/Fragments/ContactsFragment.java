@@ -192,7 +192,7 @@ public class ContactsFragment extends ListFragment{
         switch (item.getItemId()) {
             case R.id.action_add_contacts:
                 // User chose the "Settings" item, show the app settings UI...
-                if(jsonArray.length() > 5){
+                if(jsonArray.length() >= 5){
                     showSignupError(R.string.alertoverloadtitle,R.string.alertoverloadmessage);
                 }
                 else{
