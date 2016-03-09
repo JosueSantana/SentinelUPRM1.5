@@ -142,14 +142,7 @@ public class CountdownFragment extends Fragment implements
             @Override
             public void onClick(View view) {
                 // Send the Alert.
-                try {
-                    sendAlert();
                     goBackToAlertWaitFragment();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (CryptorException e) {
-                    e.printStackTrace();
-                }
             }
         });
 
@@ -215,7 +208,6 @@ public class CountdownFragment extends Fragment implements
             }
 
         };
-
         new Thread(r).start();
     }
 

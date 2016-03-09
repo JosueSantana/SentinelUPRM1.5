@@ -142,6 +142,10 @@ public class SettingsFragment extends Fragment{
 
                 editor.commit();
 
+
+                Thread postSettingsThread = new Thread(postSettings());
+                postSettingsThread.start();
+
                 System.out.println("Current " + name + " status: " + settings.getBoolean(name, false));
 
             }
@@ -155,5 +159,98 @@ public class SettingsFragment extends Fragment{
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, frag).addToBackStack(null).commit();
             }
         });
+    }
+
+    public Runnable postSettings(){
+
+        return new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("IS THIS RUNNING?!?!?!");
+                final CryptographyHandler crypto;
+
+                JSONObject registerJSON = new JSONObject();
+                try {
+                    crypto = new CryptographyHandler();
+
+                    registerJSON.put("token", getToken());
+                    registerJSON.put(ValuesCollection.EMAIL_KEY, settings.getBoolean("mail", false));
+                    registerJSON.put(ValuesCollection.SMS_KEY, settings.getBoolean("sms", false));
+                    registerJSON.put(ValuesCollection.PUSH_KEY, settings.getBoolean("push", false));
+                    registerJSON.put(ValuesCollection.FAMILY_KEY, settings.getBoolean("family", false));
+
+                    Ion.with(getContext())
+                            .load(ValuesCollection.SETTINGS_URL)
+                            .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                            .asString()
+                            .setCallback(new FutureCallback<String>() {
+                                @Override
+                                public void onCompleted(Exception e, String receivedJSON) {
+                                    // Successful Request
+                                    if (requestIsSuccessful(e)) {
+
+                                        //JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+                                        //System.out.println(decryptedValue);
+
+                                        //Context context = getContext();
+                                        //CharSequence text = "";
+                                        // Received Success Message
+                                            /*if (receivedSuccessMessage(decryptedValue)) {
+                                                text = "Settings Successfully Updated ";
+                                            }
+                                            // Message Was Not Successful.
+                                            else {
+                                                text = "There was an Error Updating Your Settings";
+                                            }
+                                            int duration = Toast.LENGTH_SHORT;
+                                            Toast toast = Toast.makeText(context, text, duration);
+                                            toast.show();*/
+                                    }
+                                    // Errors
+                                    else {
+
+                                    }
+                                }
+
+                                // Extract Success Message From Received JSON.
+                                private boolean receivedSuccessMessage(JSONObject decryptedValue) {
+                                    String success = null;
+                                    try {
+                                        success = decryptedValue.getString("success");
+                                        return success.equals("1");
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return false;
+                                }
+
+                                // Verify if there was an Error in the Request.
+                                private boolean requestIsSuccessful(Exception e) {
+                                    return e == null;
+                                }
+
+                                // Convert received JSON String into a Decrypted JSON.
+                                private JSONObject getDecryptedValue(String receivedJSONString) {
+                                    try {
+                                        JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
+                                        String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
+                                        String decryptedStringValue = crypto.decryptString(encryptedStringValue);
+                                        JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
+                                        return decryptedJSON;
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    } catch (CryptorException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return null;
+                                }
+                            });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (CryptorException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
     }
 }

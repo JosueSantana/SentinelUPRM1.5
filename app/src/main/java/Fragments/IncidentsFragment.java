@@ -71,6 +71,29 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_incidents, container, false);
 
+        return rootView;
+    }
+
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipe_container);
+        //listener for when you try to refresh the list
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                // our swipeRefreshLayout needs to be notified when the data is returned in order for it to stop the animation
+                //handler.post(refreshing);
+                new RefreshAdapter().execute();
+            }
+        });
+
+        // sets the colors used in the refresh animation
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
+
+        mList = this.getListView();
+
         mHandler = new Handler();
 
         //runnable of the list filling
@@ -183,29 +206,6 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
             Thread mythread = new Thread(r);
             mythread.start();
         }
-
-        return rootView;
-    }
-
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipe_container);
-        //listener for when you try to refresh the list
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                // our swipeRefreshLayout needs to be notified when the data is returned in order for it to stop the animation
-                //handler.post(refreshing);
-                new RefreshAdapter().execute();
-            }
-        });
-
-        // sets the colors used in the refresh animation
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
-
-        mList = this.getListView();
 
         //TODO: Get JSONArray from Handler
         //TODO: Should we use AsyncTasks or does the Fragment take care of that?
