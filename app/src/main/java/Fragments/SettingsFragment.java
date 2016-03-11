@@ -48,6 +48,7 @@ public class SettingsFragment extends Fragment{
     private Switch familySwitch;
 
     SharedPreferences settings;
+    SharedPreferences credentials;
     private Handler handler;
 
     public SettingsFragment() {
@@ -70,6 +71,9 @@ public class SettingsFragment extends Fragment{
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
+        credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        settings = this.getActivity().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+
         //get reference to row objects
         contactsRow = (TableRow) getView().findViewById(R.id.contactsrow);
 
@@ -80,7 +84,7 @@ public class SettingsFragment extends Fragment{
 
         if(settings.contains("contactsCount"))
              text = String.format(getResources().getString(R.string.contactcountlabel), settings.getInt("contactsCount", 0));
-        else text = "0";
+        else text = "0 out of 5";
 
         contactsText.setText(text);
 
@@ -102,26 +106,33 @@ public class SettingsFragment extends Fragment{
         pushSwitch = (Switch) getView().findViewById(R.id.notificationspushswitch);
         familySwitch = (Switch) getView().findViewById(R.id.notificationsfamilyswitch);
 
-        //check switch states
-        switchToggle(settings, emailSwitch, "mail");
-        switchToggle(settings, smsSwitch, "sms");
-        switchToggle(settings, pushSwitch, "push");
-        switchToggle(settings, familySwitch, "family");
+        //initialize all settings to true
+        emailSwitch.setChecked(false);
+        smsSwitch.setChecked(false);
+        pushSwitch.setChecked(false);
+        familySwitch.setChecked(false);
 
         //set all the switch listeners
         switchListener(settings, emailSwitch, "mail");
-        switchListener(settings, smsSwitch, "sms" );
+        switchListener(settings, smsSwitch, "sms");
         switchListener(settings, pushSwitch, "push");
         switchListener(settings, familySwitch, "family");
+
+        //check switch states
+        switchToggle(emailSwitch, "mail");
+        switchToggle(smsSwitch, "sms");
+        switchToggle(pushSwitch, "push");
+        switchToggle(familySwitch, "family");
+
     }
 
     private String getToken() {
-        SharedPreferences credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
         String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
         return storedToken;
     }
 
-    private void switchToggle(SharedPreferences settings, CompoundButton slideSwitch, String name){
+    private void switchToggle(CompoundButton slideSwitch, String name){
         if(settings.getBoolean(name, false)){slideSwitch.toggle();}
     }
 
@@ -143,10 +154,11 @@ public class SettingsFragment extends Fragment{
                 editor.commit();
 
 
-                Thread postSettingsThread = new Thread(postSettings());
+                Thread postSettingsThread = new Thread(postSettings(name));
                 postSettingsThread.start();
 
                 System.out.println("Current " + name + " status: " + settings.getBoolean(name, false));
+
 
             }
         });
@@ -161,7 +173,24 @@ public class SettingsFragment extends Fragment{
         });
     }
 
-    public Runnable postSettings(){
+    public Runnable postSettings(String setting){
+
+        final String name = setting;
+
+        String values = "";
+
+        switch (setting) {
+            case "mail": values =  ValuesCollection.EMAIL_KEY;
+                break;
+            case "push": values =  ValuesCollection.PUSH_KEY;
+                break;
+            case "sms": values =  ValuesCollection.SMS_KEY;
+                break;
+            case "family":  values = ValuesCollection.FAMILY_KEY;
+                break;
+        }
+
+        final String valuesFinal = values;
 
         return new Runnable() {
             @Override
@@ -174,11 +203,7 @@ public class SettingsFragment extends Fragment{
                     crypto = new CryptographyHandler();
 
                     registerJSON.put("token", getToken());
-                    registerJSON.put(ValuesCollection.EMAIL_KEY, settings.getBoolean("mail", false));
-                    registerJSON.put(ValuesCollection.SMS_KEY, settings.getBoolean("sms", false));
-                    registerJSON.put(ValuesCollection.PUSH_KEY, settings.getBoolean("push", false));
-                    registerJSON.put(ValuesCollection.FAMILY_KEY, settings.getBoolean("family", false));
-
+                    registerJSON.put(valuesFinal, settings.getBoolean(name, false));
                     Ion.with(getContext())
                             .load(ValuesCollection.SETTINGS_URL)
                             .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))

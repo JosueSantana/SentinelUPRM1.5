@@ -3,6 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/windowBackground"
+    android:descendantFocusability="blocksDescendants"
     android:paddingTop="15dp"
     android:paddingBottom="15dp">
 
@@ -43,6 +44,8 @@
         android:background="#0000"
         android:layout_gravity="center_vertical"
         android:layout_alignParentRight="true"
+        android:focusable="true"
+        android:clickable="true"
         android:foregroundTint="@color/colorPrimary"
         android:paddingRight="15dp" />
 </RelativeLayout>

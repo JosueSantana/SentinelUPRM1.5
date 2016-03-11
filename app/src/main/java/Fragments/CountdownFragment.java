@@ -49,6 +49,7 @@ public class CountdownFragment extends Fragment implements
     private ImageButton cancelButton;
     private ImageButton sendButton;
     CountDownTimer CDT;
+    boolean buttonPressed = false;
 
     public CountdownFragment() {
         // Required empty public constructor
@@ -62,6 +63,12 @@ public class CountdownFragment extends Fragment implements
         // Create an instance of GoogleAPIClient and location request
         buildGoogleApiClient();
         createLocationRequest();
+
+        if(savedInstanceState != null){
+            mLastLocation.setLatitude(savedInstanceState.getDouble("latitude"));
+            mLastLocation.setLatitude(savedInstanceState.getDouble("longitude"));
+            System.out.println("lat: " + mLastLocation.getLatitude() + "long: " + mLastLocation.getLongitude());
+        }
     }
 
     @Override
@@ -125,7 +132,9 @@ public class CountdownFragment extends Fragment implements
             }
 
             public void onFinish() {
-                return;
+                if(!buttonPressed){
+                    goBackToAlertWaitFragment();
+                }
             }
         }.start();
 
@@ -135,7 +144,9 @@ public class CountdownFragment extends Fragment implements
             @Override
             public void onClick(View view) {
                 // Send the Alert.
-                    goBackToAlertWaitFragment();
+                buttonPressed = true;
+                toggleUIClicking(false);
+                goBackToAlertWaitFragment();
             }
         });
 
@@ -144,6 +155,8 @@ public class CountdownFragment extends Fragment implements
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                buttonPressed = true;
+                toggleUIClicking(false);
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
             }
         });
@@ -184,7 +197,29 @@ public class CountdownFragment extends Fragment implements
                                         String encryptedJSONReceived = JSONHandler.getSentinelMessage(receivedSentinelMessage);
                                         String decryptedJSONReceived = crypto.decryptString(encryptedJSONReceived);
 
-                                        JSONObject receivedJSON = JSONHandler.convertStringToJSON(decryptedJSONReceived);
+                                        final JSONObject receivedJSON = JSONHandler.convertStringToJSON(decryptedJSONReceived);
+
+                                        CountdownFragment.this.getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                System.out.println("received:" + receivedJSON);
+
+                                                try {
+                                                    if(receivedJSON.getString("success").equals("3"))
+                                                    {
+                                                        buttonPressed = true;
+                                                        Toast.makeText(CountdownFragment.this.getActivity(), R.string.alertnoinlocationmessage, Toast.LENGTH_SHORT).show();
+                                                        getActivity().getSupportFragmentManager().popBackStackImmediate();
+
+                                                    }
+                                                    else if(receivedJSON.getString("success").equals("1")){
+                                                        getActivity().getSupportFragmentManager().beginTransaction().remove(CountdownFragment.this).replace(R.id.mainLayout, new AlertWaitFragment()).commit();;
+                                                    }
+                                                } catch (JSONException e1) {
+                                                    e1.printStackTrace();
+                                                }
+                                            }
+                                        });
 
                                     } catch (JSONException e1) {
                                         e1.printStackTrace();
@@ -213,14 +248,12 @@ public class CountdownFragment extends Fragment implements
         } catch (CryptorException e) {
             e.printStackTrace();
         }
-        getActivity().getSupportFragmentManager().beginTransaction().remove(this).replace(R.id.mainLayout, new AlertWaitFragment()).commit();;
     }
 
 
     public void onDestroy(){
         super.onDestroy();
         //cancel timer when this fragment is destroyed
-        CDT.cancel();
     }
 
     @Override
@@ -294,6 +327,16 @@ public class CountdownFragment extends Fragment implements
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
+    }
+
+    public void toggleUIClicking(boolean toggler){
+        sendButton.setClickable(toggler);
+        sendButton.setFocusable(toggler);
+        sendButton.setFocusableInTouchMode(toggler);
+
+        cancelButton.setClickable(toggler);
+        cancelButton.setFocusable(toggler);
+        cancelButton.setFocusableInTouchMode(toggler);
     }
 
 }

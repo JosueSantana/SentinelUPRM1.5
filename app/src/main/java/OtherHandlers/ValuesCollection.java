@@ -55,7 +55,7 @@ public class ValuesCollection {
 
     public static final String ANDROID_OS_STRING = "android";
 
-    public static final long TIMER_PERIOD = 2;
+    public static final long TIMER_PERIOD = 0;
 
     public static final String ANDROID_SENDER_ID = "6008874123";
 }

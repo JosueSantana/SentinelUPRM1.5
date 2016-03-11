@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 
-import android.os.Message;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -48,7 +47,6 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
     JSONArray jsonArray;
     ListView mList;
     private int numberOfIncidents;
-    private Handler mHandler;
     private GoogleMap mMap;
     private Double longitude;
     private Double latitude;
@@ -93,8 +91,6 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
 
         mList = this.getListView();
-
-        mHandler = new Handler();
 
         //runnable of the list filling
         final Runnable r = new Runnable() {

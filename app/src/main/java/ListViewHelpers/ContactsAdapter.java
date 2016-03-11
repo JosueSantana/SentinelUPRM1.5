@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import Fragments.ContactsFragment;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.JSONHandler;
 import OtherHandlers.ValuesCollection;
@@ -69,21 +71,6 @@ public class ContactsAdapter extends BaseAdapter {
             row.contactName = (TextView) view.findViewById(R.id.myContactName);
             row.contactPhone = (TextView) view.findViewById(R.id.myContactPhone);
 
-            ((RelativeLayout) view ).getChildAt(2).setOnClickListener(
-                    new View.OnClickListener() {
-                        public void onClick(View arg) {
-                        //do stuff
-                        System.out.println("DOING DELETING STUFF!!!");
-
-                            try {
-                                deleteContact(dataArray.getJSONObject(i).getString("editedPhone"));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                            System.out.println("LOL");
-                        }
-                    });
             view.setTag(row);
         }
         else
@@ -103,86 +90,6 @@ public class ContactsAdapter extends BaseAdapter {
         }
 
         return view;
-    }
-
-    public void deleteContact(String telephone) {
-        final CryptographyHandler crypto;
-
-        JSONObject registerJSON = new JSONObject();
-        try {
-            crypto = new CryptographyHandler();
-
-            registerJSON.put("token", getToken());
-            registerJSON.put("delete", telephone);
-
-            Ion.with(this.activity.getApplicationContext())
-                    .load("DELETE", ValuesCollection.DELETE_CONTACT_URL)
-                    .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
-                    .asString()
-                    .setCallback(new FutureCallback<String>() {
-                        @Override
-                        public void onCompleted(Exception e, String receivedJSON) {
-
-                            // Successful Request
-                            if (requestIsSuccessful(e)) {
-                                JSONObject decryptedValue = getDecryptedValue(receivedJSON);
-                                System.out.println(decryptedValue);
-                            }
-                            // Errors
-                            else {
-                            }
-                        }
-
-                        private boolean listIsEmpty(JSONObject decryptedValue) {
-                            String success = null;
-                            try {
-                                success = decryptedValue.getString("success");
-                                return success.equals("2");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            return false;
-                        }
-
-                        // Extract Success Message From Received JSON.
-                        private boolean receivedExistingContacts(JSONObject decryptedValue) {
-                            String success = null;
-                            try {
-                                success = decryptedValue.getString("success");
-                                return success.equals("1");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            return false;
-                        }
-
-                        // Verify if there was an Error in the Request.
-                        private boolean requestIsSuccessful(Exception e) {
-                            return e == null;
-                        }
-
-                        // Convert received JSON String into a Decrypted JSON.
-                        private JSONObject getDecryptedValue(String receivedJSONString) {
-                            try {
-                                JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                return decryptedJSON;
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (CryptorException e) {
-                                e.printStackTrace();
-                            }
-                            return null;
-                        }
-                    });
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (CryptorException e) {
-            e.printStackTrace();
-        }
     }
 
     private String getToken() {

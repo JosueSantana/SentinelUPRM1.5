@@ -1,6 +1,8 @@
 package Fragments;
 
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ListFragment;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
@@ -87,12 +90,11 @@ public class PhonebookFragment extends ListFragment{
                         // Now create matcher object.
                         Matcher m = r.matcher(phoneStr);
                         if(m.matches()){
-                            System.out.println("M MATCHES " + m.group(1) + m.group(2) + m.group(3));
                             item.put("phone", m.group(1) + m.group(2) + m.group(3));
                         }
 
                         contactsList.put(item);
-
+                        phones.close();
                     }
 
                 } catch (JSONException e) {
@@ -109,34 +111,36 @@ public class PhonebookFragment extends ListFragment{
 
     public void onListItemClick(ListView l, View v, int position, long id) {
         try {
-            String name = ((JSONObject) contactsList.get(position)).getString("name");
-            String phone = ((JSONObject) contactsList.get(position)).getString("phone");
-            System.out.println(name);
-            System.out.println(phone);
+            final String name = ((JSONObject) contactsList.get(position)).getString("name");
+            final String phone = ((JSONObject) contactsList.get(position)).getString("phone");
 
-            final CryptographyHandler crypto;
+            Runnable r =  new Runnable() {
+                @Override
+                public void run() {
+                    final CryptographyHandler crypto;
 
-            JSONObject registerJSON = new JSONObject();
-            try {
-                crypto = new CryptographyHandler();
+                    JSONObject registerJSON = new JSONObject();
+                    try {
+                        crypto = new CryptographyHandler();
 
-                SharedPreferences credentials = getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+                        SharedPreferences credentials = getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
 
-                registerJSON.put("token", getToken());
-                registerJSON.put("name", name);
-                registerJSON.put("phone", phone);
+                        registerJSON.put("token", getToken());
+                        registerJSON.put("name", name);
+                        registerJSON.put("phone", phone);
 
-                Ion.with(getContext())
-                        .load("PUT", ValuesCollection.ADD_CONTACT_URL)
-                        .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
-                        .asString()
-                        .setCallback(new FutureCallback<String>() {
-                            @Override
-                            public void onCompleted(Exception e, String receivedJSON) {
-                                System.out.println("lol");
-                                JSONObject decryptedValue = getDecryptedValue(receivedJSON);
-                                System.out.println(decryptedValue);
-                                // Successful Request
+                        Ion.with(getContext())
+                                .load("PUT", ValuesCollection.ADD_CONTACT_URL)
+                                .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                                .asString()
+                                .setCallback(new FutureCallback<String>() {
+                                    @Override
+                                    public void onCompleted(Exception e, String receivedJSON) {
+                                        System.out.println("lol");
+                                        JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+                                        System.out.println(decryptedValue);
+
+                                        // Successful Request
                                 /*
                                 if (requestIsSuccessful(e)) {
                                     JSONObject decryptedValue = getDecryptedValue(receivedJSON);
@@ -146,48 +150,51 @@ public class PhonebookFragment extends ListFragment{
                                 else {
                                 }
                                 */
-                            }
+                                    }
 
-                            // Extract Success Message From Received JSON.
-                            private boolean receivedSuccessMessage(JSONObject decryptedValue) {
-                                String success = null;
-                                try {
-                                    success = decryptedValue.getString("success");
-                                    return success.equals("1");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                return false;
-                            }
+                                    // Extract Success Message From Received JSON.
+                                    private boolean receivedSuccessMessage(JSONObject decryptedValue) {
+                                        String success = null;
+                                        try {
+                                            success = decryptedValue.getString("success");
+                                            return success.equals("1");
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return false;
+                                    }
 
-                            // Verify if there was an Error in the Request.
-                            private boolean requestIsSuccessful(Exception e) {
-                                return e == null;
-                            }
+                                    // Verify if there was an Error in the Request.
+                                    private boolean requestIsSuccessful(Exception e) {
+                                        return e == null;
+                                    }
 
-                            // Convert received JSON String into a Decrypted JSON.
-                            private JSONObject getDecryptedValue(String receivedJSONString) {
-                                try {
-                                    JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                    String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                    String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                    JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                    return decryptedJSON;
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                } catch (CryptorException e) {
-                                    e.printStackTrace();
-                                }
-                                return null;
-                            }
-                        });
+                                    // Convert received JSON String into a Decrypted JSON.
+                                    private JSONObject getDecryptedValue(String receivedJSONString) {
+                                        try {
+                                            JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
+                                            String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
+                                            String decryptedStringValue = crypto.decryptString(encryptedStringValue);
+                                            JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
+                                            return decryptedJSON;
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        } catch (CryptorException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return null;
+                                    }
+                                });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (CryptorException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
 
-                getActivity().getSupportFragmentManager().popBackStackImmediate();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (CryptorException e) {
-                e.printStackTrace();
-            }
+            new Thread(r).start();
+            getActivity().getSupportFragmentManager().popBackStackImmediate();
 
         } catch (JSONException e) {
             e.printStackTrace();

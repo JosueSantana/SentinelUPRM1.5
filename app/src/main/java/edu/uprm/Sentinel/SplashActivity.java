@@ -67,7 +67,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         }
         else{
-            if(credentials.contains("atSignup") && credentials.contains("email")) {
+            if(credentials.contains("atSignup") && credentials.contains("mail")) {
                 //go directly to alert view
                 Intent mainIntent = new Intent(SplashActivity.this, VerificationActivity.class);
                 startActivity(mainIntent);

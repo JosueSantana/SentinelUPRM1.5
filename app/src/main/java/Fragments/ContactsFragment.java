@@ -3,6 +3,7 @@ package Fragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
@@ -30,6 +32,9 @@ import OtherHandlers.ValuesCollection;
 public class ContactsFragment extends ListFragment{
 
     private JSONArray jsonArray;
+    private ListView mList;
+    private Thread loaderThread;
+    private Handler handler;
 
     public ContactsFragment() {
         // Required empty public constructor
@@ -57,6 +62,204 @@ public class ContactsFragment extends ListFragment{
         //all of this...
         jsonArray = new JSONArray();
 
+        mList = this.getListView();
+
+        loaderThread = new Thread(new Runnable(){
+                @Override
+                public void run() {
+
+                    try {
+                        final CryptographyHandler crypto;
+
+                        JSONObject registerJSON = new JSONObject();
+                        crypto = new CryptographyHandler();
+
+                        registerJSON.put("token", getToken());
+
+                        Ion.with(getContext())
+                                .load(ValuesCollection.CONTACT_LIST_URL)
+                                .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                                .asString()
+                                .setCallback(new FutureCallback<String>() {
+                                    @Override
+                                    public void onCompleted(Exception e, String receivedJSON) {
+
+                                        // Successful Request
+                                        if (requestIsSuccessful(e)) {
+
+                                            JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+                                            System.out.println(decryptedValue);
+
+                                            try {
+                                                JSONArray contacts = decryptedValue.getJSONArray("contact");
+
+                                                for (int i = 0; i < contacts.length(); i++) {
+                                                    JSONObject tempJSON = new JSONObject();
+                                                    tempJSON.put("name", contacts.getJSONObject(i).get("name"));
+                                                    tempJSON.put("editedPhone", contacts.getJSONObject(i).get("phone"));
+                                                    jsonArray.put(tempJSON);
+                                                }
+                                                mList.post(new Runnable(){
+                                                    @Override
+                                                    public void run() {
+                                                        setListAdapter(new ContactsAdapter(jsonArray, getActivity()));
+                                                    }
+                                                });
+
+                                                //setting up the amount of contacts for the settings
+                                                SharedPreferences settings = ContactsFragment.this.getActivity().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+                                                SharedPreferences.Editor editor = settings.edit();
+
+                                                editor.putInt("contactsCount", jsonArray.length()).commit();
+
+                                            } catch (JSONException e1) {
+                                                e1.printStackTrace();
+                                            }
+
+                                            // Created a new session; there are no registered contacts yet.
+                                            if (listIsEmpty(decryptedValue)) {
+                                            }
+                                            // Received contact list.
+                                            else if (receivedExistingContacts(decryptedValue)) {
+                                            }
+                                            //
+                                            else {
+
+                                            }
+                                        }
+                                        // Errors
+                                        else {
+                                        }
+                                    }
+
+                                    private boolean listIsEmpty(JSONObject decryptedValue) {
+                                        String success = null;
+                                        try {
+                                            success = decryptedValue.getString("success");
+                                            return success.equals("2");
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return false;
+                                    }
+
+                                    // Extract Success Message From Received JSON.
+                                    private boolean receivedExistingContacts(JSONObject decryptedValue) {
+                                        String success = null;
+                                        try {
+                                            success = decryptedValue.getString("success");
+                                            return success.equals("1");
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return false;
+                                    }
+
+                                    // Verify if there was an Error in the Request.
+                                    private boolean requestIsSuccessful(Exception e) {
+                                        return e == null;
+                                    }
+
+                                    // Convert received JSON String into a Decrypted JSON.
+                                    private JSONObject getDecryptedValue(String receivedJSONString) {
+                                        try {
+                                            JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
+                                            String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
+                                            String decryptedStringValue = crypto.decryptString(encryptedStringValue);
+                                            JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
+                                            return decryptedJSON;
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        } catch (CryptorException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return null;
+                                    }
+                                });
+                    } catch (CryptorException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+        loaderThread.start();
+
+        //setListAdapter(new ContactsAdapter(jsonArray, getActivity()));
+        //getListView();
+
+    }
+
+    private String getToken() {
+        SharedPreferences credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+        return storedToken;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_contacts, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add_contacts:
+                // User chose the "Settings" item, show the app settings UI...
+                if(jsonArray.length() >= 5){
+                    showSignupError(R.string.alertoverloadtitle,R.string.alertoverloadmessage);
+                }
+                else{
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,
+                    new PhonebookFragment()).addToBackStack(null).commit();;
+                }
+
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    public void onListItemClick(ListView l, View v, int position, long id){
+        super.onListItemClick(l, v, position, id);
+
+
+        final int i = position;
+        boolean stuff = ((RelativeLayout) v).getChildAt(2).callOnClick();
+        System.out.println("DOING DELETING STAFF?!!!: " + stuff);
+
+        if(stuff){
+                new View.OnClickListener() {
+                    public void onClick(View arg) {
+                        //do stuff
+                        System.out.println("DOING DELETING STUFF!!!");
+
+                        Runnable r = new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    deleteContact(jsonArray.getJSONObject(i).getString("editedPhone"));
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        };
+
+                        new Thread(r).start();
+
+                    }
+                };
+        }
+    }
+
+    public void deleteContact(String telephone) {
         final CryptographyHandler crypto;
 
         JSONObject registerJSON = new JSONObject();
@@ -64,10 +267,10 @@ public class ContactsFragment extends ListFragment{
             crypto = new CryptographyHandler();
 
             registerJSON.put("token", getToken());
-            System.out.println("lol");
+            registerJSON.put("delete", telephone);
 
-            Ion.with(getContext())
-                    .load(ValuesCollection.CONTACT_LIST_URL)
+            Ion.with(this.getActivity().getApplicationContext())
+                    .load("DELETE", ValuesCollection.DELETE_CONTACT_URL)
                     .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
                     .asString()
                     .setCallback(new FutureCallback<String>() {
@@ -76,44 +279,12 @@ public class ContactsFragment extends ListFragment{
 
                             // Successful Request
                             if (requestIsSuccessful(e)) {
-
                                 JSONObject decryptedValue = getDecryptedValue(receivedJSON);
                                 System.out.println(decryptedValue);
 
-                                try {
-                                    JSONArray contacts = decryptedValue.getJSONArray("contact");
+                                getActivity().getSupportFragmentManager().beginTransaction().detach(ContactsFragment.this).commit();
+                                getActivity().getSupportFragmentManager().beginTransaction().attach(ContactsFragment.this).commit();
 
-                                    for(int i = 0; i < contacts.length(); i++) {
-                                        JSONObject tempJSON = new JSONObject();
-                                        tempJSON.put("name", contacts.getJSONObject(i).get("name"));
-                                        tempJSON.put("editedPhone", contacts.getJSONObject(i).get("phone"));
-                                        jsonArray.put(tempJSON);
-                                    }
-                                    setListAdapter(new ContactsAdapter(jsonArray, getActivity()));
-
-                                    //setting up the amount of contacts for the settings
-                                    SharedPreferences settings = ContactsFragment.this.getActivity().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
-                                    SharedPreferences.Editor editor = settings.edit();
-
-                                    editor.putInt("contactsCount", jsonArray.length()).commit();
-
-                                    System.out.println("COUNT OF JSON ARRAY LENGTH " + jsonArray.length());
-
-
-                                } catch (JSONException e1) {
-                                    e1.printStackTrace();
-                                }
-
-                                // Created a new session; there are no registered contacts yet.
-                                if(listIsEmpty(decryptedValue)) {
-                                }
-                                // Received contact list.
-                                else if (receivedExistingContacts(decryptedValue)) {
-                                }
-                                //
-                                else {
-
-                                }
                             }
                             // Errors
                             else {
@@ -170,46 +341,16 @@ public class ContactsFragment extends ListFragment{
         } catch (CryptorException e) {
             e.printStackTrace();
         }
-
-        setListAdapter(new ContactsAdapter(jsonArray, getActivity()));
-        getListView();
     }
 
-    private String getToken() {
-        SharedPreferences credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
-        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
-        return storedToken;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_contacts, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add_contacts:
-                // User chose the "Settings" item, show the app settings UI...
-                if(jsonArray.length() >= 5){
-                    showSignupError(R.string.alertoverloadtitle,R.string.alertoverloadmessage);
-                }
-                else{
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,
-                    new PhonebookFragment()).addToBackStack(null).commit();;
-                }
-
-                return true;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
+    //Verifies if connection to the server has been closed or something?
+    public boolean isRefreshing() {
+        //TODO: Add refresh logic
+        if(jsonArray == null){
+            return  true;
         }
+        return false;
     }
-
     /*
     public void setListAdapter(JSONArray jsonArray){
         this.contactsListView.setAdapter(new ContactsAdapter(jsonArray, getActivity()));

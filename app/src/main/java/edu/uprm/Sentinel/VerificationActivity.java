@@ -11,8 +11,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +40,8 @@ public class VerificationActivity extends AppCompatActivity {
     private ImageButton phoneButton;
     private ImageButton proceedButton;
     private FragmentManager fm = getSupportFragmentManager();
+    private ProgressBar spinner;
+    private EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,11 @@ public class VerificationActivity extends AppCompatActivity {
 
         //fix orientation on Portrait
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
+        spinner = (ProgressBar) findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
+
 
         // Create listener for Alert Button
         phoneButton = (ImageButton) findViewById(R.id.phoneOnSignup2);
@@ -57,13 +66,24 @@ public class VerificationActivity extends AppCompatActivity {
         });
 
         //create listener for "GO" edit text action
-        final EditText editText = (EditText) findViewById(R.id.codeEnter);
+        editText = (EditText) findViewById(R.id.codeEnter);
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 boolean handled = false;
                 if (i == EditorInfo.IME_ACTION_GO) {
                     try {
+
+
+                        // Check if no view has focus:
+                        View view = VerificationActivity.this.getCurrentFocus();
+                        if (view != null) {
+                            editText.clearFocus();
+                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        }
+
+                        toggleUIClicking(false);
                         attemptVerification(editText.getText().toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -92,11 +112,28 @@ public class VerificationActivity extends AppCompatActivity {
         });
     }
 
+
+    public void toggleUIClicking(boolean toggler){
+        editText.setClickable(toggler);
+        editText.setFocusable(toggler);
+        editText.setFocusableInTouchMode(toggler);
+
+        phoneButton.setClickable(toggler);
+        phoneButton.setFocusable(toggler);
+        phoneButton.setFocusableInTouchMode(toggler);
+
+        proceedButton.setClickable(toggler);
+        proceedButton.setFocusable(toggler);
+        proceedButton.setFocusableInTouchMode(toggler);
+    }
+
     private void attemptVerification(String vCode) throws JSONException, CryptorException {
 
         //TODO: call encryption mechanism
         //TODO: call request handler
         //TODO: manage failure conditions
+
+        spinner.setVisibility(View.VISIBLE);
 
         //manage failure conditions
         if(vCode.isEmpty()){
@@ -107,6 +144,7 @@ public class VerificationActivity extends AppCompatActivity {
             dialogFragment.setArguments(bundle);
             // Show Alert DialogFragment
             dialogFragment.show(fm, "Alert Dialog Fragment");
+            spinner.setVisibility(View.GONE);
         }
         else {
 
@@ -121,146 +159,162 @@ public class VerificationActivity extends AppCompatActivity {
             final SharedPreferences.Editor credentialsEditor = credentials.edit();
             String emailAddress = credentials.getString(ValuesCollection.EMAIL_KEY, null);
 
-            JSONObject verificationJSON = new JSONObject();
+            final JSONObject verificationJSON = new JSONObject();
             verificationJSON.put("email", emailAddress);
             verificationJSON.put("checkToken", vCode);
 
-            Ion.with(getBaseContext())
-                    .load(ValuesCollection.PASSCODE_VALIDATION_URL)
-                    .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(verificationJSON))
-                    .asString()
-                    .setCallback(new FutureCallback<String>() {
+            Runnable r = new Runnable(){
 
-                        @Override
-                        public void onCompleted(Exception e, String receivedJSON) {
-                            // Successful Request
-                            if (requestIsSuccessful(e)) {
-                                JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+                @Override
+                public void run() {
+                    try {
+                        Ion.with(getBaseContext())
+                                .load(ValuesCollection.PASSCODE_VALIDATION_URL)
+                                .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(verificationJSON))
+                                .asString()
+                                .setCallback(new FutureCallback<String>() {
 
-                                // Received Success Message
-                                if (receivedSuccessMessage(decryptedValue)) {
-                                    // Store token in Shared Preferences.
-                                    String token = getToken(decryptedValue);
-                                    storeToken(token);
-                                    userIsVerified();
-                                    startMainActivity();
-                                } else if(userEntersIncorrectPasscode(decryptedValue)){
-                                    Context context = getApplicationContext();
-                                    CharSequence text = "Inputted Passcode is Incorrect";
-                                    int duration = Toast.LENGTH_SHORT;
+                                    @Override
+                                    public void onCompleted(Exception e, String receivedJSON) {
+                                        // Successful Request
+                                        if (requestIsSuccessful(e)) {
+                                            JSONObject decryptedValue = getDecryptedValue(receivedJSON);
 
-                                    Toast toast = Toast.makeText(context, text, duration);
-                                    toast.show();
+                                            // Received Success Message
+                                            if (receivedSuccessMessage(decryptedValue)) {
+                                                // Store token in Shared Preferences.
+                                                String token = getToken(decryptedValue);
+                                                storeToken(token);
+                                                userIsVerified();
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        spinner.setVisibility(View.GONE);
+                                                        startMainActivity();
+                                                        finish();
+                                                    }
+                                                });
+                                            } else if(userEntersIncorrectPasscode(decryptedValue)){
+                                                Context context = getApplicationContext();
+                                                CharSequence text = "Inputted Passcode is Incorrect";
+
+                                            }
+                                            // Message Was Not Successful.
+                                            else {}
+                                        }
+                                        // Request Was Not Successful
+                                        else {}
+                                    }
+
+                                    // User Enters Incorrect Passcode (success:2).
+                                    private boolean userEntersIncorrectPasscode(JSONObject decryptedValue) {
+                                        String success = null;
+                                        try {
+                                            success = decryptedValue.getString("success");
+                                            return success.equals("2");
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return false;
+                                    }
+
+                                    // Store Token.
+                                    private void storeToken(String token) {
+                                        credentialsEditor.putString(ValuesCollection.TOKEN_KEY, token);
+                                        credentialsEditor.commit();
+                                    }
+
+                                    // Extract Token from JSON.
+                                    private String getToken(JSONObject decryptedValue) {
+                                        try {
+                                            return decryptedValue.getString("token");
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return null;
+                                    }
+
+                                    private void startMainActivity() {
+                                        Intent veriIntent = new Intent(VerificationActivity.this, MainActivity.class);
+                                        veriIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
+                                        startActivity(veriIntent);
+                                    }
+
+                                    //
+                                    private void userIsVerified() {
+                                        credentialsEditor.putBoolean("isVerified", true).commit();
+                                    }
+
+                                    // Extract Success Message From Received JSON.
+                                    private boolean receivedSuccessMessage(JSONObject decryptedValue) {
+                                        String success = null;
+                                        try {
+                                            success = decryptedValue.getString("success");
+                                            return success.equals("1");
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return false;
+                                    }
+
+                                    // Verify if there was an Error in the Request.
+                                    private boolean requestIsSuccessful(Exception e) {
+                                        return e == null;
+                                    }
+
+                                    // Convert received JSON String into a Decrypted JSON.
+                                    private JSONObject getDecryptedValue(String receivedJSONString) {
+                                        try {
+                                            JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
+                                            String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
+                                            String decryptedStringValue = crypto.decryptString(encryptedStringValue);
+                                            JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
+                                            return decryptedJSON;
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        } catch (CryptorException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return null;
+                                    }
+
+                            /*
+                            @Override
+                            public void onCompleted(Exception e, String result) {
+                                System.out.println(result);
+                                try {
+                                    JSONObject receivedSentinelMessage = JSONHandler.convertStringToJSON(result);
+                                    String encryptedJSONReceived = receivedSentinelMessage.getString(ValuesCollection.SENTINEL_MESSAGE_KEY);
+                                    String decryptedJSONReceived = crypto.decryptString(encryptedJSONReceived);
+
+                                    JSONObject receivedJSON = JSONHandler.convertStringToJSON(decryptedJSONReceived);
+
+                                    // If successfully registered and user received the Token from the Server.
+                                    if(receivedJSON.getString("success").equals("1")) {
+                                        // Store token in Shared Preferences.
+                                        String token = receivedJSON.getString("token");
+                                        credentialsEditor.putString(ValuesCollection.TOKEN_KEY,token);
+                                        credentialsEditor.commit();
+                                    } else if (receivedJSON.getString("success").equals("2")) { // Wrong token inputted
+
+                                    } else {
+
+                                    }
+                                } catch (JSONException e1) {
+                                    e1.printStackTrace();
+                                } catch (CryptorException e1) {
+                                    e1.printStackTrace();
                                 }
-                                // Message Was Not Successful.
-                                else {}
                             }
-                            // Request Was Not Successful
-                            else {}
-                        }
+                            */
+                                });
+                    } catch (CryptorException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
 
-                        // User Enters Incorrect Passcode (success:2).
-                        private boolean userEntersIncorrectPasscode(JSONObject decryptedValue) {
-                            String success = null;
-                            try {
-                                success = decryptedValue.getString("success");
-                                return success.equals("2");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            return false;
-                        }
-
-                        // Store Token.
-                        private void storeToken(String token) {
-                            credentialsEditor.putString(ValuesCollection.TOKEN_KEY, token);
-                            credentialsEditor.commit();
-                        }
-
-                        // Extract Token from JSON.
-                        private String getToken(JSONObject decryptedValue) {
-                            try {
-                                return decryptedValue.getString("token");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            return null;
-                        }
-
-                        private void startMainActivity() {
-                            Intent veriIntent = new Intent(VerificationActivity.this, MainActivity.class);
-                            veriIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
-                            startActivity(veriIntent);
-                        }
-
-                        //
-                        private void userIsVerified() {
-                            credentialsEditor.putBoolean("isVerified", true).commit();
-                        }
-
-                        // Extract Success Message From Received JSON.
-                        private boolean receivedSuccessMessage(JSONObject decryptedValue) {
-                            String success = null;
-                            try {
-                                success = decryptedValue.getString("success");
-                                return success.equals("1");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            return false;
-                        }
-
-                        // Verify if there was an Error in the Request.
-                        private boolean requestIsSuccessful(Exception e) {
-                            return e == null;
-                        }
-
-                        // Convert received JSON String into a Decrypted JSON.
-                        private JSONObject getDecryptedValue(String receivedJSONString) {
-                            try {
-                                JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                return decryptedJSON;
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (CryptorException e) {
-                                e.printStackTrace();
-                            }
-                            return null;
-                        }
-
-                        /*
-                        @Override
-                        public void onCompleted(Exception e, String result) {
-                            System.out.println(result);
-                            try {
-                                JSONObject receivedSentinelMessage = JSONHandler.convertStringToJSON(result);
-                                String encryptedJSONReceived = receivedSentinelMessage.getString(ValuesCollection.SENTINEL_MESSAGE_KEY);
-                                String decryptedJSONReceived = crypto.decryptString(encryptedJSONReceived);
-
-                                JSONObject receivedJSON = JSONHandler.convertStringToJSON(decryptedJSONReceived);
-
-                                // If successfully registered and user received the Token from the Server.
-                                if(receivedJSON.getString("success").equals("1")) {
-                                    // Store token in Shared Preferences.
-                                    String token = receivedJSON.getString("token");
-                                    credentialsEditor.putString(ValuesCollection.TOKEN_KEY,token);
-                                    credentialsEditor.commit();
-                                } else if (receivedJSON.getString("success").equals("2")) { // Wrong token inputted
-
-                                } else {
-
-                                }
-                            } catch (JSONException e1) {
-                                e1.printStackTrace();
-                            } catch (CryptorException e1) {
-                                e1.printStackTrace();
-                            }
-                        }
-                        */
-                    });
+            new Thread(r).start();
         }
 
     }
