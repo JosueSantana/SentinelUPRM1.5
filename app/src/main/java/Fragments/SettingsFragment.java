@@ -121,10 +121,10 @@ public class SettingsFragment extends Fragment implements DialogCaller {
         familySwitch = (Switch) getView().findViewById(R.id.notificationsfamilyswitch);
 
         //initialize all settings to true
-        emailSwitch.setChecked(false);
-        smsSwitch.setChecked(false);
-        pushSwitch.setChecked(false);
-        familySwitch.setChecked(false);
+        emailSwitch.setChecked(true);
+        smsSwitch.setChecked(true);
+        pushSwitch.setChecked(true);
+        familySwitch.setChecked(true);
 
         //set all the switch listeners
         switchListener(settings, emailSwitch, "mail");

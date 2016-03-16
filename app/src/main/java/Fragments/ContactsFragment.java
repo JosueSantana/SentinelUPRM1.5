@@ -32,7 +32,6 @@ public class ContactsFragment extends ListFragment{
     private JSONArray jsonArray;
     private ListView mList;
     private Thread loaderThread;
-    private Handler handler;
 
     public ContactsFragment() {
         // Required empty public constructor
@@ -224,122 +223,6 @@ public class ContactsFragment extends ListFragment{
         }
     }
 
-    public void onListItemClick(ListView l, View v, int position, long id){
-        super.onListItemClick(l, v, position, id);
-
-
-        final int i = position;
-        boolean stuff = ((RelativeLayout) v).getChildAt(2).callOnClick();
-        System.out.println("DOING DELETING STAFF?!!!: " + stuff);
-
-        if(stuff){
-                new View.OnClickListener() {
-                    public void onClick(View arg) {
-                        //do stuff
-                        System.out.println("DOING DELETING STUFF!!!");
-
-                        Runnable r = new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    deleteContact(jsonArray.getJSONObject(i).getString("editedPhone"));
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        };
-
-                        new Thread(r).start();
-
-                    }
-                };
-        }
-    }
-
-    public void deleteContact(String telephone) {
-        final CryptographyHandler crypto;
-
-        JSONObject registerJSON = new JSONObject();
-        try {
-            crypto = new CryptographyHandler();
-
-            registerJSON.put("token", getToken());
-            registerJSON.put("delete", telephone);
-
-            Ion.with(this.getActivity().getApplicationContext())
-                    .load("DELETE", ValuesCollection.DELETE_CONTACT_URL)
-                    .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
-                    .asString()
-                    .setCallback(new FutureCallback<String>() {
-                        @Override
-                        public void onCompleted(Exception e, String receivedJSON) {
-
-                            // Successful Request
-                            if (requestIsSuccessful(e)) {
-                                JSONObject decryptedValue = getDecryptedValue(receivedJSON);
-                                System.out.println(decryptedValue);
-
-                                getActivity().getSupportFragmentManager().beginTransaction().detach(ContactsFragment.this).commit();
-                                getActivity().getSupportFragmentManager().beginTransaction().attach(ContactsFragment.this).commit();
-
-                            }
-                            // Errors
-                            else {
-                            }
-                        }
-
-                        private boolean listIsEmpty(JSONObject decryptedValue) {
-                            String success = null;
-                            try {
-                                success = decryptedValue.getString("success");
-                                return success.equals("2");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            return false;
-                        }
-
-                        // Extract Success Message From Received JSON.
-                        private boolean receivedExistingContacts(JSONObject decryptedValue) {
-                            String success = null;
-                            try {
-                                success = decryptedValue.getString("success");
-                                return success.equals("1");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            return false;
-                        }
-
-                        // Verify if there was an Error in the Request.
-                        private boolean requestIsSuccessful(Exception e) {
-                            return e == null;
-                        }
-
-                        // Convert received JSON String into a Decrypted JSON.
-                        private JSONObject getDecryptedValue(String receivedJSONString) {
-                            try {
-                                JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                return decryptedJSON;
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (CryptorException e) {
-                                e.printStackTrace();
-                            }
-                            return null;
-                        }
-                    });
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (CryptorException e) {
-            e.printStackTrace();
-        }
-    }
 
     //Verifies if connection to the server has been closed or something?
     public boolean isRefreshing() {

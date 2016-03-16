@@ -5,7 +5,7 @@
     <!--Barra navegadora -->
     <string name="alert">Alerta</string>
     <string name="incident">Incidentes</string>
-    <string name="call">Chamada</string>
+    <string name="call">Chamar</string>
     <string name="settings">Configurações</string>
     <string name="noconnectiontitle">Sem conexão à Internet</string>
     <string name="noconnectionmessage">Verifique-se que o seu dispositivo está conectado à Internet.</string>

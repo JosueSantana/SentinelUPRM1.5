@@ -246,6 +246,7 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                                     public void run() {
                                                         spinner.setVisibility(View.GONE);
                                                         showVerificationError(R.string.wrongcodetitle, R.string.wrongcodemessage);
+                                                        toggleUIClicking(true);
                                                     }
                                                 });
 

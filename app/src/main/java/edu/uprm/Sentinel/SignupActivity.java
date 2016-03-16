@@ -345,7 +345,6 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
         proceedButton.setFocusableInTouchMode(toggler);
     }
 
-
     /*
         Get the Instance ID From Google.
      */
@@ -361,7 +360,6 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
 
                 return msg;
             }
