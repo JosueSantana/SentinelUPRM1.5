@@ -73,6 +73,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:id="@+id/deutschRow"
+            android:background="@drawable/cell_shape"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Deutsch"
+                android:id="@+id/textView6"
+                android:layout_gravity="center"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="@dimen/abc_text_size_large_material" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:id="@+id/francaisRow"
             android:background="@drawable/cell_shape"
             android:paddingBottom="15dp"
@@ -107,24 +126,6 @@
                 android:textSize="@dimen/abc_text_size_large_material" />
         </TableRow>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/deutschRow"
-            android:background="@drawable/cell_shape"
-            android:paddingBottom="15dp"
-            android:paddingTop="15dp" >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Deutsch"
-                android:id="@+id/textView6"
-                android:layout_gravity="center"
-                android:textColor="@color/textColorPrimary"
-                android:textSize="@dimen/abc_text_size_large_material" />
-        </TableRow>
     </TableLayout>
 
 </FrameLayout>

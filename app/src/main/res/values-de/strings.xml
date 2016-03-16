@@ -42,7 +42,6 @@
     <string name="alertlocationdonelabel">Schließen</string>
     <string name="setlocationtitle">Set Standort Manuell</string>
     <string name="unsetlocationtitle">Unpin Standort manuell</string>
-    <string name="cancellocationtitle">Stornieren</string>
     <string name="sendbutton">SENDEN</string>
     <string name="stopbutton">HALT</string>
     <string name="alertnoinlocationtitle">Sie befinden sich außerhalb der Universität Grenzen</string>
@@ -69,7 +68,7 @@
     <string name="invalidadjustmentmessage">Sie haben den Cursor außerhalb der Grenzen gesetzt.</string>
     <string name="unchangedalert">der Standort bleibt gleich.</string>
     <string name="distanceview">Entfernung</string>
-    <string name="orangelabel">Stellen Sie die Position des Cursors innerhalb von 1000 m von der aktuellen Position ein.</string>
+    <string name="orangelabel">Stellen Sie die Position des Cursors innerhalb von 1000 m von der aktuellen Position ein</string>
     <string name="setbarbutton">Einstellen</string>
     <!-- -->
     
@@ -110,6 +109,7 @@
     
     <!--Pantalla de Idiomas -->
     <string name="languageselectlabel">Wählen Sie die Sprache</string>
+    <string name="languageselectnotice">Sie haben Deutsch gewählt</string>
     <!-- -->
     
     <!--Pantalla de Reportes -->
@@ -117,7 +117,6 @@
     <string name="reportlabel">Problem Melden</string>
     <string name="reportfeedback">Generelle Rückmeldung</string>
     <string name="reportproblem">Etwas funktionert nicht</string>
-    <string name="reportcancel">Stornieren</string>
     <string name="reportproblemfooter">Wenn Sie sicher sind, dass Sie mit einem Fehler zu tun haben, füllen Sie bitte das Formular aus. Achten Sie darauf, Ihr Problem so detailliert wie möglich zu beschreiben. Verwenden Sie Ihr Urteil.</string>
     <string name="reportfeedbackfooter">Wenn Sie Vorschläge haben, um die Anwendung zu verbessern, Lassen Sie uns wissen bitte. Wir wollen dich eine angenehme Erfahrung durch Sentinel zu geben.</string>
     <string name="reportalertonsendtitle">Geschickt</string>
@@ -134,7 +133,6 @@
     <string name="alertcontactaddedtitle">Neuer Kontakt Hinzugefügt</string>
     <string name="navigationtitle">Kontakliste</string>
     <string name="navcontacttitle">Kontakt</string>
-    <string name="cancelButton">Stornieren</string>
     <string name="saveButton">Speichern</string>
     <!-- -->
     
@@ -157,10 +155,28 @@
     <string name="phonehint">Telefonnumer</string>
     <string name="codenotreceivedmessage">Ich habe meinen Code nicht empfangen.</string>
     <string name="feedbackhint">Dafürhalten</string>
-    <string name="problemhint">Beschreibe das Problem...</string>
+    <string name="problemhint">Beschreibe das Problem…</string>
     <string name="aboutusblurbp1">Das Engagement, mit der Sicherheit unserer Einrichtung wird durch die Schaffung von Werkzeugen gezeigt, dass unsere Qualität der Koexistenz zu verbessern. Am 14. August 2014 wurde ein Professor von einem Täter erstochen, ihn an den Rand des Todes zu verlassen. Diese Tatsache zeigte die Notwendigkeit eines Mechanismus, mit dem die Menschen ihre Not an die Gemeinschaft unverzüglich kommunizieren können.</string>
     <string name="aboutusblurbp2">Im Anschluss an diese schreckliche Ereignis, das Studentenrat und die Verwaltungsbüros suchten Lösungen. Unter der Billigung dieser Einheiten, Co-Gründer Joel R. Corporán, Jean C. Méndez und Josué A. Santana entwickelte Sentinel, eine Anwendung für den Notfall Warnungen innerhalb der Universität von Puerto Rico Mayagüez Campus. Sentinel zielt darauf ab, eine effiziente und zuverlässige sofortige Reaktionssystem zu etablieren, die Offiziere und die Campus-Gemeinschaft zu lösen kritische Ereignisse mobilisiert.</string>
     <string name="sentinelspecs">® Sentinel, für UPRM | Version 1.0.0</string>
+    <string name="continuemessage">Fortsetzen</string>
+    <string name="gobackmessage">Wollen Sie sich erneut anmelden?</string>
+    <string name="gobacktitle">Ich habe meinen Code nicht empfangen</string>
+    <string name="cancelmessage">Stornieren</string>
+    <string name="incidentmap">Karte von Vorfällen</string>
+    <string name="locationviewtitle">Standort</string>
+    <string name="privacytitle">Bedingungen</string>
+    <string name="pullRefresh">Ziehen Vorfälle zu sehen</string>
+    <string name="pushnotificationavailabilitytitle">Sentinel ist nicht berechtigt Erhalten Sie Push-Benachrichtigungen an</string>
+    <string name="pushnotificationavailabiltymessage">So autorisieren diesen Typ der Benachrichtigung, Bitte gehen Sie zum Menü Einstellungen auf dem Telefon-Anwendung und setzen Sie Push-Benachrichtigungen.</string>
+    <string name="noincidents">Keine Vorfälle Gefunden</string>
+    <string name="unsubscribe">Abmelden</string>
+    <string name="warningbeforeusetitle">WARNUNG</string>
+    <string name="sortbydate">Nach Datum</string>
+    <string name="sortbyregion">Nach Regionen</string>
+    <string name="reporttitle">Rückmeldung</string>
+    <string name="unsubscribedialogmessage">Sind Sie sicher?</string>
+    <string name="warningbeforeusemessage">MISSBRAUCH DIESER ANDWENDUNG KANN BESTRAFUNGEN FÜR DEN BENUTZER VERANLASSEN. BITTE VERWENDEN SIE DIESE ANWENDUNG VERANTWORTUNGS.</string>
     <!-- -->
 
 </resources>

@@ -1,5 +1,6 @@
 package Fragments;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -35,6 +36,7 @@ public class LanguagesFragment extends Fragment {
     private TableRow ptRow;
     private TableRow frRow;
     private SharedPreferences settings;
+    private SharedPreferences.Editor editor;
 
     public LanguagesFragment() {
         // Required empty public constructor
@@ -69,7 +71,7 @@ public class LanguagesFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         settings = getContext().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
-        final SharedPreferences.Editor editor = settings.edit();
+        editor = settings.edit();
 
         enRow = (TableRow) getView().findViewById(R.id.englishRow);
         esRow = (TableRow) getView().findViewById(R.id.espanolRow);
@@ -77,78 +79,40 @@ public class LanguagesFragment extends Fragment {
         deRow = (TableRow) getView().findViewById(R.id.deutschRow);
         ptRow = (TableRow) getView().findViewById(R.id.portuguesRow);
 
-        enRow.setOnTouchListener(new View.OnTouchListener() {
+        languageRowListenerSetup(enRow, "en");
+        languageRowListenerSetup(esRow, "es");
+        languageRowListenerSetup(frRow, "fr");
+        languageRowListenerSetup(deRow, "de");
+        languageRowListenerSetup(ptRow, "pt");
+    }
+
+    public void languageRowListenerSetup(TableRow r,String localeCode){
+
+        final String lc = localeCode;
+        r.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Toast.makeText(getContext(),
-                        "You have selected English", Toast.LENGTH_SHORT)
-                        .show();
-                editor.putString("appLocale","en").commit();
-                setLocale("en");
-                return true;
-            }
-
-        });
-
-        esRow.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Toast.makeText(getContext(),
-                        "Ha seleccionado español", Toast.LENGTH_SHORT)
-                        .show();
-                editor.putString("appLocale", "es").commit();
-                setLocale("es");
-                return true;
-            }
-        });
-
-        frRow.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Toast.makeText(getContext(),
-                        "Ha seleccionado español", Toast.LENGTH_SHORT)
-                        .show();
-                editor.putString("appLocale", "fr").commit();
-                setLocale("fr");
-                return true;
-            }
-        });
-
-        deRow.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Toast.makeText(getContext(),
-                        "Ha seleccionado español", Toast.LENGTH_SHORT)
-                        .show();
-                editor.putString("appLocale", "de").commit();
-                setLocale("de");
-                return true;
-            }
-        });
-
-        ptRow.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Toast.makeText(getContext(),
-                        "Ha seleccionado español", Toast.LENGTH_SHORT)
-                        .show();
-                editor.putString("appLocale", "pt").commit();
-                setLocale("pt");
+                Activity activity = getActivity();
+                if(activity != null) {
+                    setLocale(lc);
+                    editor.putString("appLocale", lc).commit();
+                    Toast.makeText(getContext(),
+                            R.string.languageselectnotice, Toast.LENGTH_SHORT)
+                            .show();
+                    LanguagesFragment.this.getActivity().getSupportFragmentManager().popBackStackImmediate();
+                }
                 return true;
             }
         });
     }
 
-
     public void setLocale(String lang) {
 
         myLocale = new Locale(lang);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
-        getActivity().getSupportFragmentManager().beginTransaction().detach(this).commit();
-        getActivity().getSupportFragmentManager().beginTransaction().attach(this).commit();
+            Resources res = getResources();
+            DisplayMetrics dm = res.getDisplayMetrics();
+            Configuration conf = res.getConfiguration();
+            conf.locale = myLocale;
+            res.updateConfiguration(conf, dm);
     }
 }

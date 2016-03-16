@@ -3,6 +3,7 @@ package Fragments;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.View.OnClickListener;
 import android.content.SharedPreferences;
@@ -19,6 +20,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import OtherHandlers.DialogCaller;
 import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -27,6 +29,8 @@ import org.cryptonode.jncryptor.CryptorException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.JSONHandler;
 import OtherHandlers.ValuesCollection;
@@ -34,7 +38,7 @@ import OtherHandlers.ValuesCollection;
 /**
  * This fragment manages the toggles in the settings.
  */
-public class SettingsFragment extends Fragment{
+public class SettingsFragment extends Fragment implements DialogCaller {
 
     private TableRow contactsRow;
     private TableRow languagesRow;
@@ -49,7 +53,7 @@ public class SettingsFragment extends Fragment{
 
     SharedPreferences settings;
     SharedPreferences credentials;
-    private Handler handler;
+    FragmentManager fm;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -58,7 +62,6 @@ public class SettingsFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        handler = new Handler();
     }
 
     @Override
@@ -71,6 +74,8 @@ public class SettingsFragment extends Fragment{
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
+
+        fm = getActivity().getSupportFragmentManager();
         credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
         settings = this.getActivity().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
 
@@ -83,7 +88,8 @@ public class SettingsFragment extends Fragment{
         String text;
 
         if(settings.contains("contactsCount"))
-             text = String.format(getResources().getString(R.string.contactcountlabel), settings.getInt("contactsCount", 0));
+             text = String.format(getResources().getString(R.string.contactcountlabel),
+                     settings.getInt("contactsCount", 0));
         else text = "0 out of 5";
 
         contactsText.setText(text);
@@ -96,7 +102,15 @@ public class SettingsFragment extends Fragment{
         //set all the settings listeners
         rowListener(contactsRow, new ContactsFragment());
         rowListener(languagesRow, new LanguagesFragment());
-        rowListener(feedbackRow, new FeedbackFragment());
+
+        feedbackRow.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showListDialog(R.string.feedbacklabel, R.string.okmessage,
+                        R.string.okmessage, R.array.policy_options, false);
+            }
+        });
+
         rowListener(policiesRow, new PoliciesFragment());
         rowListener(aboutusRow, new AboutUsFragment());
 
@@ -168,7 +182,7 @@ public class SettingsFragment extends Fragment{
         row.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, frag).addToBackStack(null).commit();
+                fm.beginTransaction().replace(R.id.mainLayout, frag).addToBackStack(null).commit();
             }
         });
     }
@@ -257,10 +271,14 @@ public class SettingsFragment extends Fragment{
                                 // Convert received JSON String into a Decrypted JSON.
                                 private JSONObject getDecryptedValue(String receivedJSONString) {
                                     try {
-                                        JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                        String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                        String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                        JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
+                                        JSONObject receivedJSON =
+                                                JSONHandler.convertStringToJSON(receivedJSONString);
+                                        String encryptedStringValue =
+                                                JSONHandler.getSentinelMessage(receivedJSON);
+                                        String decryptedStringValue =
+                                                crypto.decryptString(encryptedStringValue);
+                                        JSONObject decryptedJSON =
+                                                JSONHandler.convertStringToJSON(decryptedStringValue);
                                         return decryptedJSON;
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -277,5 +295,57 @@ public class SettingsFragment extends Fragment{
                 }
             }
         };
+    }
+
+
+    private void showListDialog(int titleID, int positiveID, int negativeID, int optionsListID,boolean hasNeg) {
+        //prepare strings to pass to Fragment through Bundle
+        Bundle bundle = new Bundle();
+        bundle.putInt("dialogtitle", titleID);
+        bundle.putInt("optionslist", optionsListID);
+        bundle.putInt("positivetitle", positiveID);
+        bundle.putInt("negativetitle", negativeID);
+        bundle.putBoolean("hasneg", hasNeg );
+
+        //Call up AlertDialog
+        IntentDialogOptionsFragment dialogFragment = new IntentDialogOptionsFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "Proceed Dialog Fragment");
+    }
+
+
+
+    @Override
+    public void doPositiveClick() {
+        //do nothing but remove the alert dialog
+    }
+
+    @Override
+    public void doNegativeClick() {
+        //does not apply
+    }
+
+    @Override
+    public void doItemClick(int position) {
+        FeedbackFragment feedbackFrag = new FeedbackFragment();
+        Bundle feedbackBundle = new Bundle();
+
+        //get the name of the view to access
+        String viewName = getResources().getStringArray(R.array.policy_options)[position];
+
+        if(viewName.equals(getResources().getString(R.string.reportproblem))){
+            feedbackBundle.putString("title", getResources().getString(R.string.reportproblem));
+            feedbackBundle.putString("hint", getResources().getString(R.string.problemhint));
+            feedbackBundle.putString("footer", getResources().getString(R.string.reportproblemfooter));
+
+        }
+        else{
+            feedbackBundle.putString("title", getResources().getString(R.string.reportfeedback));
+            feedbackBundle.putString("hint", getResources().getString(R.string.feedbackhint));
+            feedbackBundle.putString("footer", getResources().getString(R.string.reportfeedbackfooter));
+        }
+
+        feedbackFrag.setArguments(feedbackBundle);
+        fm.beginTransaction().replace(R.id.mainLayout, feedbackFrag).addToBackStack(null).commit();
     }
 }

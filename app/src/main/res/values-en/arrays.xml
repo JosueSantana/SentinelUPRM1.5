@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="policy_options">
+        <item>@string/reportfeedback</item>
+        <item>@string/reportproblem</item>
+    </string-array>
+</resources>

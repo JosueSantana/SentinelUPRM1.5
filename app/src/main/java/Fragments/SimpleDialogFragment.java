@@ -11,12 +11,11 @@ import edu.uprm.Sentinel.R;
 /**
  * Created by a136803 on 2/12/16.
  */
-public class SentinelDialogFragment extends DialogFragment {
+public class SimpleDialogFragment extends DialogFragment {
 
-
-    public SentinelDialogFragment(){
-
+    public SimpleDialogFragment(){
     }
+
     public Dialog onCreateDialog( Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getArguments().getInt("dialogtitle"));
@@ -27,14 +26,11 @@ public class SentinelDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.okmessage, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 //User cancelled the dialog.
-                SentinelDialogFragment.this.getDialog().dismiss();
+                SimpleDialogFragment.this.getDialog().dismiss();
             }
         });
+
+
         return builder.create();
-    }
-
-
-    public void onDismiss(DialogInterface.OnDismissListener onDismissListener) {
-
     }
 }

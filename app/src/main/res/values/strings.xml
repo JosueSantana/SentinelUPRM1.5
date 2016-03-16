@@ -59,7 +59,6 @@
     <string name="viewlocationtitle">View Location</string>
     <string name="setlocationtitle">Set Location Manually</string>
     <string name="unsetlocationtitle">Unset Location Manually </string>
-    <string name="cancellocationtitle">Cancel</string>
     <string name="sendbutton">SEND</string>
     <string name="stopbutton">STOP</string>
     <string name="sendingalert">Sending Requested Alert...</string>
@@ -118,7 +117,6 @@
     <string name="languageheader">Options</string>
     <string name="supportheader">Support</string>
     <string name="privacylabel">Privacy Policy and Terms</string>
-    <string name="feedbacklabel">Feedback</string>
     <string name="aboutuslabel">About Us</string>
     <!-- -->
 
@@ -131,7 +129,6 @@
     <string name="reportlabel">Report Problem</string>
     <string name="reportfeedback">General Feedback</string>
     <string name="reportproblem">Something Isn\'t Working</string>
-    <string name="reportcancel">Cancel</string>
     <string name="reportproblemfooter">If you are sure that you are dealing with a bug, please fill out the form. Be sure to fill in as many details about your problem as possible. Please use your best judgment.  </string>
     <string name="reportfeedbackfooter">If you have any suggestions to improve the application, please let us know. We want to give you a great experience through Sentinel.  </string>
     <string name="reportalertonsendtitle">Sent</string>
@@ -143,7 +140,6 @@
     <!--Contacts Screen -->
     <string name="navigationtitle">Contact List</string>
     <string name="navcontacttitle">Contact</string>
-    <string name="cancelButton">Cancel</string>
     <string name="saveButton">Save</string>
     <!-- -->
 
@@ -179,11 +175,31 @@
 <string name="alertlocationdonelabel">Done</string>
 <string name="alertlocationnotavailablemessage">You can turn on the GPS or authorize the app to get your location in Settings</string>
 <string name="alertlocationnotavailabletitle">Location Not Available</string>
-<string name="alertnoinlocationmessage">Para enviar la alerta, debe estar dentro de los predios de la universidad.</string>
-<string name="alertnoinlocationtitle">Fuera de los Predios de la Universidad</string>
-<string name="alertoverloadmessage">Por favor editar o eliminar algún contacto presente.</string>
-<string name="alertoverloadtitle">Desafortunadamente, No se le Puede Autorizar Más Contactos</string>
-<string name="alertphonevalidmessage">Por favor, introduzca el formato correcto para el número de teléfono.</string>
+<string name="alertnoinlocationmessage">To send an alert, you need to be inside university boundaries.</string>
+<string name="alertnoinlocationtitle">Outside of University Bounds</string>
+<string name="alertoverloadmessage">Please edit or remove any current contact.</string>
+<string name="alertoverloadtitle">Unfortunately No More Contacts Can Be Authorized to be Added</string>
+<string name="alertphonevalidmessage">Please enter the right phone number format.</string>
 <string name="alertphonevalidtitle">Formato incorrecto</string>
 <string name="alerttimerend">Listo para alertar!</string>
-    </resources>
+    <string name="continuemessage">Continue</string>
+    <string name="gobackmessage">I did not receive my code</string>
+    <string name="gobacktitle">Do you want to attempt to sign in again?</string>
+    <string name="feedbacklabel">Feedback</string>
+    <string name="languageselectnotice">You have selected English</string>
+    <string name="cancelmessage">Cancel</string>
+    <string name="incidentmap">Incidents Map</string>
+    <string name="privacytitle">Terms</string>
+    <string name="pullRefresh">Pull to Get Current Incidents</string>
+    <string name="locationviewtitle">Location</string>
+    <string name="pushnotificationavailabilitytitle">Sentinel Is Not Authorized To Receive Push Notifications</string>
+    <string name="pushnotificationavailabiltymessage">To authorize this notification type, please head to the Settings menu on your phone application and set Push Notifications.</string>
+    <string name="sortbydate">By Region</string>
+    <string name="sortbyregion">By Date</string>
+    <string name="unsubscribe">Unsubscribe</string>
+    <string name="warningbeforeusetitle">WARNING</string>
+    <string name="noincidents">No Incidents Found</string>
+    <string name="reporttitle">Feedback</string>
+    <string name="warningbeforeusemessage">THE IMPROPER USE OF THIS APPLICATION CAN RESULT IN SANCTIONS TO THE USER, AS ESTABLISHED BY THE UNIVERSITY POLICIES AND REGULATIONS. PLEASE USE RESPONSIBLY.</string>
+    <string name="unsubscribedialogmessage">Are you sure?</string>
+</resources>

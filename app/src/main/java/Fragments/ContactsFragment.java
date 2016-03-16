@@ -1,8 +1,6 @@
 package Fragments;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
@@ -213,7 +211,7 @@ public class ContactsFragment extends ListFragment{
                 }
                 else{
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,
-                    new PhonebookFragment()).addToBackStack(null).commit();;
+                    new PhonebookFragment()).addToBackStack(null).commit();
                 }
 
                 return true;
@@ -381,7 +379,7 @@ public class ContactsFragment extends ListFragment{
         bundle.putInt("dialogmessage", messageID);
 
         //Call up AlertDialog
-        SentinelDialogFragment dialogFragment = new SentinelDialogFragment();
+        SimpleDialogFragment dialogFragment = new SimpleDialogFragment();
         dialogFragment.setArguments(bundle);
         dialogFragment.show(getChildFragmentManager(), "Alert Dialog Fragment");
     }

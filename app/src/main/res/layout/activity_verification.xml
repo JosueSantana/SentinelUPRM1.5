@@ -69,7 +69,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20sp"
         android:textSize="@dimen/abc_text_size_body_1_material"
-        android:textColor="@color/textColorPrimary" />
+        android:textColor="@color/textColorPrimary"
+        android:textStyle="bold" />
 
     <ImageView
         android:layout_width="135dp"

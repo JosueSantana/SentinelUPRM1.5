@@ -42,14 +42,13 @@
     <string name="alertlocationdonelabel">Cerrar</string>
     <string name="setlocationtitle">Fijar Ubicación Manualmente</string>
     <string name="unsetlocationtitle">Desfijar Ubicación Manualmente </string>
-    <string name="cancellocationtitle">Cancelar</string>
     <string name="sendbutton">ENVIAR</string>
     <string name="stopbutton">DETENER</string>
     <string name="alertnoinlocationtitle">Fuera de los Predios de la Universidad</string>
     <string name="alertnoinlocationmessage">Para enviar la alerta, debe estar dentro de los predios de la universidad.</string>
     <string name="alertlocationnotavailabletitle">Ubicación No Disponible</string>
     <string name="alertlocationnotavailablemessage">Usted puede encender el GPS o autorizar que la aplicación obtenga su ubicación en el menú de Ajustes.</string>
-    <string name="sendingalert">Enviando Alerta Solicitada... </string>
+    <string name="sendingalert">Enviando Alerta Solicitada&#8230; </string>
     <!-- -->
     
     <!--Pantalla de alerta enviada -->
@@ -110,6 +109,7 @@
     
     <!--Pantalla de Idiomas -->
     <string name="languageselectlabel">Seleccione el idioma</string>
+    <string name="languageselectnotice">Ha seleccionado Español</string>
     <!-- -->
     
     <!--Pantalla de Reportes -->
@@ -117,7 +117,6 @@
     <string name="reportlabel">Reportar Problema</string>
     <string name="reportfeedback">Opinión General</string>
     <string name="reportproblem">Algo no está funcionando</string>
-    <string name="reportcancel">Cancelar</string>
     <string name="reportproblemfooter">Si está seguro de que usted está lidiando con un error, por favor complete el formulario. Asegúrese de describir su problema con el mayor detalle posible. Utilice su juicio.</string>
     <string name="reportfeedbackfooter">Si tiene alguna sugerencia para mejorar la aplicación, háganoslo saber. Queremos darle una experiencia grata a través de Sentinel. </string>
     <string name="reportalertonsendtitle">Enviado</string>
@@ -127,19 +126,18 @@
     <!--Pantalla de Contactos -->
     <string name="alertoverloadtitle">Desafortunadamente, No se le Puede Autorizar Más Contactos</string>
     <string name="alertoverloadmessage">Por favor editar o eliminar algún contacto presente.</string>
-    <string name="alertphonevalidtitle">Formato incorrecto</string>
+    <string name="alertphonevalidtitle">Formato Incorrecto</string>
     <string name="alertphonevalidmessage">Por favor, introduzca el formato correcto para el número de teléfono.</string>
     <string name="alertcontactaddtitle">Campos Vacíos</string>
     <string name="alertcontactaddmessage">Por favor llene todos los campos.</string>
     <string name="alertcontactaddedtitle">Nuevo Contacto Añadido</string>
     <string name="navigationtitle">Lista de Contactos</string>
     <string name="navcontacttitle">Contacto</string>
-    <string name="cancelButton">Cancelar</string>
     <string name="saveButton">Guardar</string>
     <!-- -->
     
     <!--Mensajes de Solicitud -->
-    <string name="errorconnectiontitle">Error de conexión</string>
+    <string name="errorconnectiontitle">Error de Conexión</string>
     <string name="errorconnectionmessage">Solicitud suspendida.</string>
     <string name="errorretrievingtitle">Error de Información</string>
     <string name="errorretrievingmessage">Se encontró un problema al momento de obtener información.</string>
@@ -159,8 +157,26 @@
     <string name="aboutusblurbp1">El compromiso con la seguridad de nuestra institución se demuestra mediante la concepción de herramientas que mejoran el ambiente de sana convivencia. El 14 de agosto de 2014, un profesor fue apuñalado por un agresor, dejando al profesor moribundo. Este hecho demostró la necesidad de un mecanismo por el cual las personas puedan notificar a la comunidad universitaria de una emergencia sin demora.</string>
     <string name= "aboutusblurbp2">Tras este evento inaudito, el Consejo de Estudiantes y el Decanato de Administración se dieron a la tarea de buscar soluciones. Bajo el respaldo de estas entidades,  los co-fundadores Joel R. Corporán, Jean C. Méndez y Josué A. Santana desarrollaron Sentinel, una aplicación de alertas de emergencias para el Recinto Universitario de Mayagüez. Sentinel procura establecer un sistema de reacción inmediata eficaz y fidedigno que movilice a los oficiales y a la comunidad a atender situaciones críticas. </string>
     <string name="sentinelspecs">® Sentinel, para UPRM | Versión 1.0.0</string>
-    <string name="feedbackhint">Déjenos saber que piensa...</string>
-    <string name="problemhint">Describa su situación...</string>
+    <string name="feedbackhint">Déjenos saber que piensa&#8230;</string>
+    <string name="problemhint">Describa su situación&#8230;</string>
+    <string name="continuemessage">Continuar</string>
+    <string name="gobackmessage">¿Quiere intentar ingresar de nuevo?</string>
+    <string name="gobacktitle">No he recibido mi código</string>
+    <string name="cancelmessage">Cancelar</string>
+    <string name="incidentmap">Mapa de Incidentes</string>
+    <string name="locationviewtitle">Ubicación</string>
+    <string name="privacytitle">Normas</string>
+    <string name="pullRefresh">Tirar para Obtener Incidentes</string>
+    <string name="pushnotificationavailabilitytitle">Sentinel No Está Autorizada Para Recibir Notificaciones de Tipo Push</string>
+    <string name="pushnotificationavailabiltymessage">Para autorizar este tipo de notificación, por favor dirigirse al menú de configuración en el teléfono y configurar notificaciones Push</string>
+    <string name="sortbydate">Por Región</string>
+    <string name="sortbyregion">Por Fecha</string>
+    <string name="noincidents">No Se Encontraron Incidentes</string>
+    <string name="unsubscribe">Cancelar Suscripción</string>
+    <string name="warningbeforeusetitle">AVISO</string>
+    <string name="reporttitle">Opinión</string>
+    <string name="unsubscribedialogmessage">¿Está Seguro?</string>
+    <string name="warningbeforeusemessage">EL USO INDEBIDO DE ESTA APLICACIÓN PUEDE RESULTAR EN SANCIONES PARA EL USUARIO, SEGÚN LO ESTABLECE LAS NORMAS Y LOS REGLAMENTOS DE LA UNIVERSIDAD. POR FAVOR, UTILICE ESTA APLICACIÓN RESPONSABLEMENTE.</string>
     <!-- -->
 
 </resources>

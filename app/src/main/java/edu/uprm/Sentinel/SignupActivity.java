@@ -13,7 +13,6 @@ import android.view.KeyEvent;
 
 import android.view.View;
 
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
@@ -21,20 +20,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
-import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import org.cryptonode.jncryptor.CryptorException;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,15 +39,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import Fragments.EmergencyFragment;
-import Fragments.SentinelDialogFragment;
+import Fragments.IntentDialogFragment;
+import Fragments.SimpleDialogFragment;
 import OtherHandlers.CryptographyHandler;
+import OtherHandlers.DialogCaller;
 import OtherHandlers.JSONHandler;
 import OtherHandlers.ValuesCollection;
 
 /**
  * This activity handles the inputs for the login menu.
  */
-public class SignupActivity extends FragmentActivity {
+public class SignupActivity extends FragmentActivity implements DialogCaller {
 
     private ImageButton phoneButton;
     private ImageButton proceedButton;
@@ -171,9 +169,24 @@ public class SignupActivity extends FragmentActivity {
         bundle.putInt("dialogmessage", messageID);
 
         //Call up AlertDialog
-        SentinelDialogFragment dialogFragment = new SentinelDialogFragment();
+        SimpleDialogFragment dialogFragment = new SimpleDialogFragment();
         dialogFragment.setArguments(bundle);
-        dialogFragment.show(fm, "Alert Dialog Fragment");
+        dialogFragment.show(fm, "Confirm Dialog Fragment");
+    }
+
+    private void showProceedMessage(int titleID, int messageID, int positiveID, int negativeID, boolean hasNeg) {
+        //prepare strings to pass to Fragment through Bundle
+        Bundle bundle = new Bundle();
+        bundle.putInt("dialogtitle", titleID);
+        bundle.putInt("dialogmessage", messageID);
+        bundle.putInt("positivetitle", positiveID);
+        bundle.putInt("negativetitle", negativeID);
+        bundle.putBoolean("hasneg", hasNeg );
+
+        //Call up AlertDialog
+        IntentDialogFragment dialogFragment = new IntentDialogFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "Proceed Dialog Fragment");
     }
 
     private void attemptSignup(List textViews) throws JSONException, CryptorException, IOException {
@@ -198,11 +211,6 @@ public class SignupActivity extends FragmentActivity {
             showSignupError(R.string.incorrectphoneformattitle, R.string.incorrectphoneformatmessage);
             toggleUIClicking(true);
         } else {
-            //ideally this toast will be replaced soon
-            //Toast.makeText(SignupActivity.this, R.string.sendverificationalerttitle, Toast.LENGTH_SHORT).show();
-
-            final Intent veriIntent = new Intent(SignupActivity.this, VerificationActivity.class);
-            veriIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             final CryptographyHandler crypto = new CryptographyHandler();
 
@@ -248,20 +256,22 @@ public class SignupActivity extends FragmentActivity {
                                             SharedPreferences.Editor emailEditor = credentials.edit();
                                             emailEditor.putString(ValuesCollection.EMAIL_KEY, email);
                                             emailEditor.commit();
+
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    spinner.setVisibility(View.GONE);
+                                                    showProceedMessage(R.string.sendverificationalerttitle, R.string.sendverificationalertmessage,
+                                                            R.string.okmessage, R.string.okmessage, false);
+                                                }
+                                            });
                                         }
 
                                         // Message Was Not Successful.
                                         else {
 
                                         }
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                spinner.setVisibility(View.GONE);
-                                                startActivity(veriIntent);
-                                                finish();
-                                            }
-                                        });
+
 
                                     }
                                     // Errors
@@ -361,5 +371,24 @@ public class SignupActivity extends FragmentActivity {
                 token = msg;
             }
         }.execute(null, null, null);
+    }
+
+    @Override
+    public void doPositiveClick() {
+        System.out.println("DOING POSITIVE CLICK");
+        final Intent veriIntent = new Intent(SignupActivity.this, VerificationActivity.class);
+        veriIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(veriIntent);
+        finish();
+    }
+
+    @Override
+    public void doNegativeClick() {
+        System.out.println("DOING NOTHING!");
+    }
+
+    @Override
+    public void doItemClick(int position) {
+        //does not apply
     }
 }

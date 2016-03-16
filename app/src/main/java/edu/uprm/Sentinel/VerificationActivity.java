@@ -16,9 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -27,21 +25,26 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import Fragments.EmergencyFragment;
-import Fragments.SentinelDialogFragment;
+import Fragments.IntentDialogFragment;
+import Fragments.SimpleDialogFragment;
 import OtherHandlers.CryptographyHandler;
+import OtherHandlers.DialogCaller;
 import OtherHandlers.JSONHandler;
 import OtherHandlers.ValuesCollection;
 
 /**
  * Created by a136803 on 2/3/16.
  */
-public class VerificationActivity extends AppCompatActivity {
+public class VerificationActivity extends AppCompatActivity implements DialogCaller {
 
     private ImageButton phoneButton;
     private ImageButton proceedButton;
     private FragmentManager fm = getSupportFragmentManager();
     private ProgressBar spinner;
     private EditText editText;
+    private TextView goBackText;
+    private SharedPreferences credentials;
+    private SharedPreferences.Editor credentialsEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +54,11 @@ public class VerificationActivity extends AppCompatActivity {
         //fix orientation on Portrait
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-
         spinner = (ProgressBar) findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
 
+        credentials = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        credentialsEditor = credentials.edit();
 
         // Create listener for Alert Button
         phoneButton = (ImageButton) findViewById(R.id.phoneOnSignup2);
@@ -62,6 +66,21 @@ public class VerificationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getSupportFragmentManager().beginTransaction().add(R.id.verificationRLayout, new EmergencyFragment()).addToBackStack("EmergencyFromVerification").commit();
+            }
+        });
+
+        goBackText = (TextView) findViewById(R.id.codenotreceived);
+        goBackText.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showGoBackMessage(R.string.gobacktitle, R.string.gobackmessage,
+                                R.string.continuemessage, R.string.cancelmessage, true);
+                    }
+                });
             }
         });
 
@@ -113,6 +132,33 @@ public class VerificationActivity extends AppCompatActivity {
     }
 
 
+    private void showVerificationError(int titleID, int messageID) {
+        //prepare strings to pass to Fragment through Bundle
+        Bundle bundle = new Bundle();
+        bundle.putInt("dialogtitle", titleID);
+        bundle.putInt("dialogmessage", messageID);
+
+        //Call up AlertDialog
+        SimpleDialogFragment dialogFragment = new SimpleDialogFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "Confirm Dialog Fragment");
+    }
+
+    private void showGoBackMessage(int titleID, int messageID, int positiveID, int negativeID, boolean hasNeg) {
+        //prepare strings to pass to Fragment through Bundle
+        Bundle bundle = new Bundle();
+        bundle.putInt("dialogtitle", titleID);
+        bundle.putInt("dialogmessage", messageID);
+        bundle.putInt("positivetitle", positiveID);
+        bundle.putInt("negativetitle", negativeID);
+        bundle.putBoolean("hasneg", hasNeg);
+
+        //Call up AlertDialog
+        IntentDialogFragment dialogFragment = new IntentDialogFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "Proceed Dialog Fragment");
+    }
+
     public void toggleUIClicking(boolean toggler){
         editText.setClickable(toggler);
         editText.setFocusable(toggler);
@@ -140,7 +186,7 @@ public class VerificationActivity extends AppCompatActivity {
             Bundle bundle = new Bundle();
             bundle.putInt("dialogtitle", R.string.emptyformatalerttitle);
             bundle.putInt("dialogmessage", R.string.emptyformatalertmessage);
-            SentinelDialogFragment dialogFragment = new SentinelDialogFragment();
+            SimpleDialogFragment dialogFragment = new SimpleDialogFragment();
             dialogFragment.setArguments(bundle);
             // Show Alert DialogFragment
             dialogFragment.show(fm, "Alert Dialog Fragment");
@@ -154,9 +200,6 @@ public class VerificationActivity extends AppCompatActivity {
              */
 
             final CryptographyHandler crypto = new CryptographyHandler();
-
-            SharedPreferences credentials = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
-            final SharedPreferences.Editor credentialsEditor = credentials.edit();
             String emailAddress = credentials.getString(ValuesCollection.EMAIL_KEY, null);
 
             final JSONObject verificationJSON = new JSONObject();
@@ -197,6 +240,14 @@ public class VerificationActivity extends AppCompatActivity {
                                             } else if(userEntersIncorrectPasscode(decryptedValue)){
                                                 Context context = getApplicationContext();
                                                 CharSequence text = "Inputted Passcode is Incorrect";
+
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        spinner.setVisibility(View.GONE);
+                                                        showVerificationError(R.string.wrongcodetitle, R.string.wrongcodemessage);
+                                                    }
+                                                });
 
                                             }
                                             // Message Was Not Successful.
@@ -317,6 +368,27 @@ public class VerificationActivity extends AppCompatActivity {
             new Thread(r).start();
         }
 
+    }
+
+    @Override
+    public void doPositiveClick() {
+        System.out.println("DOING POSITIVE CLICK");
+
+        credentialsEditor.remove(ValuesCollection.EMAIL_KEY).commit();
+        final Intent veriIntent = new Intent(VerificationActivity.this, SignupActivity.class);
+        veriIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(veriIntent);
+        finish();
+    }
+
+    @Override
+    public void doNegativeClick() {
+        System.out.println("DOING NOTHING!");
+    }
+
+    @Override
+    public void doItemClick(int position) {
+        //does not apply
     }
 
 }
