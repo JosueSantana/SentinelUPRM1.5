@@ -177,6 +177,7 @@
     <string name="reporttitle">Opinião</string>
     <string name="unsubscribedialogmessage">Tem certeza?</string>
     <string name="warningbeforeusemessage">O MAU USO DESTE APLICATIVO PODE RESULTAR EM PENALIDADES PARA O UTILIZADOR, COMO ESTABELECE OS PADRÕES E REGULAMENTOS DA UNIVERSIDADE. POR FAVOR USAR ESTE APLICATIVO DE FORMA RESPONSÁVEL.</string>
+    <string name="unsubscribedialogtitle">Você está prestes a salir</string>
     <!-- -->
 
 </resources>

@@ -181,7 +181,7 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
         bundle.putInt("dialogmessage", messageID);
         bundle.putInt("positivetitle", positiveID);
         bundle.putInt("negativetitle", negativeID);
-        bundle.putBoolean("hasneg", hasNeg );
+        bundle.putBoolean("hasneg", hasNeg);
 
         //Call up AlertDialog
         IntentDialogFragment dialogFragment = new IntentDialogFragment();
@@ -372,8 +372,7 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
     }
 
     @Override
-    public void doPositiveClick() {
-        System.out.println("DOING POSITIVE CLICK");
+    public void doPositiveClick(Bundle bundle) {
         final Intent veriIntent = new Intent(SignupActivity.this, VerificationActivity.class);
         veriIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(veriIntent);
@@ -381,12 +380,13 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
     }
 
     @Override
-    public void doNegativeClick() {
-        System.out.println("DOING NOTHING!");
+    public void doNegativeClick(Bundle bundle) {
+        //do nothing
     }
 
     @Override
-    public void doItemClick(int position) {
+    public void doItemClick(Bundle bundle) {
         //does not apply
     }
+
 }

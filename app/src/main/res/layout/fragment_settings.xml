@@ -449,7 +449,38 @@
                             android:background="#0000"
                             android:layout_span="1"
                             android:layout_gravity="center_vertical" />
+
                     </TableRow>
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:shrinkColumns="*"
+                    android:stretchColumns="*"
+                    android:orientation="vertical"
+                    android:id="@+id/unsubscribetable" >
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="10dp"
+                        android:background="@drawable/cell_shape_unsubscribe"
+                        android:id="@+id/unsubscriberow" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/unsubscribe"
+                            android:id="@+id/unsubscribetext"
+                            android:layout_gravity="center|left"
+                            android:layout_span="5"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="@dimen/abc_text_size_medium_material" />
+
+                    </TableRow>
+
                 </TableLayout>
 
             </TableLayout>

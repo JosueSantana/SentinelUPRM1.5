@@ -98,7 +98,7 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                         View view = VerificationActivity.this.getCurrentFocus();
                         if (view != null) {
                             editText.clearFocus();
-                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                         }
 
@@ -372,7 +372,7 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
     }
 
     @Override
-    public void doPositiveClick() {
+    public void doPositiveClick(Bundle bundle) {
         System.out.println("DOING POSITIVE CLICK");
 
         credentialsEditor.remove(ValuesCollection.EMAIL_KEY).commit();
@@ -383,13 +383,12 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
     }
 
     @Override
-    public void doNegativeClick() {
-        System.out.println("DOING NOTHING!");
+    public void doNegativeClick(Bundle bundle) {
+        //do nothing
     }
 
     @Override
-    public void doItemClick(int position) {
+    public void doItemClick(Bundle bundle) {
         //does not apply
     }
-
 }

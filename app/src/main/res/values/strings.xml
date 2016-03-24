@@ -11,6 +11,7 @@
     <string name="action_sign_in" translatable="false">Sign in or register</string>
     <string name="action_sign_in_short" translatable="false">Sign in</string>
     <string name="action_add_contact" translatable="false">Add Contact</string>
+    <string name="action_show_all" translatable="false">Show All</string>
     <string name="error_invalid_email" translatable="false">This email address is invalid</string>
     <string name="error_invalid_password" translatable="false">This password is too short</string>
     <string name="error_incorrect_password" translatable="false">This password is incorrect</string>
@@ -164,24 +165,24 @@
     <string name="sentinelspecs">® Sentinel, for UPRM | Version 1.0.0</string>
 
 
-<!-- TODO: Remove or change this placeholder text -->
-<string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
-<string name="aboutusblurbp1">The commitment with the security of our institution is demonstrated by the creation of tools that improve our quality of coexistence. On August 14, 2014, a professor was stabbed by an offender, leaving him at the brink of death. This fact demonstrated the need of a mechanism by which people can communicate their emergency to the community without delay.</string>
-<string name="aboutusblurbp2">Following this terrible event, the Student Council and the Administrative Offices sought out solutions. Under the endorsement of these entities, co-founders Joel R. Corporán, Jean C. Méndez and Josué A. Santana developed Sentinel, an application for emergency alerts within the University of Puerto Rico Mayagüez Campus. Sentinel aims to establish an efficient and reliable immediate reaction system that mobilizes officers and the campus community to resolve critical events.</string>
-<string name="alert">Alert</string>
-<string name="alertcontactaddedtitle">New Contact Added</string>
-<string name="alertcontactaddmessage">Please fill out all fields.</string>
-<string name="alertcontactaddtitle">Empty Fields</string>
-<string name="alertlocationdonelabel">Done</string>
-<string name="alertlocationnotavailablemessage">You can turn on the GPS or authorize the app to get your location in Settings</string>
-<string name="alertlocationnotavailabletitle">Location Not Available</string>
-<string name="alertnoinlocationmessage">To send an alert, you need to be inside university boundaries.</string>
-<string name="alertnoinlocationtitle">Outside of University Bounds</string>
-<string name="alertoverloadmessage">Please edit or remove any current contact.</string>
-<string name="alertoverloadtitle">Unfortunately No More Contacts Can Be Authorized to be Added</string>
-<string name="alertphonevalidmessage">Please enter the right phone number format.</string>
-<string name="alertphonevalidtitle">Formato incorrecto</string>
-<string name="alerttimerend">Listo para alertar!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="aboutusblurbp1">The commitment with the security of our institution is demonstrated by the creation of tools that improve our quality of coexistence. On August 14, 2014, a professor was stabbed by an offender, leaving him at the brink of death. This fact demonstrated the need of a mechanism by which people can communicate their emergency to the community without delay.</string>
+    <string name="aboutusblurbp2">Following this terrible event, the Student Council and the Administrative Offices sought out solutions. Under the endorsement of these entities, co-founders Joel R. Corporán, Jean C. Méndez and Josué A. Santana developed Sentinel, an application for emergency alerts within the University of Puerto Rico Mayagüez Campus. Sentinel aims to establish an efficient and reliable immediate reaction system that mobilizes officers and the campus community to resolve critical events.</string>
+    <string name="alert">Alert</string>
+    <string name="alertcontactaddedtitle">New Contact Added</string>
+    <string name="alertcontactaddmessage">Please fill out all fields.</string>
+    <string name="alertcontactaddtitle">Empty Fields</string>
+    <string name="alertlocationdonelabel">Done</string>
+    <string name="alertlocationnotavailablemessage">You can turn on the GPS or authorize the app to get your location in Settings</string>
+    <string name="alertlocationnotavailabletitle">Location Not Available</string>
+    <string name="alertnoinlocationmessage">To send an alert, you need to be inside university boundaries.</string>
+    <string name="alertnoinlocationtitle">Outside of University Bounds</string>
+    <string name="alertoverloadmessage">Please edit or remove any current contact.</string>
+    <string name="alertoverloadtitle">Unfortunately No More Contacts Can Be Authorized to be Added</string>
+    <string name="alertphonevalidmessage">Please enter the right phone number format.</string>
+    <string name="alertphonevalidtitle">Formato incorrecto</string>
+    <string name="alerttimerend">Listo para alertar!</string>
     <string name="continuemessage">Continue</string>
     <string name="gobackmessage">I did not receive my code</string>
     <string name="gobacktitle">Do you want to attempt to sign in again?</string>
@@ -202,4 +203,5 @@
     <string name="reporttitle">Feedback</string>
     <string name="warningbeforeusemessage">THE IMPROPER USE OF THIS APPLICATION CAN RESULT IN SANCTIONS TO THE USER, AS ESTABLISHED BY THE UNIVERSITY POLICIES AND REGULATIONS. PLEASE USE RESPONSIBLY.</string>
     <string name="unsubscribedialogmessage">Are you sure?</string>
+    <string name="unsubscribedialogtitle">You are about to Unsubscribe</string>
 </resources>

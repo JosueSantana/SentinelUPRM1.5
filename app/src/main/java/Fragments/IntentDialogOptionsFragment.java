@@ -15,14 +15,19 @@ import edu.uprm.Sentinel.R;
 
 public class IntentDialogOptionsFragment extends DialogFragment {
 
+    Bundle transferBundle;
+
     public IntentDialogOptionsFragment(){
     }
 
     public Dialog onCreateDialog( Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        transferBundle = new Bundle();
+        transferBundle.putAll(getArguments());
+
         builder.setTitle(getArguments().getInt("dialogtitle"));
        // builder.setMessage(getArguments().getInt("dialogmessage"));
-
 
         int positiveButtonMessage = getArguments().getInt("positivetitle");
         int negativeButtonMessage = getArguments().getInt("negativetitle");
@@ -31,9 +36,10 @@ public class IntentDialogOptionsFragment extends DialogFragment {
         builder.setItems(itemsMessage,new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                transferBundle.putInt("position", i );
                 IntentDialogOptionsFragment.this.getDialog().dismiss();
                 ((DialogCaller) getActivity())
-                        .doItemClick(i);
+                        .doItemClick(transferBundle);
             }
         });
 
@@ -43,7 +49,7 @@ public class IntentDialogOptionsFragment extends DialogFragment {
                 //User cancelled the dialog.
                 IntentDialogOptionsFragment.this.getDialog().dismiss();
                 ((DialogCaller) getActivity())
-                        .doPositiveClick();
+                        .doPositiveClick(transferBundle);
             }
         });
 
@@ -53,7 +59,7 @@ public class IntentDialogOptionsFragment extends DialogFragment {
                     //User cancelled the dialog.
                     IntentDialogOptionsFragment.this.getDialog().dismiss();
                     ((DialogCaller) getActivity())
-                            .doNegativeClick();
+                            .doNegativeClick(transferBundle);
                 }
             });
         }

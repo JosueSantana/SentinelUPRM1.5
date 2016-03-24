@@ -177,6 +177,7 @@
     <string name="reporttitle">Opinion </string>
     <string name="unsubscribedialogmessage">Êtes-vous sûr?</string>
     <string name="warningbeforeusemessage">LA MAUVAISE UTILISATION DE CETTE APPLICATION PEUT PROVOQUER DES SANCTIONS À L\'UTILISATEUR, TEL QU\'ÉTABLI PAR LES POLITIQUES ET RÈGLEMENTS UNIVERSITAIRES. S\'IL VOUS PLAÎT UTILISER RESPONSABLEMENT.</string>
+    <string name="unsubscribedialogtitle">Vous Êtes sur le Point de Quitter</string>
     <!-- -->
 
 </resources>

@@ -1,10 +1,9 @@
 package Fragments;
 
-import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Handler;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View.OnClickListener;
 import android.content.SharedPreferences;
 
@@ -18,9 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import OtherHandlers.DialogCaller;
 import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -29,8 +26,6 @@ import org.cryptonode.jncryptor.CryptorException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
-
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.JSONHandler;
 import OtherHandlers.ValuesCollection;
@@ -38,13 +33,14 @@ import OtherHandlers.ValuesCollection;
 /**
  * This fragment manages the toggles in the settings.
  */
-public class SettingsFragment extends Fragment implements DialogCaller {
+public class SettingsFragment extends Fragment {
 
     private TableRow contactsRow;
     private TableRow languagesRow;
     private TableRow feedbackRow;
     private TableRow policiesRow;
     private TableRow aboutusRow;
+    private TableRow unsubscribeRow;
 
     private Switch emailSwitch;
     private Switch smsSwitch;
@@ -98,6 +94,7 @@ public class SettingsFragment extends Fragment implements DialogCaller {
         feedbackRow = (TableRow) getView().findViewById(R.id.feedbackrow);
         policiesRow = (TableRow) getView().findViewById(R.id.policiesrow);
         aboutusRow = (TableRow) getView().findViewById(R.id.aboutusrow);
+        unsubscribeRow = (TableRow) getView().findViewById(R.id.unsubscriberow);
 
         //set all the settings listeners
         rowListener(contactsRow, new ContactsFragment());
@@ -106,13 +103,21 @@ public class SettingsFragment extends Fragment implements DialogCaller {
         feedbackRow.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                showListDialog(R.string.feedbacklabel, R.string.okmessage,
-                        R.string.okmessage, R.array.policy_options, false);
+                showFeedbackDialog(R.string.feedbacklabel, R.string.okmessage,
+                        R.string.okmessage, R.array.policy_options, "feedback", false);
             }
         });
 
         rowListener(policiesRow, new PoliciesFragment());
         rowListener(aboutusRow, new AboutUsFragment());
+
+        unsubscribeRow.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showUnsubscribeDialog(R.string.unsubscribedialogtitle, R.string.unsubscribedialogmessage,
+                        R.string.okmessage, R.string.cancelmessage, "unsubscribe", true);
+            }
+        });
 
         //get reference to switch objects
         emailSwitch = (Switch) getView().findViewById(R.id.notificationsemailswitch);
@@ -298,13 +303,14 @@ public class SettingsFragment extends Fragment implements DialogCaller {
     }
 
 
-    private void showListDialog(int titleID, int positiveID, int negativeID, int optionsListID,boolean hasNeg) {
+    private void showFeedbackDialog(int titleID, int positiveID, int negativeID, int optionsListID, String kind, boolean hasNeg) {
         //prepare strings to pass to Fragment through Bundle
         Bundle bundle = new Bundle();
         bundle.putInt("dialogtitle", titleID);
         bundle.putInt("optionslist", optionsListID);
         bundle.putInt("positivetitle", positiveID);
         bundle.putInt("negativetitle", negativeID);
+        bundle.putString("intentkind", kind);
         bundle.putBoolean("hasneg", hasNeg );
 
         //Call up AlertDialog
@@ -313,39 +319,19 @@ public class SettingsFragment extends Fragment implements DialogCaller {
         dialogFragment.show(fm, "Proceed Dialog Fragment");
     }
 
+    private void showUnsubscribeDialog(int titleID, int messageID, int positiveID, int negativeID, String kind, boolean hasNeg) {
+        //prepare strings to pass to Fragment through Bundle
+        Bundle bundle = new Bundle();
+        bundle.putInt("dialogtitle", titleID);
+        bundle.putInt("dialogmessage", messageID);
+        bundle.putInt("positivetitle", positiveID);
+        bundle.putInt("negativetitle", negativeID);
+        bundle.putString("intentkind", kind);
+        bundle.putBoolean("hasneg", hasNeg );
 
-
-    @Override
-    public void doPositiveClick() {
-        //do nothing but remove the alert dialog
-    }
-
-    @Override
-    public void doNegativeClick() {
-        //does not apply
-    }
-
-    @Override
-    public void doItemClick(int position) {
-        FeedbackFragment feedbackFrag = new FeedbackFragment();
-        Bundle feedbackBundle = new Bundle();
-
-        //get the name of the view to access
-        String viewName = getResources().getStringArray(R.array.policy_options)[position];
-
-        if(viewName.equals(getResources().getString(R.string.reportproblem))){
-            feedbackBundle.putString("title", getResources().getString(R.string.reportproblem));
-            feedbackBundle.putString("hint", getResources().getString(R.string.problemhint));
-            feedbackBundle.putString("footer", getResources().getString(R.string.reportproblemfooter));
-
-        }
-        else{
-            feedbackBundle.putString("title", getResources().getString(R.string.reportfeedback));
-            feedbackBundle.putString("hint", getResources().getString(R.string.feedbackhint));
-            feedbackBundle.putString("footer", getResources().getString(R.string.reportfeedbackfooter));
-        }
-
-        feedbackFrag.setArguments(feedbackBundle);
-        fm.beginTransaction().replace(R.id.mainLayout, feedbackFrag).addToBackStack(null).commit();
+        //Call up AlertDialog
+        IntentDialogFragment dialogFragment = new IntentDialogFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "Proceed Dialog Fragment");
     }
 }

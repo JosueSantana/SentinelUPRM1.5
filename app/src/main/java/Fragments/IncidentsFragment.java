@@ -1,5 +1,6 @@
 package Fragments;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +9,9 @@ import android.os.Handler;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -51,6 +55,8 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
     private Double longitude;
     private Double latitude;
     private String placeName;
+    private boolean multipleMarkers = false;
+    private String fullName;
 
     public IncidentsFragment() {
         // Required empty public constructor
@@ -67,6 +73,7 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_incidents, container, false);
 
         return rootView;
@@ -91,6 +98,8 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
 
         mList = this.getListView();
+
+        mList.setEmptyView(this.getView().findViewById(R.id.noincidentstext));
 
         //runnable of the list filling
         final Runnable r = new Runnable() {
@@ -281,7 +290,10 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
                                                 tempJSON.put("time", date.getDisplayTime());
                                                 tempJSON.put("latitude", incidents.getJSONObject(i).get("latitude"));
                                                 tempJSON.put("longitude", incidents.getJSONObject(i).get("longitude"));
-                                                jsonArray.put(tempJSON);                                                    }
+                                                tempJSON.put("fullname", incidents.getJSONObject(i).get("regionName"));
+
+                                                jsonArray.put(tempJSON);
+                                            }
 
                                         } else {
                                             // no new incidents reported; do nothing.
@@ -395,7 +407,10 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
             latitude = Double.parseDouble(((JSONObject) jsonArray.get(position)).getString("latitude"));
             longitude = Double.parseDouble(((JSONObject) jsonArray.get(position)).getString("longitude"));
             placeName = ((JSONObject) jsonArray.get(position)).getString("name");
+            fullName = ((JSONObject) jsonArray.get(position)).getString("name");
+            multipleMarkers = false;
             SupportMapFragment mapFragment = new SupportMapFragment();
+
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, mapFragment, "mapFrag").addToBackStack("mapFrag").commit();
             mapFragment.getMapAsync(this);
 
@@ -409,13 +424,69 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng myLocation = new LatLng(latitude, longitude);
+        if(jsonArray != null) {
 
-        Float zoom = new Float(mMap.getMaxZoomLevel() * .90);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoom.floatValue()));
-        mMap.addMarker(new MarkerOptions().position(myLocation).title(placeName).visible(true));
+            if (!multipleMarkers) {
+                // Add a marker in Sydney and move the camera
+                LatLng myLocation = new LatLng(latitude, longitude);
 
+                Float zoom = new Float(mMap.getMaxZoomLevel() * .90);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoom.floatValue()));
+                mMap.addMarker(new MarkerOptions().position(myLocation).title(placeName).visible(true));
+
+                MapHeaderFragment frag = new MapHeaderFragment();
+
+                Bundle mapBundle = new Bundle();
+                mapBundle.putString("mapbanner", placeName);
+                frag.setArguments(mapBundle);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.bannerLayout,frag).commit();
+
+            } else {
+                for (int i = 0; i < jsonArray.length(); i++ ){
+                    try {
+                        LatLng myLocation = new LatLng(Double.parseDouble(jsonArray.getJSONObject(i).getString("latitude"))
+                                , Double.parseDouble(jsonArray.getJSONObject(i).getString("longitude")));
+
+                        mMap.addMarker(new MarkerOptions().position(myLocation).title(jsonArray.getJSONObject(i).getString("name")).visible(true));
+
+                        if(i == 0){
+                            Float zoom = new Float(mMap.getMaxZoomLevel() * .90);
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoom.floatValue()));
+                        }
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_incidents, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_show_all:
+                //do something
+                multipleMarkers = true;
+                SupportMapFragment mapFragment = new SupportMapFragment();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, mapFragment, "mapFrag").addToBackStack("mapFrag").commit();
+                mapFragment.getMapAsync(this);
+
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
 }

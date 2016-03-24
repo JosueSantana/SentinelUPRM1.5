@@ -8,4 +8,6 @@
     <color name="windowBackground">#fafafa</color>
     <color name="navigationBarColor">#008376</color>
     <color name="colorAccent">#008376</color>
+    <color name="colorContrast">#FF8002</color>
+    <color name="colorContrastDark">#D76D00</color>
 </resources>

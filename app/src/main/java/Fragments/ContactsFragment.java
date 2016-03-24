@@ -31,7 +31,7 @@ public class ContactsFragment extends ListFragment{
 
     private JSONArray jsonArray;
     private ListView mList;
-    private Thread loaderThread;
+    private volatile Thread loaderThread;
 
     public ContactsFragment() {
         // Required empty public constructor
@@ -51,6 +51,13 @@ public class ContactsFragment extends ListFragment{
         return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
 
+    public void onDestroyView(){
+        super.onDestroyView();
+
+        System.out.println("HELLO");
+
+    }
+
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //TODO: Get JSONArray from Handler
@@ -66,6 +73,9 @@ public class ContactsFragment extends ListFragment{
                 public void run() {
 
                     try {
+
+                        if(Thread.currentThread().interrupted()) throw new InterruptedException();
+
                         final CryptographyHandler crypto;
 
                         JSONObject registerJSON = new JSONObject();
@@ -99,15 +109,23 @@ public class ContactsFragment extends ListFragment{
                                                 mList.post(new Runnable(){
                                                     @Override
                                                     public void run() {
-                                                        setListAdapter(new ContactsAdapter(jsonArray, getActivity()));
+                                                        try{
+                                                        setListAdapter(new ContactsAdapter(jsonArray, getActivity()));}
+                                                        catch(NullPointerException e1){
+                                                            e1.printStackTrace();
+                                                        }
                                                     }
                                                 });
 
                                                 //setting up the amount of contacts for the settings
+                                                try{
                                                 SharedPreferences settings = ContactsFragment.this.getActivity().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
                                                 SharedPreferences.Editor editor = settings.edit();
 
-                                                editor.putInt("contactsCount", jsonArray.length()).commit();
+                                                editor.putInt("contactsCount", jsonArray.length()).apply();}
+                                                catch(NullPointerException e1){
+                                                    e1.printStackTrace();
+                                                }
 
                                             } catch (JSONException e1) {
                                                 e1.printStackTrace();
@@ -177,11 +195,15 @@ public class ContactsFragment extends ListFragment{
                         e.printStackTrace();
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
             });
 
+        loaderThread.setPriority(Thread.MAX_PRIORITY);
         loaderThread.start();
+
 
         //setListAdapter(new ContactsAdapter(jsonArray, getActivity()));
         //getListView();

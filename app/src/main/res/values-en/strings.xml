@@ -173,7 +173,7 @@
     <string name="gotologintitle">You Have an Open Session in Another Device</string>
     <string name="gotologinmessage">To reuse the app in this device, you need to register again.</string>
     <string name="unsubscribetitle">Subscription Cancellation Completed</string>
-    <string name="unsubscribemessage">The request for the cancelation of your subscription has been completed. You may still receive mass text messages during an emergency.</string>
+    <string name="unsubscribemessage">The request for the cancellation of your subscription has been completed. You may still receive mass text messages during an emergency.</string>
     <string name="passwordhint">Password</string>
     <!-- -->
 
@@ -184,6 +184,7 @@
     <string name= "aboutusblurbp2">Following this terrible event, the Student Council and the Administrative Offices sought out solutions. Under the endorsement of these entities, co-founders Joel R. Corporán, Jean C. Méndez and Josué A. Santana developed Sentinel, an application for emergency alerts within the University of Puerto Rico Mayagüez Campus. Sentinel aims to establish an efficient and reliable immediate reaction system that mobilizes officers and the campus community to resolve critical events.  </string>
     <string name="sentinelspecs">® Sentinel, for UPRM | Version 1.0.0</string>
     <string name="toplabelalerted">Please wait for help to come!</string>
+    <string name="unsubscribedialogtitle">You are about to Unsubscribe</string>
     <string name="unsubscribedialogmessage">Are you sure?</string>
 
 </resources>

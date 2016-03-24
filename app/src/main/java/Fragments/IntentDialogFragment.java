@@ -13,15 +13,22 @@ import OtherHandlers.DialogCaller;
  */
 public class IntentDialogFragment extends DialogFragment {
 
+    Bundle transferBundle;
+
     public IntentDialogFragment(){
     }
 
     public Dialog onCreateDialog( Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        transferBundle = new Bundle();
+        transferBundle.putAll(getArguments());
+
         builder.setTitle(getArguments().getInt("dialogtitle"));
         builder.setMessage(getArguments().getInt("dialogmessage"));
         int positiveButtonMessage = getArguments().getInt("positivetitle");
         int negativeButtonMessage = getArguments().getInt("negativetitle");
+
 
         builder.setCancelable(true);
         builder.setPositiveButton(positiveButtonMessage, new DialogInterface.OnClickListener() {
@@ -29,7 +36,7 @@ public class IntentDialogFragment extends DialogFragment {
                 //User cancelled the dialog.
                 IntentDialogFragment.this.getDialog().dismiss();
                 ((DialogCaller) getActivity())
-                        .doPositiveClick();
+                        .doPositiveClick(transferBundle);
             }
         });
 
@@ -39,7 +46,7 @@ public class IntentDialogFragment extends DialogFragment {
                     //User cancelled the dialog.
                     IntentDialogFragment.this.getDialog().dismiss();
                     ((DialogCaller) getActivity())
-                            .doNegativeClick();
+                            .doNegativeClick(transferBundle);
                 }
             });
         }
