@@ -22,14 +22,33 @@ import OtherHandlers.JSONHandler;
  * Created by jeanmendez on 3/3/16.
  */
 public class GCMListenerService extends GcmListenerService {
+
+    /*
+    public void onCreate() {
+        System.out.println("gcm service started");
+        System.out.println("gcm service started");
+        System.out.println("gcm service started");
+        System.out.println("gcm service started");
+        System.out.println("gcm service started");
+        System.out.println("gcm service started");
+        System.out.println("gcm service started");
+    }
+    */
+
     @Override
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
+        System.out.println("RECEIVED SOMETHINGGGGGGGGG");
+        System.out.println("RECEIVED SOMETHINGGGGGGGGG");
+        System.out.println("RECEIVED SOMETHINGGGGGGGGG");
+        System.out.println("RECEIVED SOMETHINGGGGGGGGG");
+        System.out.println("RECEIVED SOMETHINGGGGGGGGG");
+        System.out.println("RECEIVED SOMETHINGGGGGGGGG");
+        System.out.println("RECEIVED SOMETHINGGGGGGGGG");
 
         JSONObject receivedJSON = JSONHandler.convertBundleToJSON(data);
         //Log.d(TAG, "From: " + from);
         //Log.d(TAG, "Message: " + message);
-
 
 
         if (from.startsWith("/topics/")) {

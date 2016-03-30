@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="Sentinel.hmkcode.locations.sentineluprm15.Activities.VerificationActivity"
+    tools:context="Sentinel.hmkcode.locations.test.Activities.VerificationActivity"
     android:background="@color/colorSecondaryDark"
     android:id="@+id/verificationRLayout">
 
