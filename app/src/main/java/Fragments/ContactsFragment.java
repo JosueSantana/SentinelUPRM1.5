@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import edu.uprm.Sentinel.R;
@@ -32,6 +33,7 @@ public class ContactsFragment extends ListFragment{
     private JSONArray jsonArray;
     private ListView mList;
     private volatile Thread loaderThread;
+    private ProgressBar spinner;
 
     public ContactsFragment() {
         // Required empty public constructor
@@ -60,13 +62,12 @@ public class ContactsFragment extends ListFragment{
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //TODO: Get JSONArray from Handler
-        //TODO: Should we use AsyncTasks or does the Fragment take care of that?
-
-        //all of this...
         jsonArray = new JSONArray();
 
         mList = this.getListView();
+
+        spinner = (ProgressBar) getView().findViewById(R.id.progressBar);
+        spinner.setVisibility(View.VISIBLE);
 
         loaderThread = new Thread(new Runnable(){
                 @Override
@@ -106,6 +107,7 @@ public class ContactsFragment extends ListFragment{
                                                     tempJSON.put("editedPhone", contacts.getJSONObject(i).get("phone"));
                                                     jsonArray.put(tempJSON);
                                                 }
+
                                                 mList.post(new Runnable(){
                                                     @Override
                                                     public void run() {
@@ -114,6 +116,13 @@ public class ContactsFragment extends ListFragment{
                                                         catch(NullPointerException e1){
                                                             e1.printStackTrace();
                                                         }
+                                                    }
+                                                });
+
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        spinner.setVisibility(View.GONE);
                                                     }
                                                 });
 

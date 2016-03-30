@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,6 +35,8 @@ public class ContactsAdapter extends BaseAdapter {
 
     private JSONArray dataArray;
     private Activity activity;
+    private ProgressBar spinner;
+    private boolean isDeleting = false;
 
     private static LayoutInflater inflater = null;
 
@@ -76,6 +79,9 @@ public class ContactsAdapter extends BaseAdapter {
 
             ImageButton deleteIcon = (ImageButton) view.findViewById(R.id.deleteIcon);
 
+            spinner = (ProgressBar) activity.findViewById(R.id.progressBar);
+
+
             deleteIcon.setTag(i);
 
             deleteIcon.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +89,8 @@ public class ContactsAdapter extends BaseAdapter {
                 public void onClick(View view) {
 
                     final Integer index = (Integer) view.getTag();
+
+                    spinner.setVisibility(View.VISIBLE);
 
                     Runnable r = new Runnable() {
                         @Override
@@ -133,82 +141,85 @@ public class ContactsAdapter extends BaseAdapter {
             registerJSON.put("token", getToken());
             registerJSON.put("delete", telephone);
 
-            Ion.with(activity.getApplicationContext())
-                    .load("DELETE", ValuesCollection.DELETE_CONTACT_URL)
-                    .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
-                    .asString()
-                    .setCallback(new FutureCallback<String>() {
-                        @Override
-                        public void onCompleted(Exception e, String receivedJSON) {
+            if(!isDeleting) {
+                isDeleting = true;
+                Ion.with(activity.getApplicationContext())
+                        .load("DELETE", ValuesCollection.DELETE_CONTACT_URL)
+                        .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                        .asString()
+                        .setCallback(new FutureCallback<String>() {
+                            @Override
+                            public void onCompleted(Exception e, String receivedJSON) {
 
-                            // Successful Request
-                            if (requestIsSuccessful(e)) {
-                                JSONObject decryptedValue = getDecryptedValue(receivedJSON);
-                                System.out.println(decryptedValue);
+                                // Successful Request
+                                if (requestIsSuccessful(e)) {
+                                    JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+                                    System.out.println(decryptedValue);
 
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        dataArray.remove(index);
-                                        //setting up the amount of contacts for the settings
-                                        SharedPreferences settings = activity.getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
-                                        SharedPreferences.Editor editor = settings.edit();
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            spinner.setVisibility(View.GONE);
+                                            dataArray.remove(index);
+                                            //setting up the amount of contacts for the settings
+                                            SharedPreferences settings = activity.getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+                                            SharedPreferences.Editor editor = settings.edit();
 
-                                        editor.putInt("contactsCount", dataArray.length()).commit();
-                                        notifyDataSetChanged();
-                                    }
-                                });
+                                            editor.putInt("contactsCount", dataArray.length()).commit();
+                                            notifyDataSetChanged();
+                                        }
+                                    });
+                                }
+                                // Errors
+                                else {
+                                }
                             }
-                            // Errors
-                            else {
+
+                            private boolean listIsEmpty(JSONObject decryptedValue) {
+                                String success = null;
+                                try {
+                                    success = decryptedValue.getString("success");
+                                    return success.equals("2");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                return false;
                             }
-                        }
 
-                        private boolean listIsEmpty(JSONObject decryptedValue) {
-                            String success = null;
-                            try {
-                                success = decryptedValue.getString("success");
-                                return success.equals("2");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            // Extract Success Message From Received JSON.
+                            private boolean receivedExistingContacts(JSONObject decryptedValue) {
+                                String success = null;
+                                try {
+                                    success = decryptedValue.getString("success");
+                                    return success.equals("1");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                return false;
                             }
-                            return false;
-                        }
 
-                        // Extract Success Message From Received JSON.
-                        private boolean receivedExistingContacts(JSONObject decryptedValue) {
-                            String success = null;
-                            try {
-                                success = decryptedValue.getString("success");
-                                return success.equals("1");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            // Verify if there was an Error in the Request.
+                            private boolean requestIsSuccessful(Exception e) {
+                                return e == null;
                             }
-                            return false;
-                        }
 
-                        // Verify if there was an Error in the Request.
-                        private boolean requestIsSuccessful(Exception e) {
-                            return e == null;
-                        }
-
-                        // Convert received JSON String into a Decrypted JSON.
-                        private JSONObject getDecryptedValue(String receivedJSONString) {
-                            try {
-                                JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                return decryptedJSON;
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (CryptorException e) {
-                                e.printStackTrace();
+                            // Convert received JSON String into a Decrypted JSON.
+                            private JSONObject getDecryptedValue(String receivedJSONString) {
+                                try {
+                                    JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
+                                    String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
+                                    String decryptedStringValue = crypto.decryptString(encryptedStringValue);
+                                    JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
+                                    return decryptedJSON;
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                } catch (CryptorException e) {
+                                    e.printStackTrace();
+                                }
+                                return null;
                             }
-                            return null;
-                        }
-                    });
-
+                        });
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (CryptorException e) {

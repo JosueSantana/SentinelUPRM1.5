@@ -18,7 +18,8 @@
         android:textSize="@dimen/abc_text_size_medium_material"
         android:layout_alignParentLeft="true"
         android:paddingLeft="15dp"
-        android:paddingRight="15dp" />
+        android:paddingRight="15dp"
+        android:layout_toLeftOf="@+id/myContactPhone" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -30,9 +31,11 @@
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/abc_text_size_medium_material"
         android:fontFamily="sans-serif-condensed-light"
-        android:layout_toLeftOf="@+id/deleteIcon"
         android:paddingLeft="15dp"
-        android:paddingRight="15dp" />
+        android:paddingRight="15dp"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentRight="false"
+        android:layout_toLeftOf="@+id/deleteIcon" />
 
     <ImageButton
         android:layout_width="wrap_content"

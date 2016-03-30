@@ -45,14 +45,13 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_below="@+id/myFeedback" />
 
-        <Button
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Report"
-            android:id="@+id/button"
-            android:layout_below="@+id/feedbackmessage"
-            android:layout_alignEnd="@+id/feedbackmessage" />
-
+            android:progressDrawable="@drawable/circular_progress_bar"
+            android:layout_centerInParent="true" />
     </RelativeLayout>
 
 </FrameLayout>

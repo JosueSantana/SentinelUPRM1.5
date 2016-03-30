@@ -34,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.Key;
 import java.text.ParseException;
 
 import ListViewHelpers.IncidentsAdapter;
@@ -45,7 +46,7 @@ import OtherHandlers.ValuesCollection;
 /**
  * This fragment controls the incidents to be manipulated into the table.
  */
-public class IncidentsFragment extends ListFragment implements OnMapReadyCallback {
+public class IncidentsFragment extends ListFragment {
 
     SwipeRefreshLayout swipeRefreshLayout;
     private Handler handler = new Handler();
@@ -54,10 +55,10 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
     private int numberOfIncidents;
     private GoogleMap mMap;
     private Double longitude;
-    private Double latitude;
-    private String placeName;
+    private Double latitude ;
+    private String placeName = "";
     private boolean multipleMarkers = false;
-    private String fullName;
+    private MapFragment mapFragment;
 
     public IncidentsFragment() {
         // Required empty public constructor
@@ -68,6 +69,8 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         this.numberOfIncidents = 0;
         this.jsonArray = new JSONArray();
+
+
     }
 
     @Override
@@ -408,69 +411,21 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
             latitude = Double.parseDouble(((JSONObject) jsonArray.get(position)).getString("latitude"));
             longitude = Double.parseDouble(((JSONObject) jsonArray.get(position)).getString("longitude"));
             placeName = ((JSONObject) jsonArray.get(position)).getString("name");
-            fullName = ((JSONObject) jsonArray.get(position)).getString("name");
+            //fullName = ((JSONObject) jsonArray.get(position)).getString("name");
             multipleMarkers = false;
-            SupportMapFragment mapFragment = new SupportMapFragment();
 
+            mapFragment = new MapFragment();
+            Bundle mapFragBundle = new Bundle();
+            mapFragBundle.putFloat("latitude", latitude.floatValue());
+            mapFragBundle.putFloat("longitude", longitude.floatValue());
+            mapFragBundle.putString("name", placeName);
+            mapFragment.setArguments(mapFragBundle);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, mapFragment, "mapFrag").addToBackStack("mapFrag").commit();
-            mapFragment.getMapAsync(this);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        if(jsonArray != null) {
-
-            if (!multipleMarkers) {
-                // Add a marker in Sydney and move the camera
-                LatLng myLocation = new LatLng(latitude, longitude);
-
-                Float zoom = new Float(mMap.getMaxZoomLevel() * .90);
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoom.floatValue()));
-                mMap.addMarker(new MarkerOptions().position(myLocation).title(placeName).visible(true));
-
-                MapHeaderFragment frag = new MapHeaderFragment();
-
-                Bundle mapBundle = new Bundle();
-                mapBundle.putString("mapbanner", placeName);
-                frag.setArguments(mapBundle);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.bannerLayout,frag).commit();
-
-                frag.getView().setFocusableInTouchMode(true);
-                frag.getView().requestFocus();
-                frag.getView().setOnKeyListener(new View.OnKeyListener() {
-                    @Override
-                    public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                        return i == KeyEvent.KEYCODE_BACK;
-                    }
-                });
-
-            } else {
-                for (int i = 0; i < jsonArray.length(); i++ ){
-                    try {
-                        LatLng myLocation = new LatLng(Double.parseDouble(jsonArray.getJSONObject(i).getString("latitude"))
-                                , Double.parseDouble(jsonArray.getJSONObject(i).getString("longitude")));
-
-                        mMap.addMarker(new MarkerOptions().position(myLocation).title(jsonArray.getJSONObject(i).getString("name")).visible(true));
-
-                        if(i == 0){
-                            Float zoom = new Float(mMap.getMaxZoomLevel() * .90);
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoom.floatValue()));
-                        }
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
     }
 
     @Override
@@ -485,9 +440,9 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
             case R.id.action_show_all:
                 //do something
                 multipleMarkers = true;
-                SupportMapFragment mapFragment = new SupportMapFragment();
+                mapFragment = new MapFragment();
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, mapFragment, "mapFrag").addToBackStack("mapFrag").commit();
-                mapFragment.getMapAsync(this);
+                //mapFragment.getMapAsync(this);
 
                 return true;
 

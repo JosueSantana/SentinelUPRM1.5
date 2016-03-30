@@ -1,13 +1,35 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="Fragments.MapFragment">
 
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapview"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:id="@+id/mapLayout"
+        android:background="@color/colorPrimary">
+    </RelativeLayout>
 
-</FrameLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/mapbannercontainer"
+        android:background="@drawable/cell_shape_mapbanner"
+        android:padding="10dp"
+        android:layout_marginTop="@dimen/abc_action_bar_subtitle_bottom_margin_material">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello"
+            android:id="@+id/mapbannertext"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:layout_gravity="center_horizontal" />
+    </RelativeLayout>
+</RelativeLayout>

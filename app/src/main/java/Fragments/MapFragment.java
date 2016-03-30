@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -17,18 +18,22 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONException;
+
 import edu.uprm.Sentinel.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private double latitude;
     private double longitude;
     private String name;
-    private GoogleMap theMap;
-    private MapView mMapView;
+    private SupportMapFragment mapFragment;
+    private GoogleMap mMap;
+    private TextView bannerText;
 
     public MapFragment() {
         // Required empty public constructor
@@ -43,48 +48,60 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        // Inflate the layout for this fragment
-        System.out.println("HERE");
-        latitude = Double.parseDouble(getArguments().getString("incidentlatitude"));
-        longitude = Double.parseDouble(getArguments().getString("incidentlongitude"));
-        name = getArguments().getString("incidentname");
+        View root = inflater.inflate(R.layout.fragment_map, container, false);
 
+        latitude = getArguments().getFloat("latitude");
+        longitude = getArguments().getFloat("longitude");
+        System.out.println("lat:" + latitude + ", lon: " + longitude);
+        name = getArguments().getString("name");
 
-        return inflater.inflate(R.layout.fragment_map, container, false);
+        mapFragment = new SupportMapFragment();
+        getChildFragmentManager().beginTransaction().replace(R.id.mapLayout, mapFragment, "mapfragment").commit();
+        mapFragment.getMapAsync(this);
+
+        bannerText = (TextView) root.findViewById(R.id.mapbannertext);
+        bannerText.setText(name);
+
+        return root;
     }
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mMapView = (MapView) getActivity().findViewById(R.id.mapview);
-        this.onCreate(savedInstanceState);
-        mMapView.getMapAsync(this); //this is important
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        theMap = googleMap;
-        theMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap = googleMap;
 
-        System.out.println("ONMAPREADY!!");
+        //if(jsonArray != null) {
 
-        LatLng incidentPosition = new LatLng(latitude,longitude);
+//            if (!multipleMarkers) {
+                // Add a marker in Sydney and move the camera
+                LatLng myLocation = new LatLng(latitude, longitude);
 
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        theMap.setMyLocationEnabled(true);
-        theMap.moveCamera(CameraUpdateFactory.newLatLngZoom(incidentPosition, 13));
+                Float zoom = new Float(mMap.getMaxZoomLevel() * .90);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoom.floatValue()));
+                mMap.addMarker(new MarkerOptions().position(myLocation).title(name).visible(true));
 
-        theMap.addMarker(new MarkerOptions()
-                .title(name)
-                .position(incidentPosition));
+//            } else {
+//                for (int i = 0; i < jsonArray.length(); i++ ){
+//                    try {
+//                        LatLng myLocation = new LatLng(Double.parseDouble(jsonArray.getJSONObject(i).getString("latitude"))
+//                                , Double.parseDouble(jsonArray.getJSONObject(i).getString("longitude")));
+//
+//                        mMap.addMarker(new MarkerOptions().position(myLocation).title(jsonArray.getJSONObject(i).getString("name")).visible(true));
+//
+//                        if(i == 0){
+//                            Float zoom = new Float(mMap.getMaxZoomLevel() * .90);
+//                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoom.floatValue()));
+//                        }
+//
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+        //}
     }
 }

@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
             feedbackFrag.setArguments(feedbackBundle);
             fm.beginTransaction().replace(R.id.mainLayout, feedbackFrag).addToBackStack(null).commit();
         }
-
     }
+
+
 }
