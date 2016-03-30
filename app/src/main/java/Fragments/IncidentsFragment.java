@@ -131,7 +131,7 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
                                             for(int i = 0; i < incidents.length(); i++) {
                                                 JSONObject tempJSON = new JSONObject();
                                                 DateHandler date = new DateHandler(incidents.getJSONObject(i).get("created_on").toString());
-                                                tempJSON.put("name", incidents.getJSONObject(i).get("regionName"));
+                                                tempJSON.put("name", incidents.getJSONObject(i).get("regionFullname"));
                                                 tempJSON.put("date", date.getDisplayDate());
                                                 tempJSON.put("time", date.getDisplayTime());
                                                 tempJSON.put("latitude", incidents.getJSONObject(i).get("latitude"));

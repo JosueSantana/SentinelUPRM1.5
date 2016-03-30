@@ -18,6 +18,7 @@ import OtherHandlers.ValuesCollection;
 import edu.uprm.Sentinel.R;
 
 import Fragments.ViewPagerFragment;
+import edu.uprm.Sentinel.Services.GCMListenerService;
 
 
 public class MainActivity extends AppCompatActivity implements DialogCaller {
@@ -53,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
         //SharedPreferences credentials = getBaseContext().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
         //SharedPreferences.Editor editor = credentials.edit();
         //editor.clear().commit();
-
     }
 
     @Override

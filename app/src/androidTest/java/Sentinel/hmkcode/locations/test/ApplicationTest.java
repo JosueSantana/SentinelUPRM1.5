@@ -1,4 +1,4 @@
-package Sentinel.hmkcode.locations.sentineluprm15;
+package Sentinel.hmkcode.locations.test;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
