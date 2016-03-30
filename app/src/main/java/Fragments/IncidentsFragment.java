@@ -8,6 +8,7 @@ import android.os.Handler;
 
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -440,6 +441,15 @@ public class IncidentsFragment extends ListFragment implements OnMapReadyCallbac
                 mapBundle.putString("mapbanner", placeName);
                 frag.setArguments(mapBundle);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.bannerLayout,frag).commit();
+
+                frag.getView().setFocusableInTouchMode(true);
+                frag.getView().requestFocus();
+                frag.getView().setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                        return i == KeyEvent.KEYCODE_BACK;
+                    }
+                });
 
             } else {
                 for (int i = 0; i < jsonArray.length(); i++ ){
