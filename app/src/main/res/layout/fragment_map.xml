@@ -30,6 +30,7 @@
             android:layout_centerHorizontal="true"
             android:textColor="@color/textColorPrimary"
             android:textSize="@dimen/abc_text_size_medium_material"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:gravity="center" />
     </RelativeLayout>
 </RelativeLayout>

@@ -20,12 +20,7 @@ import android.widget.ListView;
 
 import edu.uprm.Sentinel.R;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -34,7 +29,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.Key;
 import java.text.ParseException;
 
 import ListViewHelpers.IncidentsAdapter;
@@ -411,14 +405,14 @@ public class IncidentsFragment extends ListFragment {
             latitude = Double.parseDouble(((JSONObject) jsonArray.get(position)).getString("latitude"));
             longitude = Double.parseDouble(((JSONObject) jsonArray.get(position)).getString("longitude"));
             placeName = ((JSONObject) jsonArray.get(position)).getString("name");
-            //fullName = ((JSONObject) jsonArray.get(position)).getString("name");
             multipleMarkers = false;
 
             mapFragment = new MapFragment();
             Bundle mapFragBundle = new Bundle();
-            mapFragBundle.putFloat("latitude", latitude.floatValue());
-            mapFragBundle.putFloat("longitude", longitude.floatValue());
+            mapFragBundle.putDouble("latitude", latitude);
+            mapFragBundle.putDouble("longitude", longitude);
             mapFragBundle.putString("name", placeName);
+            mapFragBundle.putBoolean("multipleMarkers", multipleMarkers);
             mapFragment.setArguments(mapFragBundle);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, mapFragment, "mapFrag").addToBackStack("mapFrag").commit();
 
@@ -440,9 +434,28 @@ public class IncidentsFragment extends ListFragment {
             case R.id.action_show_all:
                 //do something
                 multipleMarkers = true;
+
                 mapFragment = new MapFragment();
+                Bundle mapFragBundle = new Bundle();
+
+                double[] latitudeArray = new double[jsonArray.length()];
+                double[] longitudeArray = new double[jsonArray.length()];
+                String[] nameArray = new String[jsonArray.length()];
+                for(int i = 0; i < jsonArray.length(); i++){
+                    try {
+                        latitudeArray[i] = Double.parseDouble(jsonArray.getJSONObject(i).getString("latitude"));
+                        longitudeArray[i] = Double.parseDouble(jsonArray.getJSONObject(i).getString("longitude"));
+                        nameArray[i] = jsonArray.getJSONObject(i).getString("name");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                mapFragBundle.putDoubleArray("latitude", latitudeArray);
+                mapFragBundle.putDoubleArray("longitude", longitudeArray);
+                mapFragBundle.putStringArray("name", nameArray);
+                mapFragBundle.putBoolean("multipleMarkers", multipleMarkers);
+                mapFragment.setArguments(mapFragBundle);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, mapFragment, "mapFrag").addToBackStack("mapFrag").commit();
-                //mapFragment.getMapAsync(this);
 
                 return true;
 
