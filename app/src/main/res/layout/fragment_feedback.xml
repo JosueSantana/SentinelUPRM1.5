@@ -24,7 +24,7 @@
 
         <AutoCompleteTextView
             android:layout_width="fill_parent"
-            android:layout_height="@dimen/abc_dialog_fixed_width_major"
+            android:layout_height="320dp"
             android:id="@+id/myFeedback"
             android:layout_below="@+id/feedbacktitle"
             android:textAlignment="gravity"
@@ -44,6 +44,15 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_below="@+id/myFeedback" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Report"
+            android:id="@+id/button"
+            android:layout_below="@+id/feedbackmessage"
+            android:layout_alignEnd="@+id/feedbackmessage" />
+
     </RelativeLayout>
 
 </FrameLayout>

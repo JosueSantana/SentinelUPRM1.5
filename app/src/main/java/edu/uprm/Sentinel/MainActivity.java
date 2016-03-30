@@ -92,11 +92,13 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
                 feedbackBundle.putString("title", getResources().getString(R.string.reportproblem));
                 feedbackBundle.putString("hint", getResources().getString(R.string.problemhint));
                 feedbackBundle.putString("footer", getResources().getString(R.string.reportproblemfooter));
+                feedbackBundle.putBoolean("reportProblem", true);
 
             } else {
                 feedbackBundle.putString("title", getResources().getString(R.string.reportfeedback));
                 feedbackBundle.putString("hint", getResources().getString(R.string.feedbackhint));
                 feedbackBundle.putString("footer", getResources().getString(R.string.reportfeedbackfooter));
+                feedbackBundle.putBoolean("reportProblem", false);
             }
 
             feedbackFrag.setArguments(feedbackBundle);
