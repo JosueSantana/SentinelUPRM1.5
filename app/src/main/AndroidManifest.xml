@@ -37,6 +37,16 @@
         <!-- [START gcm_receiver] -->
 
         <receiver
+            android:name="edu.uprm.Sentinel.Services.NetworkChangeReceiver"
+            android:exported="false"
+            android:label="NetworkChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >

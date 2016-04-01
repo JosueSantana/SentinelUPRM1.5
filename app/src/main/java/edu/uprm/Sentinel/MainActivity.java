@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
             TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
             Typeface myTypeface = Typeface.createFromAsset(getAssets(), "stentiga.ttf");
             toolbarTitle.setTypeface(myTypeface);
-            toolbarTitle.setGravity(Gravity.CENTER);
+            //toolbarTitle.setGravity(Gravity.CENTER);
             //getSupportActionBar().setTitle("My custom toolbar!");
             //getSupportActionBar().setHomeButtonEnabled(true);
             //getSupportActionBar().setDisplayHomeAsUpEnabled(true);

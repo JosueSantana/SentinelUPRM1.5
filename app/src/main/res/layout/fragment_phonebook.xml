@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,11 +9,40 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:id="@+id/phonebookheader"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/phonebooktitle"
+            android:id="@+id/textView24"
+            android:textColor="@color/textColorPrimary"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:gravity="center"
+            android:textSize="@dimen/abc_text_size_medium_material" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listholder"
+        android:layout_below="@+id/phonebookheader">
 
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/android:list" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progressDrawable="@drawable/circular_progress_bar"
+            android:layout_centerInParent="true" />
     </RelativeLayout>
-</FrameLayout>
+</RelativeLayout>

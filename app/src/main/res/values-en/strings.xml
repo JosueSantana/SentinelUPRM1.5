@@ -156,6 +156,7 @@
     <string name="alertcontactaddtitle">Empty Fields</string>
     <string name="alertcontactaddmessage">Please fill out all fields.</string>
     <string name="alertcontactaddedtitle">New Contact Added</string>
+    <string name="phonebooktitle">Choose a contact</string>
     <string name="navigationtitle">Contact List</string>
     <string name="navcontacttitle">Contact</string>
     <string name="saveButton">Save</string>

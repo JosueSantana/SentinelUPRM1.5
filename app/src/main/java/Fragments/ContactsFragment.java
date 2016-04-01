@@ -56,8 +56,6 @@ public class ContactsFragment extends ListFragment{
     public void onDestroyView(){
         super.onDestroyView();
 
-        System.out.println("HELLO");
-
     }
 
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -240,7 +238,7 @@ public class ContactsFragment extends ListFragment{
                     showSignupError(R.string.alertoverloadtitle,R.string.alertoverloadmessage);
                 }
                 else{
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout,
+                    getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.mainLayout,
                     new PhonebookFragment()).addToBackStack(null).commit();
                 }
 

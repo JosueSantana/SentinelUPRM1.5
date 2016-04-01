@@ -204,4 +204,5 @@
     <string name="warningbeforeusemessage">THE IMPROPER USE OF THIS APPLICATION CAN RESULT IN SANCTIONS TO THE USER, AS ESTABLISHED BY THE UNIVERSITY POLICIES AND REGULATIONS. PLEASE USE RESPONSIBLY.</string>
     <string name="unsubscribedialogmessage">Are you sure?</string>
     <string name="unsubscribedialogtitle">You are about to Unsubscribe</string>
+    <string name="phonebooktitle">Choose a contact to add from your phone book</string>
 </resources>

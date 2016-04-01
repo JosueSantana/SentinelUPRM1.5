@@ -1,6 +1,5 @@
 package Fragments;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.os.Handler;
 
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import edu.uprm.Sentinel.R;
 
@@ -53,6 +52,8 @@ public class IncidentsFragment extends ListFragment {
     private String placeName = "";
     private boolean multipleMarkers = false;
     private MapFragment mapFragment;
+    private ProgressBar spinner;
+    private boolean allowRefresh = true;
 
     public IncidentsFragment() {
         // Required empty public constructor
@@ -95,6 +96,164 @@ public class IncidentsFragment extends ListFragment {
         // sets the colors used in the refresh animation
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
 
+    }
+
+
+    private String getToken() {
+        SharedPreferences credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+        return storedToken;
+    }
+
+    //this asynctask runs while refreshing and gets new data from DB
+    private class RefreshAdapter extends AsyncTask<Void,Long,IncidentsAdapter > {
+        @Override
+        protected void onPreExecute() {
+            swipeRefreshLayout.setEnabled(true);
+            swipeRefreshLayout.setRefreshing(true);
+        }
+        /* (non-Javadoc)
+         * @see android.os.AsyncTask#doInBackground(Params[])
+         */
+        @Override
+        protected IncidentsAdapter doInBackground(Void... params) {
+            // get the new data from you data source
+            // TODO : request data here
+            final CryptographyHandler crypto;
+            try {
+                if (allowRefresh) {
+                    System.out.println("allowrefresh: " + allowRefresh);
+                    System.out.println("ALLOWED REFRESH");
+                    crypto = new CryptographyHandler();
+
+                    allowRefresh = false;
+                    JSONObject registerJSON = new JSONObject();
+                    registerJSON.put("token", getToken());
+
+                    Ion.with(getContext())
+                            .load(ValuesCollection.GET_ALERTS_URL)
+                            .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                            .asString()
+                            .setCallback(new FutureCallback<String>() {
+                                @Override
+                                public void onCompleted(Exception e, String receivedJSON) {
+                                    // Successful Request
+                                    if (requestIsSuccessful(e)) {
+                                        JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+                                        //System.out.println(decryptedValue);
+
+                                        try {
+                                            JSONArray incidents = decryptedValue.getJSONArray("incident");
+
+                                            // new incidents reported since last refresh
+                                            if (incidents.length() > numberOfIncidents) {
+
+                                                numberOfIncidents = incidents.length();
+                                                jsonArray = new JSONArray();
+
+                                                for (int i = 0; i < incidents.length(); i++) {
+                                                    JSONObject tempJSON = new JSONObject();
+                                                    DateHandler date = new DateHandler(incidents.getJSONObject(i).get("created_on").toString());
+                                                    tempJSON.put("name", incidents.getJSONObject(i).get("regionFullname"));
+                                                    tempJSON.put("date", date.getDisplayDate());
+                                                    tempJSON.put("time", date.getDisplayTime());
+                                                    tempJSON.put("latitude", incidents.getJSONObject(i).get("latitude"));
+                                                    tempJSON.put("longitude", incidents.getJSONObject(i).get("longitude"));
+                                                    tempJSON.put("fullname", incidents.getJSONObject(i).get("regionName"));
+
+                                                    jsonArray.put(tempJSON);
+                                                    allowRefresh = true;
+                                                }
+
+                                            } else {
+                                                // no new incidents reported; do nothing.
+                                            }
+
+                                        } catch (JSONException e1) {
+                                            e1.printStackTrace();
+                                        } catch (ParseException e1) {
+                                            e1.printStackTrace();
+                                        }
+
+                                        // Received Success Message
+                                        if (receivedSuccessMessage(decryptedValue)) {
+
+                                        }
+
+                                        // Message Was Not Successful.
+                                        else {
+
+                                        }
+
+                                    }
+                                    // Errors
+                                    else {
+
+                                    }
+                                }
+
+                                // Extract Success Message From Received JSON.
+                                private boolean receivedSuccessMessage(JSONObject decryptedValue) {
+                                    String success = null;
+                                    try {
+                                        success = decryptedValue.getString("success");
+                                        return success.equals("1");
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return false;
+                                }
+
+                                // Verify if there was an Error in the Request.
+                                private boolean requestIsSuccessful(Exception e) {
+                                    return e == null;
+                                }
+
+
+
+                                // Convert received JSON String into a Decrypted JSON.
+                                private JSONObject getDecryptedValue(String receivedJSONString) {
+                                    try {
+                                        JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
+                                        String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
+                                        String decryptedStringValue = crypto.decryptString(encryptedStringValue);
+                                        JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
+                                        return decryptedJSON;
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    } catch (CryptorException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return null;
+                                }
+
+                            });
+
+                }
+            }catch (JSONException e) {
+                e.printStackTrace();
+            } catch (CryptorException e) {
+                e.printStackTrace();
+            }
+            handler.post(refreshing);
+            IncidentsAdapter adapter = new IncidentsAdapter(jsonArray, getActivity());
+            return adapter;
+        }
+
+        protected void onPostExecute(IncidentsAdapter result) {
+            // stop the animation after the data is fully loaded
+            swipeRefreshLayout.setRefreshing(false);
+
+            mList.setAdapter(result);
+        }
+    }
+
+    public void onResume(){
+        super.onResume();
+
+        spinner = (ProgressBar) getView().findViewById(R.id.progressBar);
+        spinner.setVisibility(View.VISIBLE);
+
         mList = this.getListView();
 
         mList.setEmptyView(this.getView().findViewById(R.id.noincidentstext));
@@ -105,6 +264,8 @@ public class IncidentsFragment extends ListFragment {
             public void run() {
                 final CryptographyHandler crypto;
                 try {
+                    allowRefresh = false;
+                    System.out.println("REFRESH IS NOW FALSE");
                     crypto = new CryptographyHandler();
 
                     JSONObject registerJSON = new JSONObject();
@@ -137,9 +298,17 @@ public class IncidentsFragment extends ListFragment {
                                                 jsonArray.put(tempJSON);
                                             }
 
-                                            mList.post(new Runnable(){
-                                                public void run(){
+                                            mList.post(new Runnable() {
+                                                public void run() {
                                                     mList.setAdapter(new IncidentsAdapter(jsonArray, getActivity()));
+                                                }
+                                            });
+
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    spinner.setVisibility(View.GONE);
+                                                    allowRefresh = true;
                                                 }
                                             });
 
@@ -154,7 +323,12 @@ public class IncidentsFragment extends ListFragment {
                                         }
                                         // Message Was Not Successful.
                                         else {
-
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    spinner.setVisibility(View.GONE);
+                                                }
+                                            });
                                         }
                                     }
                                     // Errors
@@ -205,19 +379,16 @@ public class IncidentsFragment extends ListFragment {
             }
         };
 
-        if(jsonArray.length() == 0) {
+        if (jsonArray.length() == 0) {
             Thread mythread = new Thread(r);
             mythread.start();
         }
 
-        //TODO: Get JSONArray from Handler
-        //TODO: Should we use AsyncTasks or does the Fragment take care of that?
-
         //makes sure it doesn't try to refresh the list while the visible list is not at the top
         mList.setOnScrollListener(new AbsListView.OnScrollListener() {
 
-        public void onScrollStateChanged(AbsListView view, int scrollState) {
-        }
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
 
             public void onScroll(AbsListView view, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
@@ -228,149 +399,6 @@ public class IncidentsFragment extends ListFragment {
                 );
             }
         });
-
-    }
-
-
-    private String getToken() {
-        SharedPreferences credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
-        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
-        return storedToken;
-    }
-
-    //this asynctask runs while refreshing and gets new data from DB
-    private class RefreshAdapter extends AsyncTask<Void,Long,IncidentsAdapter > {
-        @Override
-        protected void onPreExecute() {
-            swipeRefreshLayout.setEnabled(true);
-            swipeRefreshLayout.setRefreshing(true);
-        }
-        /* (non-Javadoc)
-         * @see android.os.AsyncTask#doInBackground(Params[])
-         */
-        @Override
-        protected IncidentsAdapter doInBackground(Void... params) {
-            // get the new data from you data source
-            // TODO : request data here
-            final CryptographyHandler crypto;
-            try {
-                crypto = new CryptographyHandler();
-
-                JSONObject registerJSON = new JSONObject();
-                registerJSON.put("token", getToken());
-
-                Ion.with(getContext())
-                        .load(ValuesCollection.GET_ALERTS_URL)
-                        .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
-                        .asString()
-                        .setCallback(new FutureCallback<String>() {
-                            @Override
-                            public void onCompleted(Exception e, String receivedJSON) {
-                                // Successful Request
-                                if (requestIsSuccessful(e)) {
-                                    JSONObject decryptedValue = getDecryptedValue(receivedJSON);
-                                    //System.out.println(decryptedValue);
-
-                                    try {
-                                        JSONArray incidents = decryptedValue.getJSONArray("incident");
-
-                                        // new incidents reported since last refresh
-                                        if(incidents.length() > numberOfIncidents){
-
-                                            numberOfIncidents = incidents.length();
-                                            jsonArray = new JSONArray();
-
-                                            for(int i = 0; i < incidents.length(); i++) {
-                                                JSONObject tempJSON = new JSONObject();
-                                                DateHandler date = new DateHandler(incidents.getJSONObject(i).get("created_on").toString());
-                                                tempJSON.put("name", incidents.getJSONObject(i).get("regionName"));
-                                                tempJSON.put("date", date.getDisplayDate());
-                                                tempJSON.put("time", date.getDisplayTime());
-                                                tempJSON.put("latitude", incidents.getJSONObject(i).get("latitude"));
-                                                tempJSON.put("longitude", incidents.getJSONObject(i).get("longitude"));
-                                                tempJSON.put("fullname", incidents.getJSONObject(i).get("regionName"));
-
-                                                jsonArray.put(tempJSON);
-                                            }
-
-                                        } else {
-                                            // no new incidents reported; do nothing.
-                                        }
-
-                                    } catch (JSONException e1) {
-                                        e1.printStackTrace();
-                                    } catch (ParseException e1) {
-                                        e1.printStackTrace();
-                                    }
-
-                                    // Received Success Message
-                                    if (receivedSuccessMessage(decryptedValue)) {
-
-                                    }
-
-                                    // Message Was Not Successful.
-                                    else {
-
-                                    }
-
-                                }
-                                // Errors
-                                else {
-
-                                }
-                            }
-
-                            // Extract Success Message From Received JSON.
-                            private boolean receivedSuccessMessage(JSONObject decryptedValue) {
-                                String success = null;
-                                try {
-                                    success = decryptedValue.getString("success");
-                                    return success.equals("1");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                return false;
-                            }
-
-                            // Verify if there was an Error in the Request.
-                            private boolean requestIsSuccessful(Exception e) {
-                                return e == null;
-                            }
-
-                            // Convert received JSON String into a Decrypted JSON.
-                            private JSONObject getDecryptedValue(String receivedJSONString) {
-                                try {
-                                    JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                    String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                    String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                    JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                    return decryptedJSON;
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                } catch (CryptorException e) {
-                                    e.printStackTrace();
-                                }
-                                return null;
-                            }
-
-                        });
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (CryptorException e) {
-                e.printStackTrace();
-            }
-            handler.post(refreshing);
-            IncidentsAdapter adapter = new IncidentsAdapter(jsonArray, getActivity());
-            return adapter;
-        }
-
-        protected void onPostExecute(IncidentsAdapter result) {
-            // stop the animation after the data is fully loaded
-            swipeRefreshLayout.setRefreshing(false);
-
-            mList.setAdapter(result);
-        }
     }
 
     //This runnable runs for as long as the new data hasn't arrived
@@ -414,7 +442,7 @@ public class IncidentsFragment extends ListFragment {
             mapFragBundle.putString("name", placeName);
             mapFragBundle.putBoolean("multipleMarkers", multipleMarkers);
             mapFragment.setArguments(mapFragBundle);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, mapFragment, "mapFrag").addToBackStack("mapFrag").commit();
+            getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.mainLayout, mapFragment, "mapFrag").addToBackStack("mapFrag").commit();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -455,7 +483,7 @@ public class IncidentsFragment extends ListFragment {
                 mapFragBundle.putStringArray("name", nameArray);
                 mapFragBundle.putBoolean("multipleMarkers", multipleMarkers);
                 mapFragment.setArguments(mapFragBundle);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, mapFragment, "mapFrag").addToBackStack("mapFrag").commit();
+                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.mainLayout, mapFragment, "mapFrag").addToBackStack("mapFrag").commit();
 
                 return true;
 

@@ -187,7 +187,7 @@ public class SettingsFragment extends Fragment {
         row.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                fm.beginTransaction().replace(R.id.mainLayout, frag).addToBackStack(null).commit();
+                fm.beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.mainLayout, frag).addToBackStack(null).commit();
             }
         });
     }

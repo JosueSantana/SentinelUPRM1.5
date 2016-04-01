@@ -45,6 +45,7 @@ import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DialogCaller;
 import OtherHandlers.JSONHandler;
 import OtherHandlers.ValuesCollection;
+import OtherHandlers.NetworkUtil;
 
 /**
  * This activity handles the inputs for the login menu.
@@ -104,7 +105,7 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 boolean handled = false;
-                if (i == EditorInfo.IME_ACTION_GO) {
+                if (i == EditorInfo.IME_ACTION_GO && NetworkUtil.getConnectivityStatus(getBaseContext()) != NetworkUtil.TYPE_NOT_CONNECTED ) {
 
                     try {
 

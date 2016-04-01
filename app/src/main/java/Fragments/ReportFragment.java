@@ -116,7 +116,7 @@ public class ReportFragment extends Fragment implements
                 locationBundle.putDouble("longitude", mLastLocation.getLatitude());
 
                 cdFrag.setArguments(locationBundle);
-                fm.beginTransaction().replace(R.id.mainLayout, cdFrag).addToBackStack("ReportFragment").commit();
+                fm.beginTransaction().setCustomAnimations(R.anim.fade_in,R.anim.fade_out).replace(R.id.mainLayout, cdFrag).addToBackStack("ReportFragment").commit();
             }
             /*public void onClick(View view) {
                 FragmentManager fm = getActivity().getSupportFragmentManager();

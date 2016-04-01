@@ -30,6 +30,7 @@ import Fragments.SimpleDialogFragment;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DialogCaller;
 import OtherHandlers.JSONHandler;
+import OtherHandlers.NetworkUtil;
 import OtherHandlers.ValuesCollection;
 
 /**
@@ -90,7 +91,7 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 boolean handled = false;
-                if (i == EditorInfo.IME_ACTION_GO) {
+                if (i == EditorInfo.IME_ACTION_GO && NetworkUtil.getConnectivityStatus(getBaseContext()) != NetworkUtil.TYPE_NOT_CONNECTED ) {
                     try {
 
 

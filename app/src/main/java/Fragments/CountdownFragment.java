@@ -213,7 +213,7 @@ public class CountdownFragment extends Fragment implements
 
                                                     }
                                                     else if(receivedJSON.getString("success").equals("1")){
-                                                        getActivity().getSupportFragmentManager().beginTransaction().remove(CountdownFragment.this).replace(R.id.mainLayout, new AlertWaitFragment()).commit();
+                                                        getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).remove(CountdownFragment.this).replace(R.id.mainLayout, new AlertWaitFragment()).commit();
                                                     }
                                                 } catch (JSONException e1) {
                                                     e1.printStackTrace();

@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import edu.uprm.Sentinel.R;
@@ -40,6 +41,7 @@ public class PhonebookFragment extends ListFragment{
 
 
     JSONArray contactsList;
+    private ProgressBar spinner;
 
     public PhonebookFragment() {
         // Required empty public constructor
@@ -56,6 +58,9 @@ public class PhonebookFragment extends ListFragment{
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        spinner = (ProgressBar) getView().findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
 
         Uri uri = ContactsContract.Contacts.CONTENT_URI;
         String[] projection = {ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts.HAS_PHONE_NUMBER};
@@ -123,6 +128,13 @@ public class PhonebookFragment extends ListFragment{
                     try {
                         crypto = new CryptographyHandler();
 
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                spinner.setVisibility(View.VISIBLE);
+                            }
+                        });
+
                         SharedPreferences credentials = getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
 
                         registerJSON.put("token", getToken());
@@ -150,6 +162,14 @@ public class PhonebookFragment extends ListFragment{
                                 else {
                                 }
                                 */
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                getActivity().getSupportFragmentManager().popBackStackImmediate();
+                                                spinner.setVisibility(View.GONE);
+                                            }
+                                        });
+
                                     }
 
                                     // Extract Success Message From Received JSON.
@@ -158,6 +178,8 @@ public class PhonebookFragment extends ListFragment{
                                         try {
                                             success = decryptedValue.getString("success");
                                             return success.equals("1");
+
+
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -194,7 +216,6 @@ public class PhonebookFragment extends ListFragment{
             };
 
             new Thread(r).start();
-            getActivity().getSupportFragmentManager().popBackStackImmediate();
 
         } catch (JSONException e) {
             e.printStackTrace();

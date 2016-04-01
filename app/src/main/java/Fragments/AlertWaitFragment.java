@@ -62,13 +62,13 @@ public class AlertWaitFragment extends Fragment {
                     if (getActivity() instanceof SplashActivity) {
                         System.out.println("INSTANCEOF SPLASH");
                         Activity myActivity = getActivity();
-                        getActivity().getSupportFragmentManager().beginTransaction().remove(AlertWaitFragment.this).commitAllowingStateLoss();
+                        getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).remove(AlertWaitFragment.this).commitAllowingStateLoss();
                         Intent mainIntent = new Intent(myActivity, MainActivity.class);
                         startActivity(mainIntent);
                         myActivity.finish();
                     } else if (getActivity() instanceof MainActivity) {
                         System.out.println("INSTANCEOF MAIN");
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainLayout, new ViewPagerFragment()).commitAllowingStateLoss();
+                        getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.mainLayout, new ViewPagerFragment()).commitAllowingStateLoss();
                     }
 
                     this.cancel();

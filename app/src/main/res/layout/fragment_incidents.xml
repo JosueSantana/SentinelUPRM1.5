@@ -59,5 +59,13 @@
             android:layout_centerInParent="true"
             android:paddingLeft="10dp"
             android:paddingRight="10dp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progressDrawable="@drawable/circular_progress_bar"
+            android:layout_centerInParent="true" />
     </RelativeLayout>
 </FrameLayout>
