@@ -1,6 +1,5 @@
 package Fragments;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.os.Handler;
 
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import OtherHandlers.Constants;
 import edu.uprm.Sentinel.R;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -35,7 +34,6 @@ import ListViewHelpers.IncidentsAdapter;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DateHandler;
 import OtherHandlers.JSONHandler;
-import OtherHandlers.ValuesCollection;
 
 /**
  * This fragment controls the incidents to be manipulated into the table.
@@ -111,8 +109,8 @@ public class IncidentsFragment extends ListFragment {
                     registerJSON.put("token", getToken());
 
                     Ion.with(getContext())
-                            .load(ValuesCollection.GET_ALERTS_URL)
-                            .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                            .load(Constants.GET_ALERTS_URL)
+                            .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
                             .asString()
                             .setCallback(new FutureCallback<String>() {
                                 @Override
@@ -233,8 +231,8 @@ public class IncidentsFragment extends ListFragment {
 
 
     private String getToken() {
-        SharedPreferences credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
-        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+        SharedPreferences credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
         return storedToken;
     }
 
@@ -260,8 +258,8 @@ public class IncidentsFragment extends ListFragment {
                 registerJSON.put("token", getToken());
 
                 Ion.with(getContext())
-                        .load(ValuesCollection.GET_ALERTS_URL)
-                        .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                        .load(Constants.GET_ALERTS_URL)
+                        .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
                         .asString()
                         .setCallback(new FutureCallback<String>() {
                             @Override

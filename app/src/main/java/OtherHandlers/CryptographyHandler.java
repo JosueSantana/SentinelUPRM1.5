@@ -19,15 +19,7 @@ import java.nio.charset.StandardCharsets;
  */
 
 public final class CryptographyHandler {
-    
     private JNCryptor cryptor;
-
-    private String email;
-    private String phone;
-    private String os;
-    private String deviceID;
-
-    private JSONObject json;
     final String SENTINEL_ENCRYPTION_KEY = "62rCTnekkNI1rHTa3ygTO9dOwUJTuZUf";
 
     // Standard Constructor
@@ -55,29 +47,4 @@ public final class CryptographyHandler {
         byte[] decryptedMessageArray = this.cryptor.decryptData(Base64.decode(json, 0), SENTINEL_ENCRYPTION_KEY.toCharArray());
         return new String(decryptedMessageArray, StandardCharsets.UTF_8);
     }
-
-    public String getJsonString(){
-        return this.json.toString();
-    }
-
 }
-
-/*
-            JSONObject receivedJSON = new JSONObject();
-            receivedJSON.put("SentinelMessage", "AwFXWwsGAXxKtBU+tZsX9d0qGMjxGUY9zhi+Rizvwhj61wDH2M36LoJe31yCFsw/0IoqaXXpfOa/2SOIJoZ3CrYpv4b53dNQZQxbi5QLMg9AKA==");
-
-            String receivedJSONString = receivedJSON.toString();
-
-            System.out.println(receivedJSONString);
-            System.out.println("lol");
-
-            JSONObject convertedJSON = new JSONObject(receivedJSONString);
-            String receivedKey = convertedJSON.get("SentinelMessage").toString();
-
-            System.out.println(receivedKey);
-            JNCryptor encryptor = new AES256JNCryptor();
-            byte[] decryptedMessageArray = encryptor.decryptData(Base64.decode(receivedKey, 0), SENTINEL_ENCRYPTION_KEY.toCharArray());
-
-            String decryptedMessage = new String(decryptedMessageArray, StandardCharsets.UTF_8);
-            System.out.println(decryptedMessage);
- */

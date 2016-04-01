@@ -18,7 +18,7 @@ import edu.uprm.Sentinel.R;
 
 import java.util.Locale;
 
-import OtherHandlers.ValuesCollection;
+import OtherHandlers.Constants;
 
 public class LanguagesFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -70,7 +70,7 @@ public class LanguagesFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
-        settings = getContext().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+        settings = getContext().getSharedPreferences(Constants.SETTINGS_SP, 0);
         editor = settings.edit();
 
         enRow = (TableRow) getView().findViewById(R.id.englishRow);

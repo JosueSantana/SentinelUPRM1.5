@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,24 +16,16 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import org.cryptonode.jncryptor.CryptorException;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-
 import Fragments.FeedbackFragment;
-import ListViewHelpers.IncidentsAdapter;
+import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
-import OtherHandlers.DateHandler;
 import OtherHandlers.DialogCaller;
 import OtherHandlers.JSONHandler;
-import OtherHandlers.ValuesCollection;
-import edu.uprm.Sentinel.R;
 
 import Fragments.ViewPagerFragment;
-import edu.uprm.Sentinel.Services.GCMListenerService;
-
 
 public class MainActivity extends AppCompatActivity implements DialogCaller {
 
@@ -66,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
             //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        //SharedPreferences credentials = getBaseContext().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        //SharedPreferences credentials = getBaseContext().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
         //SharedPreferences.Editor editor = credentials.edit();
         //editor.clear().commit();
     }
@@ -78,8 +69,8 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
             unsubscribeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             //clear all credentials
-            getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0).edit().clear().commit();
-            getSharedPreferences(ValuesCollection.SETTINGS_SP, 0).edit().clear().commit();
+            getSharedPreferences(Constants.CREDENTIALS_SP, 0).edit().clear().commit();
+            getSharedPreferences(Constants.SETTINGS_SP, 0).edit().clear().commit();
 
 
             final Runnable r = new Runnable() {
@@ -93,8 +84,8 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
                         registerJSON.put("token", getToken());
 
                         Ion.with(getApplicationContext())
-                                .load(ValuesCollection.UNSUBSCRIBE_URL)
-                                .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                                .load(Constants.UNSUBSCRIBE_URL)
+                                .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
                                 .asString()
                                 .setCallback(new FutureCallback<String>() {
                                     @Override
@@ -172,8 +163,8 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
     }
 
     private String getToken() {
-        SharedPreferences credentials = this.getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
-        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+        SharedPreferences credentials = this.getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
         return storedToken;
     }
 

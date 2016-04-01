@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 
 import android.view.View;
@@ -24,12 +23,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.koushikdutta.async.future.FutureCallback;
@@ -48,10 +41,10 @@ import java.util.regex.Pattern;
 import Fragments.EmergencyFragment;
 import Fragments.IntentDialogFragment;
 import Fragments.SimpleDialogFragment;
+import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DialogCaller;
 import OtherHandlers.JSONHandler;
-import OtherHandlers.ValuesCollection;
 
 /**
  * This activity handles the inputs for the login menu.
@@ -88,7 +81,7 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
         spinner = (ProgressBar) findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
 
-        credentials = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        credentials = getSharedPreferences(Constants.CREDENTIALS_SP, 0);
         editor = credentials.edit();
 
         editor.putBoolean("atSignup", true).commit();
@@ -234,7 +227,7 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
             //String token = getGCMToken();
 
             //registerJSON.put("deviceID", Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID).toString());
-            //registerJSON.put("deviceID", instanceID.getToken(ValuesCollection.ANDROID_SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE));
+            //registerJSON.put("deviceID", instanceID.getToken(Constants.ANDROID_SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE));
 
             Runnable r = new Runnable(){
                 @Override
@@ -243,7 +236,7 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                     JSONObject registerJSON = new JSONObject();
                     registerJSON.put("email", email);
                     registerJSON.put("phone", phone);
-                    registerJSON.put("os", ValuesCollection.ANDROID_OS_STRING);
+                    registerJSON.put("os", Constants.ANDROID_OS_STRING);
                     registerJSON.put("deviceID", token);
                     //registerJSON.put("deviceID", regid);
 
@@ -251,12 +244,12 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
 
                     final SharedPreferences.Editor credentialsEditor = credentials.edit();
 
-                    //credentialsEditor.putString(ValuesCollection.ANDROID_SENDER_ID, token);
-                    credentialsEditor.putString(ValuesCollection.ANDROID_SENDER_ID, regid);
+                    //credentialsEditor.putString(Constants.ANDROID_SENDER_ID, token);
+                    credentialsEditor.putString(Constants.ANDROID_SENDER_ID, regid);
                     credentialsEditor.commit();
                     Ion.with(getBaseContext())
-                            .load(ValuesCollection.REGISTER_URL)
-                            .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                            .load(Constants.REGISTER_URL)
+                            .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
                             .asString()
                             .setCallback(new FutureCallback<String>() {
                                 @Override
@@ -268,9 +261,9 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
 
                                         // Received Success Message
                                         if (receivedSuccessMessage(decryptedValue)) {
-                                            SharedPreferences credentials = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+                                            SharedPreferences credentials = getSharedPreferences(Constants.CREDENTIALS_SP, 0);
                                             SharedPreferences.Editor emailEditor = credentials.edit();
-                                            emailEditor.putString(ValuesCollection.EMAIL_KEY, email);
+                                            emailEditor.putString(Constants.EMAIL_KEY, email);
                                             emailEditor.commit();
 
                                             runOnUiThread(new Runnable() {

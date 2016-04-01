@@ -1,8 +1,6 @@
 package Fragments;
 
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.ListFragment;
 import android.database.Cursor;
 import android.net.Uri;
@@ -14,8 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
+import OtherHandlers.Constants;
 import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -31,7 +29,6 @@ import java.util.regex.Pattern;
 import ListViewHelpers.PhonebookAdapter;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.JSONHandler;
-import OtherHandlers.ValuesCollection;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -123,15 +120,15 @@ public class PhonebookFragment extends ListFragment{
                     try {
                         crypto = new CryptographyHandler();
 
-                        SharedPreferences credentials = getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+                        SharedPreferences credentials = getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
 
                         registerJSON.put("token", getToken());
                         registerJSON.put("name", name);
                         registerJSON.put("phone", phone);
 
                         Ion.with(getContext())
-                                .load("PUT", ValuesCollection.ADD_CONTACT_URL)
-                                .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                                .load("PUT", Constants.ADD_CONTACT_URL)
+                                .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
                                 .asString()
                                 .setCallback(new FutureCallback<String>() {
                                     @Override
@@ -202,8 +199,8 @@ public class PhonebookFragment extends ListFragment{
     }
 
     private String getToken() {
-        SharedPreferences credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
-        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+        SharedPreferences credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
         return storedToken;
     }
 }

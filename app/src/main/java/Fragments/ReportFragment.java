@@ -24,7 +24,7 @@ import com.google.android.gms.location.LocationServices;
 
 import edu.uprm.Sentinel.R;
 
-import OtherHandlers.ValuesCollection;
+import OtherHandlers.Constants;
 
 /**
  * This fragment listens on user input when reporting.
@@ -99,7 +99,7 @@ public class ReportFragment extends Fragment implements
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        SharedPreferences settings = this.getActivity().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+        SharedPreferences settings = this.getActivity().getSharedPreferences(Constants.SETTINGS_SP, 0);
         System.out.println("APPLOCALE IS: " + settings.getString("appLocale", "no"));
         mButton = (ImageButton) getView().findViewById(R.id.alertButton);
 

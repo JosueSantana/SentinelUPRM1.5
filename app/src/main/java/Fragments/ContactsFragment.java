@@ -1,7 +1,6 @@
 package Fragments;
 
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
+import OtherHandlers.Constants;
 import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -26,7 +25,6 @@ import org.json.JSONObject;
 import ListViewHelpers.ContactsAdapter;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.JSONHandler;
-import OtherHandlers.ValuesCollection;
 
 public class ContactsFragment extends ListFragment{
 
@@ -85,8 +83,8 @@ public class ContactsFragment extends ListFragment{
                         registerJSON.put("token", getToken());
 
                         Ion.with(getContext())
-                                .load(ValuesCollection.CONTACT_LIST_URL)
-                                .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                                .load(Constants.CONTACT_LIST_URL)
+                                .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
                                 .asString()
                                 .setCallback(new FutureCallback<String>() {
                                     @Override
@@ -128,7 +126,7 @@ public class ContactsFragment extends ListFragment{
 
                                                 //setting up the amount of contacts for the settings
                                                 try{
-                                                SharedPreferences settings = ContactsFragment.this.getActivity().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+                                                SharedPreferences settings = ContactsFragment.this.getActivity().getSharedPreferences(Constants.SETTINGS_SP, 0);
                                                 SharedPreferences.Editor editor = settings.edit();
 
                                                 editor.putInt("contactsCount", jsonArray.length()).apply();}
@@ -220,8 +218,8 @@ public class ContactsFragment extends ListFragment{
     }
 
     private String getToken() {
-        SharedPreferences credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
-        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+        SharedPreferences credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
         return storedToken;
     }
 

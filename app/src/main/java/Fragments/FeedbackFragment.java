@@ -13,11 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.SupportMapFragment;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -25,9 +23,9 @@ import org.cryptonode.jncryptor.CryptorException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.JSONHandler;
-import OtherHandlers.ValuesCollection;
 import edu.uprm.Sentinel.R;
 
 public class FeedbackFragment extends Fragment {
@@ -129,11 +127,11 @@ public class FeedbackFragment extends Fragment {
                             @Override
                             public void run() {
                                 try {
-                                    String URL = isReportProblem ? ValuesCollection.REPORT_PROBLEM_URL : ValuesCollection.SEND_FEEDBACK_URL;
+                                    String URL = isReportProblem ? Constants.REPORT_PROBLEM_URL : Constants.SEND_FEEDBACK_URL;
 
                                     JSONObject registerJSON = new JSONObject();
                                     registerJSON.put("message", hintView.getText().toString());
-                                    registerJSON.put("os", ValuesCollection.ANDROID_OS_STRING);
+                                    registerJSON.put("os", Constants.ANDROID_OS_STRING);
                                     registerJSON.put("token", getToken());
 
                                     getActivity().runOnUiThread(new Runnable() {
@@ -148,7 +146,7 @@ public class FeedbackFragment extends Fragment {
 
                                     Ion.with(getContext())
                                             .load("PUT", URL)
-                                            .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                                            .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
                                             .asString()
                                             .setCallback(new FutureCallback<String>() {
                                                 @Override
@@ -223,8 +221,8 @@ public class FeedbackFragment extends Fragment {
                             }
 
                             private String getToken() {
-                                SharedPreferences credentials = getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
-                                String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+                                SharedPreferences credentials = getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+                                String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
                                 return storedToken;
                             }
                         };
