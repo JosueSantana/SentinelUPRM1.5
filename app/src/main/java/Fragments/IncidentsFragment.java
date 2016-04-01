@@ -259,130 +259,137 @@ public class IncidentsFragment extends ListFragment {
         mList.setEmptyView(this.getView().findViewById(R.id.noincidentstext));
 
         //runnable of the list filling
-        final Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                final CryptographyHandler crypto;
-                try {
-                    allowRefresh = false;
-                    System.out.println("REFRESH IS NOW FALSE");
-                    crypto = new CryptographyHandler();
+            final Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    final CryptographyHandler crypto;
+                    try {
+                        allowRefresh = false;
+                        System.out.println("REFRESH IS NOW FALSE");
+                        crypto = new CryptographyHandler();
 
-                    JSONObject registerJSON = new JSONObject();
-                    registerJSON.put("token", getToken());
+                        JSONObject registerJSON = new JSONObject();
+                        registerJSON.put("token", getToken());
 
-                    Ion.with(getContext())
-                            .load(ValuesCollection.GET_ALERTS_URL)
-                            .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
-                            .asString()
-                            .setCallback(new FutureCallback<String>() {
-                                @Override
-                                public void onCompleted(Exception e, String receivedJSON) {
-                                    // Successful Request
-                                    if (requestIsSuccessful(e)) {
-                                        JSONObject decryptedValue = getDecryptedValue(receivedJSON);
-                                        //System.out.println(decryptedValue);
-                                        try {
-                                            JSONArray incidents = decryptedValue.getJSONArray("incident");
-                                            numberOfIncidents = incidents.length();
-                                            //System.out.println(incidents);
+                        Ion.with(getContext())
+                                .load(ValuesCollection.GET_ALERTS_URL)
+                                .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                                .asString()
+                                .setCallback(new FutureCallback<String>() {
+                                    @Override
+                                    public void onCompleted(Exception e, String receivedJSON) {
+                                        // Successful Request
+                                        if (requestIsSuccessful(e)) {
+                                            JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+                                            //System.out.println(decryptedValue);
+                                            try {
+                                                JSONArray incidents = decryptedValue.getJSONArray("incident");
+                                                numberOfIncidents = incidents.length();
+                                                //System.out.println(incidents);
 
-                                            for(int i = 0; i < incidents.length(); i++) {
-                                                JSONObject tempJSON = new JSONObject();
-                                                DateHandler date = new DateHandler(incidents.getJSONObject(i).get("created_on").toString());
-                                                tempJSON.put("name", incidents.getJSONObject(i).get("regionFullname"));
-                                                tempJSON.put("date", date.getDisplayDate());
-                                                tempJSON.put("time", date.getDisplayTime());
-                                                tempJSON.put("latitude", incidents.getJSONObject(i).get("latitude"));
-                                                tempJSON.put("longitude", incidents.getJSONObject(i).get("longitude"));
-                                                jsonArray.put(tempJSON);
+                                                for (int i = 0; i < incidents.length(); i++) {
+                                                    JSONObject tempJSON = new JSONObject();
+
+                                                    if(incidents.length() != jsonArray.length() || incidents.length() == 0) {
+                                                        DateHandler date = new DateHandler(incidents.getJSONObject(i).get("created_on").toString());
+                                                        tempJSON.put("name", incidents.getJSONObject(i).get("regionFullname"));
+                                                        tempJSON.put("date", date.getDisplayDate());
+                                                        tempJSON.put("time", date.getDisplayTime());
+                                                        tempJSON.put("latitude", incidents.getJSONObject(i).get("latitude"));
+                                                        tempJSON.put("longitude", incidents.getJSONObject(i).get("longitude"));
+                                                        jsonArray.put(tempJSON);
+                                                    }
+                                                    else if(!jsonArray.getJSONObject(i).get("name").equals(incidents.getJSONObject(i).get("regionFullname"))){
+                                                        System.out.println("JSONARRAY DOESNT EQUAL");
+                                                        jsonArray.put(i, incidents.get(i));
+                                                    }
+                                                }
+
+                                                mList.post(new Runnable() {
+                                                    public void run() {
+                                                        mList.setAdapter(new IncidentsAdapter(jsonArray, getActivity()));
+                                                    }
+                                                });
+
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        spinner.setVisibility(View.GONE);
+                                                        allowRefresh = true;
+                                                    }
+                                                });
+
+                                            } catch (JSONException e1) {
+                                                e1.printStackTrace();
+                                            } catch (ParseException e1) {
+                                                e1.printStackTrace();
                                             }
+                                            // Received Success Message
+                                            if (receivedSuccessMessage(decryptedValue)) {
 
-                                            mList.post(new Runnable() {
-                                                public void run() {
-                                                    mList.setAdapter(new IncidentsAdapter(jsonArray, getActivity()));
-                                                }
-                                            });
-
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    spinner.setVisibility(View.GONE);
-                                                    allowRefresh = true;
-                                                }
-                                            });
-
-                                        } catch (JSONException e1) {
-                                            e1.printStackTrace();
-                                        } catch (ParseException e1) {
-                                            e1.printStackTrace();
+                                            }
+                                            // Message Was Not Successful.
+                                            else {
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        spinner.setVisibility(View.GONE);
+                                                    }
+                                                });
+                                            }
                                         }
-                                        // Received Success Message
-                                        if (receivedSuccessMessage(decryptedValue)) {
-
-                                        }
-                                        // Message Was Not Successful.
+                                        // Errors
                                         else {
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    spinner.setVisibility(View.GONE);
-                                                }
-                                            });
+
                                         }
                                     }
-                                    // Errors
-                                    else {
 
+                                    // Extract Success Message From Received JSON.
+                                    private boolean receivedSuccessMessage(JSONObject decryptedValue) {
+                                        String success = null;
+                                        try {
+                                            success = decryptedValue.getString("success");
+                                            return success.equals("1");
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return false;
                                     }
-                                }
 
-                                // Extract Success Message From Received JSON.
-                                private boolean receivedSuccessMessage(JSONObject decryptedValue) {
-                                    String success = null;
-                                    try {
-                                        success = decryptedValue.getString("success");
-                                        return success.equals("1");
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                    // Verify if there was an Error in the Request.
+                                    private boolean requestIsSuccessful(Exception e) {
+                                        return e == null;
                                     }
-                                    return false;
-                                }
 
-                                // Verify if there was an Error in the Request.
-                                private boolean requestIsSuccessful(Exception e) {
-                                    return e == null;
-                                }
-
-                                // Convert received JSON String into a Decrypted JSON.
-                                private JSONObject getDecryptedValue(String receivedJSONString) {
-                                    try {
-                                        JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                        String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                        String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                        JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                        return decryptedJSON;
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    } catch (CryptorException e) {
-                                        e.printStackTrace();
+                                    // Convert received JSON String into a Decrypted JSON.
+                                    private JSONObject getDecryptedValue(String receivedJSONString) {
+                                        try {
+                                            JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
+                                            String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
+                                            String decryptedStringValue = crypto.decryptString(encryptedStringValue);
+                                            JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
+                                            return decryptedJSON;
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        } catch (CryptorException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return null;
                                     }
-                                    return null;
-                                }
-                            });
+                                });
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (CryptorException e) {
-                    e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (CryptorException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        };
+            };
 
-        if (jsonArray.length() == 0) {
-            Thread mythread = new Thread(r);
-            mythread.start();
-        }
+            //if (jsonArray.length() == 0) {
+                Thread mythread = new Thread(r);
+                mythread.start();
+            //}
 
         //makes sure it doesn't try to refresh the list while the visible list is not at the top
         mList.setOnScrollListener(new AbsListView.OnScrollListener() {
