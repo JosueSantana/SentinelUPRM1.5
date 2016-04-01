@@ -31,11 +31,7 @@ import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DialogCaller;
 import OtherHandlers.JSONHandler;
-<<<<<<< HEAD
 import OtherHandlers.NetworkUtil;
-import OtherHandlers.ValuesCollection;
-=======
->>>>>>> ced9d81ff1ff5bb01419b38aa42c3bc960ff02f1
 
 /**
  * Created by a136803 on 2/3/16.

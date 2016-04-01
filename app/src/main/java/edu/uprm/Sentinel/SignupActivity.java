@@ -45,11 +45,7 @@ import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DialogCaller;
 import OtherHandlers.JSONHandler;
-<<<<<<< HEAD
-import OtherHandlers.ValuesCollection;
 import OtherHandlers.NetworkUtil;
-=======
->>>>>>> ced9d81ff1ff5bb01419b38aa42c3bc960ff02f1
 
 /**
  * This activity handles the inputs for the login menu.
