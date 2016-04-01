@@ -34,9 +34,6 @@
         android:supportsRtl="true"
         android:theme="@style/GrunesLeitmotif">
 
-        <!-- [START gcm_receiver] -->
-
-        <!--
         <receiver
             android:name="edu.uprm.Sentinel.Services.NetworkChangeReceiver"
             android:exported="false"
@@ -79,8 +76,6 @@
             </intent-filter>
         </receiver>
         <service android:name="edu.uprm.Sentinel.Services.GcmMessageHandler" />
-
-
 
         <service
             android:name="edu.uprm.Sentinel.Services.InstanceIDListenerService"

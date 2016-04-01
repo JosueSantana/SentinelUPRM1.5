@@ -1,6 +1,5 @@
 package Fragments;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -12,18 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
-
-import org.cryptonode.jncryptor.CryptorException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import OtherHandlers.CryptographyHandler;
-import OtherHandlers.JSONHandler;
-import OtherHandlers.ValuesCollection;
 import edu.uprm.Sentinel.R;
 
 import java.util.ArrayList;

@@ -9,7 +9,6 @@ import com.google.android.gms.location.LocationListener;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -23,6 +22,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+
+import OtherHandlers.Constants;
 import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -33,7 +34,6 @@ import org.json.JSONObject;
 
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.JSONHandler;
-import OtherHandlers.ValuesCollection;
 
 public class CountdownFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -164,8 +164,8 @@ public class CountdownFragment extends Fragment implements
     }
 
     private String getToken() {
-        SharedPreferences credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
-        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+        SharedPreferences credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
         return storedToken;
     }
 
@@ -185,8 +185,8 @@ public class CountdownFragment extends Fragment implements
                 alertJSON.put("longitude", mLastLocation.getLongitude());
 
                     Ion.with(getContext())
-                            .load(ValuesCollection.SEND_ALERT_URL)
-                            .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(alertJSON))
+                            .load(Constants.SEND_ALERT_URL)
+                            .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(alertJSON))
                             .asString()
                             .setCallback(new FutureCallback<String>() {
                                 @Override

@@ -8,18 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import Fragments.ContactsFragment;
+import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.JSONHandler;
-import OtherHandlers.ValuesCollection;
 import edu.uprm.Sentinel.R;
 
 import org.cryptonode.jncryptor.CryptorException;
@@ -144,8 +141,8 @@ public class ContactsAdapter extends BaseAdapter {
             if(!isDeleting) {
                 isDeleting = true;
                 Ion.with(activity.getApplicationContext())
-                        .load("DELETE", ValuesCollection.DELETE_CONTACT_URL)
-                        .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                        .load("DELETE", Constants.DELETE_CONTACT_URL)
+                        .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
                         .asString()
                         .setCallback(new FutureCallback<String>() {
                             @Override
@@ -162,7 +159,7 @@ public class ContactsAdapter extends BaseAdapter {
                                             spinner.setVisibility(View.GONE);
                                             dataArray.remove(index);
                                             //setting up the amount of contacts for the settings
-                                            SharedPreferences settings = activity.getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+                                            SharedPreferences settings = activity.getSharedPreferences(Constants.SETTINGS_SP, 0);
                                             SharedPreferences.Editor editor = settings.edit();
 
                                             editor.putInt("contactsCount", dataArray.length()).commit();
@@ -228,8 +225,8 @@ public class ContactsAdapter extends BaseAdapter {
     }
 
     private String getToken() {
-        SharedPreferences credentials = this.activity.getApplicationContext().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
-        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+        SharedPreferences credentials = this.activity.getApplicationContext().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
         return storedToken;
     }
 

@@ -9,11 +9,10 @@ import android.os.Bundle;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-import edu.uprm.Sentinel.R;
+
+import OtherHandlers.Constants;
 
 import Fragments.AlertWaitFragment;
-import OtherHandlers.ValuesCollection;
-import edu.uprm.Sentinel.R;
 
 /**
  * This class verifies the user data and checks whether it is the first time accessing the app, if
@@ -25,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences settings = getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+        SharedPreferences settings = getSharedPreferences(Constants.SETTINGS_SP, 0);
         if(settings.getString("appLocale", null) != null) {
             setLocale(settings.getString("appLocale", null));
         }
@@ -33,7 +32,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         //get the credentials
-        SharedPreferences credentials = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        SharedPreferences credentials = getSharedPreferences(Constants.CREDENTIALS_SP, 0);
 
         checkSession(credentials);
     }
@@ -47,7 +46,7 @@ public class SplashActivity extends AppCompatActivity {
 
             if (credentials.contains("alertDisabled") && credentials.getBoolean("alertDisabled", false)) {
                 long alertTime = credentials.getLong("alertTime", 0);
-                if (TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - alertTime) < ValuesCollection.TIMER_PERIOD) {
+                if (TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - alertTime) < Constants.TIMER_PERIOD) {
                     getSupportFragmentManager().beginTransaction().add(R.id.splashRelative, new AlertWaitFragment()).commit();
                 } else {
                     editor.putLong("alertTime", 0);
@@ -67,7 +66,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         }
         else{
-            if(credentials.contains("atSignup") && credentials.contains(ValuesCollection.EMAIL_KEY)) {
+            if(credentials.contains("atSignup") && credentials.contains(Constants.EMAIL_KEY)) {
                 //go directly to alert view
                 Intent mainIntent = new Intent(SplashActivity.this, VerificationActivity.class);
                 startActivity(mainIntent);

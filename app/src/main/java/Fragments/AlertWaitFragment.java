@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import OtherHandlers.Constants;
 import edu.uprm.Sentinel.MainActivity;
 import edu.uprm.Sentinel.R;
 
@@ -19,7 +20,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import OtherHandlers.ValuesCollection;
 import edu.uprm.Sentinel.SplashActivity;
 
 /**
@@ -45,14 +45,14 @@ public class AlertWaitFragment extends Fragment {
                     @Override
                     public void run() {
                         System.out.println("IN RUNNABLE!!");
-                        if (TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - credentials.getLong("alertTime", 0)) < ValuesCollection.TIMER_PERIOD) {
-                            String minutesToAlert = String.valueOf(ValuesCollection.TIMER_PERIOD - TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - credentials.getLong("alertTime", 0)));
+                        if (TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - credentials.getLong("alertTime", 0)) < Constants.TIMER_PERIOD) {
+                            String minutesToAlert = String.valueOf(Constants.TIMER_PERIOD - TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - credentials.getLong("alertTime", 0)));
                             String text = String.format(getResources().getString(R.string.bottomlabelalerted), minutesToAlert);
                             timeCount.setText(text);
                         }
                     }
                 });
-                if (!(TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - credentials.getLong("alertTime", 0)) < ValuesCollection.TIMER_PERIOD)) {
+                if (!(TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - credentials.getLong("alertTime", 0)) < Constants.TIMER_PERIOD)) {
                     editor = credentials.edit();
                     editor.putLong("alertTime", 0);
                     editor.putBoolean("alertDisabled", false);
@@ -96,7 +96,7 @@ public class AlertWaitFragment extends Fragment {
 
         System.out.println("CALLING ONACTIVITYCREATED");
         //get reference to credentials
-        credentials = getContext().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        credentials = getContext().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
         editor = credentials.edit();
 
         //get reference to bottom label object
@@ -107,7 +107,7 @@ public class AlertWaitFragment extends Fragment {
             long currentTime = System.currentTimeMillis();
 
             //set the string's timer to the timer period
-            String text = String.format(getResources().getString(R.string.bottomlabelalerted), String.valueOf(ValuesCollection.TIMER_PERIOD));
+            String text = String.format(getResources().getString(R.string.bottomlabelalerted), String.valueOf(Constants.TIMER_PERIOD));
             timeCount.setText(text);
 
             //put the timer-related variables in credentials
@@ -117,7 +117,7 @@ public class AlertWaitFragment extends Fragment {
         else{
 
             //get the time difference until ready
-            String minutesToAlert = String.valueOf(ValuesCollection.TIMER_PERIOD - TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - credentials.getLong("alertTime", 0)));
+            String minutesToAlert = String.valueOf(Constants.TIMER_PERIOD - TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - credentials.getLong("alertTime", 0)));
 
             String text = String.format(getResources().getString(R.string.bottomlabelalerted), minutesToAlert);
             timeCount.setText(text);
@@ -141,7 +141,7 @@ public class AlertWaitFragment extends Fragment {
         System.out.println("CALLING ONRESUME");
 
         //get the time difference until ready
-        String minutesToAlert = String.valueOf(ValuesCollection.TIMER_PERIOD - TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - credentials.getLong("alertTime", 0)));
+        String minutesToAlert = String.valueOf(Constants.TIMER_PERIOD - TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis() - credentials.getLong("alertTime", 0)));
 
         String text = String.format(getResources().getString(R.string.bottomlabelalerted), minutesToAlert);
         timeCount.setText(text);

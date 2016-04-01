@@ -27,11 +27,15 @@ import org.json.JSONObject;
 import Fragments.EmergencyFragment;
 import Fragments.IntentDialogFragment;
 import Fragments.SimpleDialogFragment;
+import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DialogCaller;
 import OtherHandlers.JSONHandler;
+<<<<<<< HEAD
 import OtherHandlers.NetworkUtil;
 import OtherHandlers.ValuesCollection;
+=======
+>>>>>>> ced9d81ff1ff5bb01419b38aa42c3bc960ff02f1
 
 /**
  * Created by a136803 on 2/3/16.
@@ -58,7 +62,7 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
         spinner = (ProgressBar) findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
 
-        credentials = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        credentials = getSharedPreferences(Constants.CREDENTIALS_SP, 0);
         credentialsEditor = credentials.edit();
 
         // Create listener for Alert Button
@@ -132,7 +136,6 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
         });
     }
 
-
     private void showVerificationError(int titleID, int messageID) {
         //prepare strings to pass to Fragment through Bundle
         Bundle bundle = new Bundle();
@@ -196,12 +199,12 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
         else {
 
             /*
-            SharedPreferences credentials = getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+            SharedPreferences credentials = getSharedPreferences(Constants.CREDENTIALS_SP, 0);
             SharedPreferences.Editor editor = credentials.edit();
              */
 
             final CryptographyHandler crypto = new CryptographyHandler();
-            String emailAddress = credentials.getString(ValuesCollection.EMAIL_KEY, null);
+            String emailAddress = credentials.getString(Constants.EMAIL_KEY, null);
 
             final JSONObject verificationJSON = new JSONObject();
             verificationJSON.put("email", emailAddress);
@@ -213,8 +216,8 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                 public void run() {
                     try {
                         Ion.with(getBaseContext())
-                                .load(ValuesCollection.PASSCODE_VALIDATION_URL)
-                                .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(verificationJSON))
+                                .load(Constants.PASSCODE_VALIDATION_URL)
+                                .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(verificationJSON))
                                 .asString()
                                 .setCallback(new FutureCallback<String>() {
 
@@ -273,7 +276,7 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
 
                                     // Store Token.
                                     private void storeToken(String token) {
-                                        credentialsEditor.putString(ValuesCollection.TOKEN_KEY, token);
+                                        credentialsEditor.putString(Constants.TOKEN_KEY, token);
                                         credentialsEditor.commit();
                                     }
 
@@ -330,36 +333,6 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                         }
                                         return null;
                                     }
-
-                            /*
-                            @Override
-                            public void onCompleted(Exception e, String result) {
-                                System.out.println(result);
-                                try {
-                                    JSONObject receivedSentinelMessage = JSONHandler.convertStringToJSON(result);
-                                    String encryptedJSONReceived = receivedSentinelMessage.getString(ValuesCollection.SENTINEL_MESSAGE_KEY);
-                                    String decryptedJSONReceived = crypto.decryptString(encryptedJSONReceived);
-
-                                    JSONObject receivedJSON = JSONHandler.convertStringToJSON(decryptedJSONReceived);
-
-                                    // If successfully registered and user received the Token from the Server.
-                                    if(receivedJSON.getString("success").equals("1")) {
-                                        // Store token in Shared Preferences.
-                                        String token = receivedJSON.getString("token");
-                                        credentialsEditor.putString(ValuesCollection.TOKEN_KEY,token);
-                                        credentialsEditor.commit();
-                                    } else if (receivedJSON.getString("success").equals("2")) { // Wrong token inputted
-
-                                    } else {
-
-                                    }
-                                } catch (JSONException e1) {
-                                    e1.printStackTrace();
-                                } catch (CryptorException e1) {
-                                    e1.printStackTrace();
-                                }
-                            }
-                            */
                                 });
                     } catch (CryptorException e) {
                         e.printStackTrace();
@@ -376,7 +349,7 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
     public void doPositiveClick(Bundle bundle) {
         System.out.println("DOING POSITIVE CLICK");
 
-        credentialsEditor.remove(ValuesCollection.EMAIL_KEY).commit();
+        credentialsEditor.remove(Constants.EMAIL_KEY).commit();
         final Intent veriIntent = new Intent(VerificationActivity.this, SignupActivity.class);
         veriIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(veriIntent);

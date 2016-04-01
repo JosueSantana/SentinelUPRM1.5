@@ -1,9 +1,6 @@
 package Fragments;
 
 import android.support.v4.app.FragmentManager;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View.OnClickListener;
 import android.content.SharedPreferences;
 
@@ -18,6 +15,7 @@ import android.widget.Switch;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import OtherHandlers.Constants;
 import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -28,7 +26,6 @@ import org.json.JSONObject;
 
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.JSONHandler;
-import OtherHandlers.ValuesCollection;
 
 /**
  * This fragment manages the toggles in the settings.
@@ -72,15 +69,15 @@ public class SettingsFragment extends Fragment {
 
 
         fm = getActivity().getSupportFragmentManager();
-        credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
-        settings = this.getActivity().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+        credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        settings = this.getActivity().getSharedPreferences(Constants.SETTINGS_SP, 0);
 
         //get reference to row objects
         contactsRow = (TableRow) getView().findViewById(R.id.contactsrow);
 
         //set the contacts count
         TextView contactsText = (TextView) contactsRow.getChildAt(1);
-        settings = this.getActivity().getSharedPreferences(ValuesCollection.SETTINGS_SP, 0);
+        settings = this.getActivity().getSharedPreferences(Constants.SETTINGS_SP, 0);
         String text;
 
         if(settings.contains("contactsCount"))
@@ -146,8 +143,8 @@ public class SettingsFragment extends Fragment {
     }
 
     private String getToken() {
-        credentials = this.getActivity().getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
-        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+        credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
         return storedToken;
     }
 
@@ -199,13 +196,13 @@ public class SettingsFragment extends Fragment {
         String values = "";
 
         switch (setting) {
-            case "mail": values =  ValuesCollection.EMAIL_KEY;
+            case "mail": values =  Constants.EMAIL_KEY;
                 break;
-            case "push": values =  ValuesCollection.PUSH_KEY;
+            case "push": values =  Constants.PUSH_KEY;
                 break;
-            case "sms": values =  ValuesCollection.SMS_KEY;
+            case "sms": values =  Constants.SMS_KEY;
                 break;
-            case "family":  values = ValuesCollection.FAMILY_KEY;
+            case "family":  values = Constants.FAMILY_KEY;
                 break;
         }
 
@@ -224,8 +221,8 @@ public class SettingsFragment extends Fragment {
                     registerJSON.put("token", getToken());
                     registerJSON.put(valuesFinal, settings.getBoolean(name, false));
                     Ion.with(getContext())
-                            .load(ValuesCollection.SETTINGS_URL)
-                            .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                            .load(Constants.SETTINGS_URL)
+                            .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
                             .asString()
                             .setCallback(new FutureCallback<String>() {
                                 @Override
