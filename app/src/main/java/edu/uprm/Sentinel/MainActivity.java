@@ -13,8 +13,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.widget.TextView;
 
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
+import org.cryptonode.jncryptor.CryptorException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+
 import Fragments.FeedbackFragment;
+import ListViewHelpers.IncidentsAdapter;
+import OtherHandlers.CryptographyHandler;
+import OtherHandlers.DateHandler;
 import OtherHandlers.DialogCaller;
+import OtherHandlers.JSONHandler;
 import OtherHandlers.ValuesCollection;
 import edu.uprm.Sentinel.R;
 
@@ -67,15 +81,100 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
             getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0).edit().clear().commit();
             getSharedPreferences(ValuesCollection.SETTINGS_SP, 0).edit().clear().commit();
 
+
+            final Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    final CryptographyHandler crypto;
+                    try {
+                        crypto = new CryptographyHandler();
+
+                        JSONObject registerJSON = new JSONObject();
+                        registerJSON.put("token", getToken());
+
+                        Ion.with(getApplicationContext())
+                                .load(ValuesCollection.UNSUBSCRIBE_URL)
+                                .setBodyParameter(ValuesCollection.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                                .asString()
+                                .setCallback(new FutureCallback<String>() {
+                                    @Override
+                                    public void onCompleted(Exception e, String receivedJSON) {
+                                        // Successful Request
+                                        if (requestIsSuccessful(e)) {
+                                            JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+
+                                            // Received Success Message
+                                            if (receivedSuccess1Message(decryptedValue)) {
+
+                                            }
+                                            // Message Was Not Successful.
+                                            else {
+
+                                            }
+                                        }
+                                        // Errors
+                                        else {
+
+                                        }
+                                    }
+
+                                    // Extract Success Message From Received JSON.
+                                    private boolean receivedSuccess1Message(JSONObject decryptedValue) {
+                                        String success = null;
+                                        try {
+                                            success = decryptedValue.getString("success");
+                                            return success.equals("1");
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return false;
+                                    }
+
+                                    // Verify if there was an Error in the Request.
+                                    private boolean requestIsSuccessful(Exception e) {
+                                        return e == null;
+                                    }
+
+                                    // Convert received JSON String into a Decrypted JSON.
+                                    private JSONObject getDecryptedValue(String receivedJSONString) {
+                                        try {
+                                            JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
+                                            String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
+                                            String decryptedStringValue = crypto.decryptString(encryptedStringValue);
+                                            JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
+                                            return decryptedJSON;
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        } catch (CryptorException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return null;
+                                    }
+                                });
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (CryptorException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            new Thread(r).start();
+
             startActivity(unsubscribeIntent);
             finish();
-
         }
     }
 
     @Override
     public void doNegativeClick(Bundle bundle) {
 
+    }
+
+    private String getToken() {
+        SharedPreferences credentials = this.getSharedPreferences(ValuesCollection.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(ValuesCollection.TOKEN_KEY, null);
+        return storedToken;
     }
 
     @Override
