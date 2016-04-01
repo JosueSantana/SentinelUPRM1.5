@@ -1,11 +1,7 @@
 package OtherHandlers;
 
-import android.os.Bundle;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Set;
 
 /**
  * Created by jeanmendez on 2/13/16.

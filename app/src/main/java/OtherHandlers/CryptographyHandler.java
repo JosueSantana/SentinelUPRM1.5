@@ -2,7 +2,6 @@ package OtherHandlers;
 import android.util.Base64;
 import org.cryptonode.jncryptor.AES256JNCryptor;
 import org.cryptonode.jncryptor.CryptorException;
-import org.cryptonode.jncryptor.InvalidHMACException;
 import org.cryptonode.jncryptor.JNCryptor;
 import org.json.JSONException;
 import org.json.JSONObject;

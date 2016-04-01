@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
 import OtherHandlers.DialogCaller;
-import edu.uprm.Sentinel.R;
 
 /**
  * Created by a136803 on 2/12/16.
