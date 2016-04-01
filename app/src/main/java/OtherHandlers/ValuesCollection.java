@@ -28,6 +28,9 @@ public class ValuesCollection {
     public static final String REPORT_PROBLEM_URL = INITIAL_URL + "8679df6f1ae36d9395/report/c525b9ff1ae36d9395/problem";
     public static final String SEND_FEEDBACK_URL = INITIAL_URL + "1ea13556cc62590a90/report/8679df6f1ae36d9395/feedback";
 
+    // Unsubscribe
+    public static final String UNSUBSCRIBE_URL = INITIAL_URL + "db3aa951749409372/user/ee50ada0acefb7ac89b/unsubscribe";
+
     /*
     public static final String SEND_INCIDENT_URL = INITIAL_URL + "incident/31923faa-340c-4707-8c93-df528e65aa41/incident-request/7c0d78d4-4b78-4ee2-9e8e-4b4d6988a855";
 
@@ -59,7 +62,7 @@ public class ValuesCollection {
 
     public static final long TIMER_PERIOD = 0;
 
-    public static final String ANDROID_SENDER_ID = "6008874123";
+    public static final String ANDROID_SENDER_ID = "682306700573";
 }
 
 /*
@@ -78,4 +81,6 @@ public class ValuesCollection {
     static let contactEdit = ["route": "/47abedc1a15c9f73/contact/98aee6f6fbbbf06133/edit", "type": "POST"]
 
     static let contactDelete = ["route": "/580b3b11e4e7bffd/contact/133757f42b99c7903/delete", "type": "DELETE"]
+
+    static let unSubscribe = ["route": "/db3aa951749409372/user/ee50ada0acefb7ac89b/unsubscribe", "type": "POST"
  */

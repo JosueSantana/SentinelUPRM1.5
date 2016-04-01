@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 
 import android.view.View;
@@ -23,6 +24,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.koushikdutta.async.future.FutureCallback;
@@ -65,7 +72,13 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
     InstanceID instanceID;
     String token;
     private ProgressBar spinner;
+    String regid;
 
+    // THIS ONE WORKS:
+    //String PROJECT_NUMBER = "797012049317";
+
+    // SENTINEL TEST NUMBER:
+    String PROJECT_NUMBER = "682306700573";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +96,6 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
 
         //fix orientation on Portrait
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
 
         // Create listener for Alert Button
         phoneButton = (ImageButton) findViewById(R.id.phoneOnSignup);
@@ -234,10 +246,14 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                     registerJSON.put("phone", phone);
                     registerJSON.put("os", ValuesCollection.ANDROID_OS_STRING);
                     registerJSON.put("deviceID", token);
+                    //registerJSON.put("deviceID", regid);
+
+                    System.out.println("GCM TOKEN IS: " + regid);
 
                     final SharedPreferences.Editor credentialsEditor = credentials.edit();
 
-                    credentialsEditor.putString(ValuesCollection.ANDROID_SENDER_ID, token);
+                    //credentialsEditor.putString(ValuesCollection.ANDROID_SENDER_ID, token);
+                    credentialsEditor.putString(ValuesCollection.ANDROID_SENDER_ID, regid);
                     credentialsEditor.commit();
                     Ion.with(getBaseContext())
                             .load(ValuesCollection.REGISTER_URL)
@@ -321,10 +337,42 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                     }
                 }
             };
-
             new Thread(r).start();
 
 
+            /*
+            Runnable r = new Runnable(){
+                @Override
+                public void run() {
+                    RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+
+                    JSONObject json = new JSONObject();
+                    try {
+                        //json.put("token", regid);
+                        json.put("token", token);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    JsonObjectRequest jsonPOST = new JsonObjectRequest
+                            (Request.Method.POST, "https://gcmexamplesentinel.herokuapp.com/", json, new Response.Listener() {
+
+                                public void onResponse(JSONObject response) {
+                                }
+                                @Override
+                                public void onResponse(Object response) {
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    // TODO Auto-generated method stub
+                                }
+                            });
+                    queue.add(jsonPOST);
+                }
+            };
+            new Thread(r).start();
+            */
         }
     }
 
@@ -349,6 +397,32 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
     /*
         Get the Instance ID From Google.
      */
+    /*
+    public void getRegId(){
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg = "";
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+                    }
+                    regid = gcm.register(PROJECT_NUMBER);
+                    msg = "Device registered, registration ID=" + regid;
+                    Log.i("GCM",  msg);
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                }
+                return msg;
+            }
+            @Override
+            protected void onPostExecute(String msg) {
+                //etRegId.setText(msg + "\n");
+            }
+        }.execute(null, null, null);
+    }
+    */
+
     public void getRegId() {
         new AsyncTask<Void, Void, String>() {
             @Override
@@ -356,7 +430,7 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                 String msg = "";
                 instanceID = InstanceID.getInstance(getApplicationContext());
                 try {
-                    String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                    String token = instanceID.getToken(PROJECT_NUMBER, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
                     return token;
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -371,6 +445,7 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
             }
         }.execute(null, null, null);
     }
+
 
     @Override
     public void doPositiveClick(Bundle bundle) {
