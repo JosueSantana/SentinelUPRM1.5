@@ -44,6 +44,7 @@
             </intent-filter>
         </receiver>
 
+        <!--
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
@@ -54,6 +55,7 @@
             </intent-filter>
         </receiver>
         -->
+
         <!-- [END gcm_receiver] -->
 
         <!-- Declare these services and uncomment them below: -->

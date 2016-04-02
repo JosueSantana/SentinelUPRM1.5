@@ -241,13 +241,12 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                     registerJSON.put("deviceID", token);
                     //registerJSON.put("deviceID", regid);
 
+                        /*
                     System.out.println("GCM TOKEN IS: " + regid);
-
                     final SharedPreferences.Editor credentialsEditor = credentials.edit();
-
-                    //credentialsEditor.putString(Constants.ANDROID_SENDER_ID, token);
-                    credentialsEditor.putString(Constants.ANDROID_SENDER_ID, regid);
                     credentialsEditor.commit();
+                    */
+
                     Ion.with(getBaseContext())
                             .load(Constants.REGISTER_URL)
                             .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
@@ -263,9 +262,10 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                                         // Received Success Message
                                         if (receivedSuccessMessage(decryptedValue)) {
                                             SharedPreferences credentials = getSharedPreferences(Constants.CREDENTIALS_SP, 0);
-                                            SharedPreferences.Editor emailEditor = credentials.edit();
-                                            emailEditor.putString(Constants.EMAIL_KEY, email);
-                                            emailEditor.commit();
+                                            SharedPreferences.Editor credentialsEditor = credentials.edit();
+                                            credentialsEditor.putString(Constants.EMAIL_KEY, email);
+                                            credentialsEditor.putString(Constants.TOKEN_KEY, token);
+                                            credentialsEditor.commit();
 
                                             runOnUiThread(new Runnable() {
                                                 @Override
@@ -279,14 +279,12 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
 
                                         // Message Was Not Successful.
                                         else {
-
+                                            System.out.println("got here");
                                         }
-
-
                                     }
                                     // Errors
                                     else {
-
+                                        System.out.println("got here lol");
                                     }
                                 }
 
