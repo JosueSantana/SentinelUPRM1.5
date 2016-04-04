@@ -27,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import OtherHandlers.CryptographyHandler;
-import OtherHandlers.JSONHandler;
 import edu.uprm.Sentinel.SplashActivity;
 
 /**

@@ -2,7 +2,6 @@ package Fragments;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 
@@ -210,8 +209,7 @@ public class CountdownFragment extends Fragment implements
                                                 System.out.println("received:" + receivedJSON);
 
                                                 try {
-                                                    if(receivedJSON.getString("success").equals("3"))
-                                                    {
+                                                    if(receivedJSON.getString("success").equals("3"))  {
                                                         buttonPressed = true;
                                                         Toast.makeText(CountdownFragment.this.getActivity(), R.string.alertnoinlocationmessage, Toast.LENGTH_SHORT).show();
                                                         getActivity().getSupportFragmentManager().popBackStackImmediate();
@@ -224,6 +222,10 @@ public class CountdownFragment extends Fragment implements
                                                     }
                                                     else if(receivedJSON.getString("success").equals("1")){
                                                         getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).remove(CountdownFragment.this).replace(R.id.mainLayout, new AlertWaitFragment()).commit();
+                                                    }
+                                                    else if(HttpHelper.receivedSuccess4Message(receivedJSON)) {
+                                                        Toast.makeText(CountdownFragment.this.getActivity(), "Please Wait 30 Minutes Between Reporting Incidents", Toast.LENGTH_SHORT).show();
+                                                        getActivity().getSupportFragmentManager().popBackStackImmediate();
                                                     }
                                                 } catch (JSONException e1) {
                                                     e1.printStackTrace();

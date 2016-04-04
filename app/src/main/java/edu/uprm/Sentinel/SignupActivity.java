@@ -45,7 +45,6 @@ import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DialogCaller;
 import OtherHandlers.HttpHelper;
-import OtherHandlers.JSONHandler;
 import OtherHandlers.NetworkUtil;
 
 /**

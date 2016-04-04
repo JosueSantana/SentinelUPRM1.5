@@ -27,7 +27,6 @@ import org.json.JSONObject;
 import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.HttpHelper;
-import OtherHandlers.JSONHandler;
 import edu.uprm.Sentinel.R;
 import edu.uprm.Sentinel.SplashActivity;
 

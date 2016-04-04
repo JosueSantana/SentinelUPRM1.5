@@ -1,7 +1,6 @@
 package Fragments;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,7 +35,6 @@ import java.text.ParseException;
 import ListViewHelpers.IncidentsAdapter;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DateHandler;
-import OtherHandlers.JSONHandler;
 import edu.uprm.Sentinel.SplashActivity;
 
 /**
