@@ -1,5 +1,6 @@
 package Fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.ListFragment;
 import android.database.Cursor;
@@ -16,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import OtherHandlers.Constants;
+import OtherHandlers.HttpHelper;
 import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -31,6 +33,7 @@ import java.util.regex.Pattern;
 import ListViewHelpers.PhonebookAdapter;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.JSONHandler;
+import edu.uprm.Sentinel.SplashActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -151,6 +154,14 @@ public class PhonebookFragment extends ListFragment{
                                         System.out.println(decryptedValue);
 
                                         // Successful Request
+
+                                        if(HttpHelper.receivedSuccess2Message(decryptedValue)){
+                                            Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
+                                            splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
+                                            startActivity(splashIntent);
+                                        }
+
+
                                 /*
                                 if (requestIsSuccessful(e)) {
                                     JSONObject decryptedValue = getDecryptedValue(receivedJSON);

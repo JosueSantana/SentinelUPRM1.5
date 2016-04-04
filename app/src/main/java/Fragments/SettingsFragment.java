@@ -1,5 +1,6 @@
 package Fragments;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.view.View.OnClickListener;
 import android.content.SharedPreferences;
@@ -16,6 +17,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import OtherHandlers.Constants;
+import OtherHandlers.HttpHelper;
 import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -26,6 +28,7 @@ import org.json.JSONObject;
 
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.JSONHandler;
+import edu.uprm.Sentinel.SplashActivity;
 
 /**
  * This fragment manages the toggles in the settings.
@@ -227,8 +230,9 @@ public class SettingsFragment extends Fragment {
                             .setCallback(new FutureCallback<String>() {
                                 @Override
                                 public void onCompleted(Exception e, String receivedJSON) {
+                                    JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
                                     // Successful Request
-                                    if (requestIsSuccessful(e)) {
+                                    if (HttpHelper.requestIsSuccessful(e)) {
 
                                         //JSONObject decryptedValue = getDecryptedValue(receivedJSON);
                                         //System.out.println(decryptedValue);
@@ -247,6 +251,11 @@ public class SettingsFragment extends Fragment {
                                             Toast toast = Toast.makeText(context, text, duration);
                                             toast.show();*/
                                     }
+                                    else if(HttpHelper.receivedSuccess2Message(decryptedValue)){
+                                        Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
+                                        splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
+                                        startActivity(splashIntent);
+                                    }
                                     // Errors
                                     else {
 
@@ -254,6 +263,7 @@ public class SettingsFragment extends Fragment {
                                 }
 
                                 // Extract Success Message From Received JSON.
+                                /*)
                                 private boolean receivedSuccessMessage(JSONObject decryptedValue) {
                                     String success = null;
                                     try {
@@ -289,6 +299,7 @@ public class SettingsFragment extends Fragment {
                                     }
                                     return null;
                                 }
+                                */
                             });
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -1,6 +1,7 @@
 package Fragments;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -24,6 +25,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import OtherHandlers.Constants;
+import OtherHandlers.HttpHelper;
 import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -34,6 +36,7 @@ import org.json.JSONObject;
 
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.JSONHandler;
+import edu.uprm.Sentinel.SplashActivity;
 
 public class CountdownFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -163,11 +166,13 @@ public class CountdownFragment extends Fragment implements
 
     }
 
+    /*
     private String getToken() {
         SharedPreferences credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
         String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
         return storedToken;
     }
+    */
 
     private void sendAlert() throws JSONException, CryptorException {
 
@@ -180,7 +185,7 @@ public class CountdownFragment extends Fragment implements
 
 
                 try {
-                alertJSON.put("token", getToken());
+                alertJSON.put("token", Constants.getToken(getContext()));
                 alertJSON.put("latitude", mLastLocation.getLatitude());
                 alertJSON.put("longitude", mLastLocation.getLongitude());
 
@@ -195,7 +200,7 @@ public class CountdownFragment extends Fragment implements
                                     try {
                                         JSONObject receivedSentinelMessage = JSONHandler.convertStringToJSON(result);
                                         String encryptedJSONReceived = JSONHandler.getSentinelMessage(receivedSentinelMessage);
-                                        String decryptedJSONReceived = crypto.decryptString(encryptedJSONReceived);
+                                        final String decryptedJSONReceived = crypto.decryptString(encryptedJSONReceived);
 
                                         final JSONObject receivedJSON = JSONHandler.convertStringToJSON(decryptedJSONReceived);
 
@@ -211,6 +216,11 @@ public class CountdownFragment extends Fragment implements
                                                         Toast.makeText(CountdownFragment.this.getActivity(), R.string.alertnoinlocationmessage, Toast.LENGTH_SHORT).show();
                                                         getActivity().getSupportFragmentManager().popBackStackImmediate();
 
+                                                    }
+                                                    else if(HttpHelper.receivedSuccess2Message(receivedJSON)){
+                                                        Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
+                                                        splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
+                                                        startActivity(splashIntent);
                                                     }
                                                     else if(receivedJSON.getString("success").equals("1")){
                                                         getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).remove(CountdownFragment.this).replace(R.id.mainLayout, new AlertWaitFragment()).commit();

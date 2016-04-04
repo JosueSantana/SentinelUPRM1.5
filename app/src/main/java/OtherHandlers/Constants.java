@@ -1,5 +1,8 @@
 package OtherHandlers;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 /**
  * Created by a136803 on 1/8/16.
  */
@@ -34,7 +37,6 @@ public class Constants {
     // Unsubscribe
     public static final String UNSUBSCRIBE_URL = INITIAL_URL + "db3aa951749409372/user/ee50ada0acefb7ac89b/unsubscribe";
 
-
     /**
      * Other Constants:
      */
@@ -54,4 +56,13 @@ public class Constants {
     public static final String ANDROID_OS_STRING = "android";
     public static final long TIMER_PERIOD = 0;
     public static final String ANDROID_SENDER_ID = "682306700573";
+
+    /**
+     * Get Token
+     */
+    public static String getToken(Context context) {
+        SharedPreferences credentials = context.getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
+        return storedToken;
+    }
 }

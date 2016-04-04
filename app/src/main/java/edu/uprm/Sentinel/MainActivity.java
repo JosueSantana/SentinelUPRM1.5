@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.widget.TextView;
 
 import com.koushikdutta.async.future.FutureCallback;
@@ -95,9 +94,7 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
                                             JSONObject decryptedValue = getDecryptedValue(receivedJSON);
 
                                             // Received Success Message
-                                            if (receivedSuccess1Message(decryptedValue)) {
-
-                                            }
+                                            if (receivedSuccess1Message(decryptedValue)) {}
                                             // Message Was Not Successful.
                                             else {
 

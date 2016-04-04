@@ -171,7 +171,6 @@ public class ReportFragment extends Fragment implements
         //begin attempting updates
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
-
     }
 
     protected void stopLocationUpdates() {

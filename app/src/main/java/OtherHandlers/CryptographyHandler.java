@@ -46,4 +46,19 @@ public final class CryptographyHandler {
         byte[] decryptedMessageArray = this.cryptor.decryptData(Base64.decode(json, 0), SENTINEL_ENCRYPTION_KEY.toCharArray());
         return new String(decryptedMessageArray, StandardCharsets.UTF_8);
     }
+
+    public JSONObject getDecryptedValue(String receivedJSONString) {
+        try {
+            JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
+            String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
+            String decryptedStringValue = this.decryptString(encryptedStringValue);
+            JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
+            return decryptedJSON;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (CryptorException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -30,6 +30,7 @@ import Fragments.SimpleDialogFragment;
 import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DialogCaller;
+import OtherHandlers.HttpHelper;
 import OtherHandlers.JSONHandler;
 import OtherHandlers.NetworkUtil;
 
@@ -220,11 +221,11 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                     @Override
                                     public void onCompleted(Exception e, String receivedJSON) {
                                         // Successful Request
-                                        if (requestIsSuccessful(e)) {
-                                            JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+                                        if (HttpHelper.requestIsSuccessful(e)) {
+                                            JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
 
                                             // Received Success Message
-                                            if (receivedSuccessMessage(decryptedValue)) {
+                                            if (HttpHelper.receivedSuccessMessage(decryptedValue)) {
                                                 // Store token in Shared Preferences.
                                                 String token = getToken(decryptedValue);
                                                 storeToken(token);
@@ -237,7 +238,7 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                                         finish();
                                                     }
                                                 });
-                                            } else if(userEntersIncorrectPasscode(decryptedValue)){
+                                            } else if(HttpHelper.receivedSuccessMessage(decryptedValue)){
                                                 Context context = getApplicationContext();
                                                 CharSequence text = "Inputted Passcode is Incorrect";
 
@@ -258,7 +259,14 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                         else {}
                                     }
 
+                                    // Store Token.
+                                    private void storeToken(String token) {
+                                        credentialsEditor.putString(Constants.TOKEN_KEY, token);
+                                        credentialsEditor.commit();
+                                    }
+
                                     // User Enters Incorrect Passcode (success:2).
+                                    /*
                                     private boolean userEntersIncorrectPasscode(JSONObject decryptedValue) {
                                         String success = null;
                                         try {
@@ -269,12 +277,7 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                         }
                                         return false;
                                     }
-
-                                    // Store Token.
-                                    private void storeToken(String token) {
-                                        credentialsEditor.putString(Constants.TOKEN_KEY, token);
-                                        credentialsEditor.commit();
-                                    }
+                                    */
 
                                     // Extract Token from JSON.
                                     private String getToken(JSONObject decryptedValue) {
@@ -286,10 +289,17 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                         return null;
                                     }
 
+
                                     private void startMainActivity() {
                                         Intent veriIntent = new Intent(VerificationActivity.this, MainActivity.class);
                                         veriIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                         startActivity(veriIntent);
+                                    }
+
+                                    private void startSplashActivity() {
+                                        Intent splashIntent = new Intent(VerificationActivity.this, SplashActivity.class);
+                                        splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
+                                        startActivity(splashIntent);
                                     }
 
                                     //
@@ -298,6 +308,7 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                     }
 
                                     // Extract Success Message From Received JSON.
+                                    /*
                                     private boolean receivedSuccessMessage(JSONObject decryptedValue) {
                                         String success = null;
                                         try {
@@ -314,6 +325,7 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                         return e == null;
                                     }
 
+
                                     // Convert received JSON String into a Decrypted JSON.
                                     private JSONObject getDecryptedValue(String receivedJSONString) {
                                         try {
@@ -329,6 +341,7 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                         }
                                         return null;
                                     }
+                                    */
                                 });
                     } catch (CryptorException e) {
                         e.printStackTrace();

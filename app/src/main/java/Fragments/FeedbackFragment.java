@@ -1,6 +1,7 @@
 package Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,8 +26,10 @@ import org.json.JSONObject;
 
 import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
+import OtherHandlers.HttpHelper;
 import OtherHandlers.JSONHandler;
 import edu.uprm.Sentinel.R;
+import edu.uprm.Sentinel.SplashActivity;
 
 public class FeedbackFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -152,12 +155,12 @@ public class FeedbackFragment extends Fragment {
                                                 @Override
                                                 public void onCompleted(Exception e, String receivedJSON) {
                                                     // Successful Request
-                                                    if (requestIsSuccessful(e)) {
-                                                        JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+                                                    if (HttpHelper.requestIsSuccessful(e)) {
+                                                        JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
                                                         System.out.println(decryptedValue);
 
                                                         // Received Success Message
-                                                        if (receivedSuccessMessage(decryptedValue)) {
+                                                        if (HttpHelper.receivedSuccessMessage(decryptedValue)) {
                                                             getActivity().runOnUiThread(new Runnable() {
                                                                 @Override
                                                                 public void run() {
@@ -167,6 +170,12 @@ public class FeedbackFragment extends Fragment {
                                                                 }
                                                             });
                                                             FeedbackFragment.this.getActivity().getSupportFragmentManager().popBackStackImmediate();
+                                                        }
+
+                                                        if(HttpHelper.receivedSuccess2Message(decryptedValue)){
+                                                            Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
+                                                            splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
+                                                            startActivity(splashIntent);
                                                         }
 
                                                         // Message Was Not Successful.
@@ -181,6 +190,7 @@ public class FeedbackFragment extends Fragment {
                                                 }
 
                                                 // Extract Success Message From Received JSON.
+                                                /*
                                                 private boolean receivedSuccessMessage(JSONObject decryptedValue) {
                                                     String success = null;
                                                     try {
@@ -212,6 +222,8 @@ public class FeedbackFragment extends Fragment {
                                                     }
                                                     return null;
                                                 }
+                                                */
+
                                             });
                                 } catch (CryptorException e) {
                                     e.printStackTrace();

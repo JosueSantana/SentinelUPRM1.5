@@ -1,5 +1,6 @@
 package Fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import OtherHandlers.Constants;
+import OtherHandlers.HttpHelper;
 import edu.uprm.Sentinel.R;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -35,6 +37,7 @@ import ListViewHelpers.IncidentsAdapter;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DateHandler;
 import OtherHandlers.JSONHandler;
+import edu.uprm.Sentinel.SplashActivity;
 
 /**
  * This fragment controls the incidents to be manipulated into the table.
@@ -98,13 +101,6 @@ public class IncidentsFragment extends ListFragment {
 
     }
 
-
-    private String getToken() {
-        SharedPreferences credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
-        String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
-        return storedToken;
-    }
-
     //this asynctask runs while refreshing and gets new data from DB
     private class RefreshAdapter extends AsyncTask<Void,Long,IncidentsAdapter > {
         @Override
@@ -128,7 +124,7 @@ public class IncidentsFragment extends ListFragment {
 
                     allowRefresh = false;
                     JSONObject registerJSON = new JSONObject();
-                    registerJSON.put("token", getToken());
+                    registerJSON.put("token", Constants.getToken(getContext()));
 
                     Ion.with(getContext())
                             .load(Constants.GET_ALERTS_URL)
@@ -138,97 +134,53 @@ public class IncidentsFragment extends ListFragment {
                                 @Override
                                 public void onCompleted(Exception e, String receivedJSON) {
                                     // Successful Request
-                                    if (requestIsSuccessful(e)) {
-                                        JSONObject decryptedValue = getDecryptedValue(receivedJSON);
-                                        //System.out.println(decryptedValue);
+                                    if (HttpHelper.requestIsSuccessful(e)) {
+                                        JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
+                                        // Received Success Message
+                                        if (HttpHelper.receivedSuccessMessage(decryptedValue)) {
+                                            try {
+                                                JSONArray incidents = decryptedValue.getJSONArray("incident");
 
-                                        try {
-                                            JSONArray incidents = decryptedValue.getJSONArray("incident");
+                                                // new incidents reported since last refresh
+                                                if (incidents.length() > numberOfIncidents) {
 
-                                            // new incidents reported since last refresh
-                                            if (incidents.length() > numberOfIncidents) {
+                                                    numberOfIncidents = incidents.length();
+                                                    jsonArray = new JSONArray();
 
-                                                numberOfIncidents = incidents.length();
-                                                jsonArray = new JSONArray();
+                                                    for (int i = 0; i < incidents.length(); i++) {
+                                                        JSONObject tempJSON = new JSONObject();
+                                                        DateHandler date = new DateHandler(incidents.getJSONObject(i).get("created_on").toString());
+                                                        tempJSON.put("name", incidents.getJSONObject(i).get("regionFullname"));
+                                                        tempJSON.put("date", date.getDisplayDate());
+                                                        tempJSON.put("time", date.getDisplayTime());
+                                                        tempJSON.put("latitude", incidents.getJSONObject(i).get("latitude"));
+                                                        tempJSON.put("longitude", incidents.getJSONObject(i).get("longitude"));
+                                                        tempJSON.put("fullname", incidents.getJSONObject(i).get("regionName"));
 
-                                                for (int i = 0; i < incidents.length(); i++) {
-                                                    JSONObject tempJSON = new JSONObject();
-                                                    DateHandler date = new DateHandler(incidents.getJSONObject(i).get("created_on").toString());
-                                                    tempJSON.put("name", incidents.getJSONObject(i).get("regionFullname"));
-                                                    tempJSON.put("date", date.getDisplayDate());
-                                                    tempJSON.put("time", date.getDisplayTime());
-                                                    tempJSON.put("latitude", incidents.getJSONObject(i).get("latitude"));
-                                                    tempJSON.put("longitude", incidents.getJSONObject(i).get("longitude"));
-                                                    tempJSON.put("fullname", incidents.getJSONObject(i).get("regionName"));
+                                                        jsonArray.put(tempJSON);
+                                                        allowRefresh = true;
+                                                    }
 
-                                                    jsonArray.put(tempJSON);
-                                                    allowRefresh = true;
+                                                } else {
+                                                    // no new incidents reported; do nothing.
                                                 }
 
-                                            } else {
-                                                // no new incidents reported; do nothing.
+                                            } catch (JSONException e1) {
+                                                e1.printStackTrace();
+                                            } catch (ParseException e1) {
+                                                e1.printStackTrace();
                                             }
-
-                                        } catch (JSONException e1) {
-                                            e1.printStackTrace();
-                                        } catch (ParseException e1) {
-                                            e1.printStackTrace();
                                         }
-
-                                        // Received Success Message
-                                        if (receivedSuccessMessage(decryptedValue)) {
-
+                                        else if(HttpHelper.receivedSuccess2Message(decryptedValue)){
+                                            // Go back to Splash Activity
                                         }
-
                                         // Message Was Not Successful.
-                                        else {
-
-                                        }
-
+                                        else {}
                                     }
                                     // Errors
-                                    else {
-
-                                    }
+                                    else {}
                                 }
-
-                                // Extract Success Message From Received JSON.
-                                private boolean receivedSuccessMessage(JSONObject decryptedValue) {
-                                    String success = null;
-                                    try {
-                                        success = decryptedValue.getString("success");
-                                        return success.equals("1");
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    return false;
-                                }
-
-                                // Verify if there was an Error in the Request.
-                                private boolean requestIsSuccessful(Exception e) {
-                                    return e == null;
-                                }
-
-
-
-                                // Convert received JSON String into a Decrypted JSON.
-                                private JSONObject getDecryptedValue(String receivedJSONString) {
-                                    try {
-                                        JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                        String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                        String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                        JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                        return decryptedJSON;
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    } catch (CryptorException e) {
-                                        e.printStackTrace();
-                                    }
-                                    return null;
-                                }
-
                             });
-
                 }
             }catch (JSONException e) {
                 e.printStackTrace();
@@ -269,7 +221,7 @@ public class IncidentsFragment extends ListFragment {
                         crypto = new CryptographyHandler();
 
                         JSONObject registerJSON = new JSONObject();
-                        registerJSON.put("token", getToken());
+                        registerJSON.put("token", Constants.getToken(getContext()));
 
                         Ion.with(getContext())
                                 .load(Constants.GET_ALERTS_URL)
@@ -279,13 +231,11 @@ public class IncidentsFragment extends ListFragment {
                                     @Override
                                     public void onCompleted(Exception e, String receivedJSON) {
                                         // Successful Request
-                                        if (requestIsSuccessful(e)) {
-                                            JSONObject decryptedValue = getDecryptedValue(receivedJSON);
-                                            //System.out.println(decryptedValue);
+                                        if (HttpHelper.requestIsSuccessful(e)) {
+                                            JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
                                             try {
                                                 JSONArray incidents = decryptedValue.getJSONArray("incident");
                                                 numberOfIncidents = incidents.length();
-                                                //System.out.println(incidents);
 
                                                 for (int i = 0; i < incidents.length(); i++) {
                                                     JSONObject tempJSON = new JSONObject();
@@ -325,9 +275,15 @@ public class IncidentsFragment extends ListFragment {
                                                 e1.printStackTrace();
                                             }
                                             // Received Success Message
-                                            if (receivedSuccessMessage(decryptedValue)) {
+                                            if (HttpHelper.receivedSuccessMessage(decryptedValue)) {
 
                                             }
+                                            else if(HttpHelper.receivedSuccess2Message(decryptedValue)){
+                                                Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
+                                                splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
+                                                startActivity(splashIntent);
+                                            }
+
                                             // Message Was Not Successful.
                                             else {
                                                 getActivity().runOnUiThread(new Runnable() {
@@ -338,43 +294,12 @@ public class IncidentsFragment extends ListFragment {
                                                 });
                                             }
                                         }
+
+
                                         // Errors
                                         else {
 
                                         }
-                                    }
-
-                                    // Extract Success Message From Received JSON.
-                                    private boolean receivedSuccessMessage(JSONObject decryptedValue) {
-                                        String success = null;
-                                        try {
-                                            success = decryptedValue.getString("success");
-                                            return success.equals("1");
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        return false;
-                                    }
-
-                                    // Verify if there was an Error in the Request.
-                                    private boolean requestIsSuccessful(Exception e) {
-                                        return e == null;
-                                    }
-
-                                    // Convert received JSON String into a Decrypted JSON.
-                                    private JSONObject getDecryptedValue(String receivedJSONString) {
-                                        try {
-                                            JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                            String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                            String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                            JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                            return decryptedJSON;
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        } catch (CryptorException e) {
-                                            e.printStackTrace();
-                                        }
-                                        return null;
                                     }
                                 });
 

@@ -1,5 +1,6 @@
 package Fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import OtherHandlers.Constants;
+import OtherHandlers.HttpHelper;
 import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -25,6 +27,7 @@ import org.json.JSONObject;
 import ListViewHelpers.ContactsAdapter;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.JSONHandler;
+import edu.uprm.Sentinel.SplashActivity;
 
 public class ContactsFragment extends ListFragment{
 
@@ -66,145 +69,152 @@ public class ContactsFragment extends ListFragment{
         spinner.setVisibility(View.VISIBLE);
 
         loaderThread = new Thread(new Runnable(){
-                @Override
-                public void run() {
+            @Override
+            public void run() {
 
-                    try {
+                try {
 
-                        if(Thread.currentThread().interrupted()) throw new InterruptedException();
+                    if(Thread.currentThread().interrupted()) throw new InterruptedException();
 
-                        final CryptographyHandler crypto;
+                    final CryptographyHandler crypto;
 
-                        JSONObject registerJSON = new JSONObject();
-                        crypto = new CryptographyHandler();
+                    JSONObject registerJSON = new JSONObject();
+                    crypto = new CryptographyHandler();
 
-                        registerJSON.put("token", getToken());
+                    registerJSON.put("token", getToken());
 
-                        Ion.with(getContext())
-                                .load(Constants.CONTACT_LIST_URL)
-                                .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
-                                .asString()
-                                .setCallback(new FutureCallback<String>() {
-                                    @Override
-                                    public void onCompleted(Exception e, String receivedJSON) {
+                    Ion.with(getContext())
+                            .load(Constants.CONTACT_LIST_URL)
+                            .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                            .asString()
+                            .setCallback(new FutureCallback<String>() {
+                                @Override
+                                public void onCompleted(Exception e, String receivedJSON) {
 
-                                        // Successful Request
-                                        if (requestIsSuccessful(e)) {
+                                    // Successful Request
+                                    if (requestIsSuccessful(e)) {
 
-                                            JSONObject decryptedValue = getDecryptedValue(receivedJSON);
-                                            System.out.println(decryptedValue);
+                                        JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+                                        System.out.println(decryptedValue);
 
-                                            try {
-                                                JSONArray contacts = decryptedValue.getJSONArray("contact");
+                                        if(HttpHelper.receivedSuccess2Message(decryptedValue)){
+                                            Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
+                                            splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
+                                            startActivity(splashIntent);
+                                        }
 
-                                                for (int i = 0; i < contacts.length(); i++) {
-                                                    JSONObject tempJSON = new JSONObject();
-                                                    tempJSON.put("name", contacts.getJSONObject(i).get("name"));
-                                                    tempJSON.put("editedPhone", contacts.getJSONObject(i).get("phone"));
-                                                    jsonArray.put(tempJSON);
-                                                }
+                                        try {
+                                            JSONArray contacts = decryptedValue.getJSONArray("contact");
 
-                                                mList.post(new Runnable(){
-                                                    @Override
-                                                    public void run() {
-                                                        try{
+                                            for (int i = 0; i < contacts.length(); i++) {
+                                                JSONObject tempJSON = new JSONObject();
+                                                tempJSON.put("name", contacts.getJSONObject(i).get("name"));
+                                                tempJSON.put("editedPhone", contacts.getJSONObject(i).get("phone"));
+                                                jsonArray.put(tempJSON);
+                                            }
+
+                                            mList.post(new Runnable(){
+                                                @Override
+                                                public void run() {
+                                                    try{
                                                         setListAdapter(new ContactsAdapter(jsonArray, getActivity()));}
-                                                        catch(NullPointerException e1){
-                                                            e1.printStackTrace();
-                                                        }
+                                                    catch(NullPointerException e1){
+                                                        e1.printStackTrace();
                                                     }
-                                                });
+                                                }
+                                            });
 
-                                                getActivity().runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        spinner.setVisibility(View.GONE);
-                                                    }
-                                                });
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    spinner.setVisibility(View.GONE);
+                                                }
+                                            });
 
-                                                //setting up the amount of contacts for the settings
-                                                try{
+                                            //setting up the amount of contacts for the settings
+                                            try{
                                                 SharedPreferences settings = ContactsFragment.this.getActivity().getSharedPreferences(Constants.SETTINGS_SP, 0);
                                                 SharedPreferences.Editor editor = settings.edit();
 
                                                 editor.putInt("contactsCount", jsonArray.length()).apply();}
-                                                catch(NullPointerException e1){
-                                                    e1.printStackTrace();
-                                                }
-
-                                            } catch (JSONException e1) {
+                                            catch(NullPointerException e1){
                                                 e1.printStackTrace();
                                             }
 
-                                            // Created a new session; there are no registered contacts yet.
-                                            if (listIsEmpty(decryptedValue)) {
-                                            }
-                                            // Received contact list.
-                                            else if (receivedExistingContacts(decryptedValue)) {
-                                            }
-                                            //
-                                            else {
-
-                                            }
+                                        } catch (JSONException e1) {
+                                            e1.printStackTrace();
                                         }
-                                        // Errors
+
+                                        // Created a new session; there are no registered contacts yet.
+                                        if (listIsEmpty(decryptedValue)) {
+                                        }
+                                        // Received contact list.
+                                        else if (receivedExistingContacts(decryptedValue)) {
+                                        }
+                                        //
                                         else {
+
                                         }
                                     }
 
-                                    private boolean listIsEmpty(JSONObject decryptedValue) {
-                                        String success = null;
-                                        try {
-                                            success = decryptedValue.getString("success");
-                                            return success.equals("2");
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        return false;
+                                    // Errors
+                                    else {
                                     }
+                                }
 
-                                    // Extract Success Message From Received JSON.
-                                    private boolean receivedExistingContacts(JSONObject decryptedValue) {
-                                        String success = null;
-                                        try {
-                                            success = decryptedValue.getString("success");
-                                            return success.equals("1");
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        return false;
+                                private boolean listIsEmpty(JSONObject decryptedValue) {
+                                    String success = null;
+                                    try {
+                                        success = decryptedValue.getString("success");
+                                        return success.equals("2");
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
+                                    return false;
+                                }
 
-                                    // Verify if there was an Error in the Request.
-                                    private boolean requestIsSuccessful(Exception e) {
-                                        return e == null;
+                                // Extract Success Message From Received JSON.
+                                private boolean receivedExistingContacts(JSONObject decryptedValue) {
+                                    String success = null;
+                                    try {
+                                        success = decryptedValue.getString("success");
+                                        return success.equals("1");
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
+                                    return false;
+                                }
 
-                                    // Convert received JSON String into a Decrypted JSON.
-                                    private JSONObject getDecryptedValue(String receivedJSONString) {
-                                        try {
-                                            JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                            String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                            String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                            JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                            return decryptedJSON;
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        } catch (CryptorException e) {
-                                            e.printStackTrace();
-                                        }
-                                        return null;
+                                // Verify if there was an Error in the Request.
+                                private boolean requestIsSuccessful(Exception e) {
+                                    return e == null;
+                                }
+
+                                // Convert received JSON String into a Decrypted JSON.
+                                private JSONObject getDecryptedValue(String receivedJSONString) {
+                                    try {
+                                        JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
+                                        String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
+                                        String decryptedStringValue = crypto.decryptString(encryptedStringValue);
+                                        JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
+                                        return decryptedJSON;
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    } catch (CryptorException e) {
+                                        e.printStackTrace();
                                     }
-                                });
-                    } catch (CryptorException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                                    return null;
+                                }
+                            });
+                } catch (CryptorException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-            });
+            }
+        });
 
         loaderThread.setPriority(Thread.MAX_PRIORITY);
         loaderThread.start();
@@ -237,7 +247,7 @@ public class ContactsFragment extends ListFragment{
                 }
                 else{
                     getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.mainLayout,
-                    new PhonebookFragment()).addToBackStack(null).commit();
+                            new PhonebookFragment()).addToBackStack(null).commit();
                 }
 
                 return true;

@@ -44,6 +44,7 @@ import Fragments.SimpleDialogFragment;
 import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DialogCaller;
+import OtherHandlers.HttpHelper;
 import OtherHandlers.JSONHandler;
 import OtherHandlers.NetworkUtil;
 
@@ -255,12 +256,12 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                                 @Override
                                 public void onCompleted(Exception e, String receivedJSON) {
                                     // Successful Request
-                                    if (requestIsSuccessful(e)) {
-                                        JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+                                    if (HttpHelper.requestIsSuccessful(e)) {
+                                        JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
                                         System.out.println(decryptedValue);
 
                                         // Received Success Message
-                                        if (receivedSuccessMessage(decryptedValue)) {
+                                        if (HttpHelper.receivedSuccessMessage(decryptedValue)) {
                                             SharedPreferences credentials = getSharedPreferences(Constants.CREDENTIALS_SP, 0);
                                             SharedPreferences.Editor credentialsEditor = credentials.edit();
                                             credentialsEditor.putString(Constants.EMAIL_KEY, email);
@@ -289,6 +290,7 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                                 }
 
                                 // Extract Success Message From Received JSON.
+                                /*
                                 private boolean receivedSuccessMessage(JSONObject decryptedValue) {
                                     String success = null;
                                     try {
@@ -320,6 +322,8 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                                     }
                                     return null;
                                 }
+                                */
+
                             });
                 } catch (CryptorException e) {
                         e.printStackTrace();
@@ -329,41 +333,6 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                 }
             };
             new Thread(r).start();
-
-
-            /*
-            Runnable r = new Runnable(){
-                @Override
-                public void run() {
-                    RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-
-                    JSONObject json = new JSONObject();
-                    try {
-                        //json.put("token", regid);
-                        json.put("token", token);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    JsonObjectRequest jsonPOST = new JsonObjectRequest
-                            (Request.Method.POST, "https://gcmexamplesentinel.herokuapp.com/", json, new Response.Listener() {
-
-                                public void onResponse(JSONObject response) {
-                                }
-                                @Override
-                                public void onResponse(Object response) {
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    // TODO Auto-generated method stub
-                                }
-                            });
-                    queue.add(jsonPOST);
-                }
-            };
-            new Thread(r).start();
-            */
         }
     }
 
@@ -388,32 +357,6 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
     /*
         Get the Instance ID From Google.
      */
-    /*
-    public void getRegId(){
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                String msg = "";
-                try {
-                    if (gcm == null) {
-                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
-                    }
-                    regid = gcm.register(PROJECT_NUMBER);
-                    msg = "Device registered, registration ID=" + regid;
-                    Log.i("GCM",  msg);
-                } catch (IOException ex) {
-                    msg = "Error :" + ex.getMessage();
-                }
-                return msg;
-            }
-            @Override
-            protected void onPostExecute(String msg) {
-                //etRegId.setText(msg + "\n");
-            }
-        }.execute(null, null, null);
-    }
-    */
-
     public void getRegId() {
         new AsyncTask<Void, Void, String>() {
             @Override
