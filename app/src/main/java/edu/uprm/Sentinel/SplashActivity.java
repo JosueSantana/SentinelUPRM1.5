@@ -43,6 +43,9 @@ public class SplashActivity extends AppCompatActivity {
         //verify token is saved
         if(credentials.contains("token")) {
             //verify verification code
+            if(credentials.contains("alertDisabled") && credentials.getBoolean("alertDisabled", false)){
+
+            }
 
             if (credentials.contains("alertDisabled") && credentials.getBoolean("alertDisabled", false)) {
                 long alertTime = credentials.getLong("alertTime", 0);

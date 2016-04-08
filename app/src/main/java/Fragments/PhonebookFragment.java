@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import OtherHandlers.Constants;
 import OtherHandlers.HttpHelper;
@@ -43,6 +44,9 @@ public class PhonebookFragment extends ListFragment{
     JSONArray contactsList;
     private ProgressBar spinner;
 
+    private SharedPreferences credentials;
+    private SharedPreferences.Editor editor;
+
     public PhonebookFragment() {
         // Required empty public constructor
     }
@@ -61,6 +65,9 @@ public class PhonebookFragment extends ListFragment{
 
         spinner = (ProgressBar) getView().findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
+
+        credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        editor = credentials.edit();
 
         Uri uri = ContactsContract.Contacts.CONTENT_URI;
         String[] projection = {ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME, ContactsContract.Contacts.HAS_PHONE_NUMBER};
@@ -134,7 +141,7 @@ public class PhonebookFragment extends ListFragment{
                                 spinner.setVisibility(View.VISIBLE);
                             }
                         });
-                        
+
                         SharedPreferences credentials = getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
 
                         registerJSON.put("token", getToken());
@@ -148,28 +155,19 @@ public class PhonebookFragment extends ListFragment{
                                 .setCallback(new FutureCallback<String>() {
                                     @Override
                                     public void onCompleted(Exception e, String receivedJSON) {
-                                        System.out.println("lol");
                                         JSONObject decryptedValue = getDecryptedValue(receivedJSON);
                                         System.out.println(decryptedValue);
 
                                         // Successful Request
 
-                                        if(HttpHelper.receivedSuccessMessage("2", decryptedValue)){
+                                        if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
+                                            editor.putBoolean("sessionDropped", true).commit();
+
                                             Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                             startActivity(splashIntent);
                                         }
 
-
-                                /*
-                                if (requestIsSuccessful(e)) {
-                                    JSONObject decryptedValue = getDecryptedValue(receivedJSON);
-                                    System.out.println(decryptedValue);
-                                }
-                                // Errors
-                                else {
-                                }
-                                */
                                         getActivity().runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {

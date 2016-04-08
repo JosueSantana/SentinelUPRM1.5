@@ -179,6 +179,8 @@
     <string name="warningbeforeusemessage">LA MAUVAISE UTILISATION DE CETTE APPLICATION PEUT PROVOQUER DES SANCTIONS À L\'UTILISATEUR, TEL QU\'ÉTABLI PAR LES POLITIQUES ET RÈGLEMENTS UNIVERSITAIRES. S\'IL VOUS PLAÎT UTILISER RESPONSABLEMENT.</string>
     <string name="unsubscribedialogtitle">Vous Êtes sur le Point de Quitter</string>
     <string name="phonebooktitle">Choisir un Contact</string>
+    <string name="timenotupmessage">Pour envoyer une autre alerte, vous devrez attendre 10 minutes.</string>
+    <string name="timenotuptitle">Vous ne pouvez pas Envoyer l\'Alerte</string>
     <!-- -->
 
 </resources>

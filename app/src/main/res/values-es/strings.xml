@@ -179,6 +179,8 @@
     <string name="warningbeforeusemessage">EL USO INDEBIDO DE ESTA APLICACIÓN PUEDE RESULTAR EN SANCIONES PARA EL USUARIO, SEGÚN LO ESTABLECE LAS NORMAS Y LOS REGLAMENTOS DE LA UNIVERSIDAD. POR FAVOR, UTILICE ESTA APLICACIÓN RESPONSABLEMENTE.</string>
     <string name="unsubscribedialogtitle">Está a punto de Cerrar Sesión</string>
     <string name="phonebooktitle">Seleccione un Contacto</string>
+    <string name="timenotuptitle">No Se Puede Enviar La Alerta</string>
+    <string name="timenotupmessage">Para enviar la alerta, tendrá que esperar 10 minutos.</string>
     <!-- -->
 
 </resources>

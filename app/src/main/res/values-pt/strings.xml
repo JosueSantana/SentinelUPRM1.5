@@ -179,6 +179,8 @@
     <string name="warningbeforeusemessage">O MAU USO DESTE APLICATIVO PODE RESULTAR EM PENALIDADES PARA O UTILIZADOR, COMO ESTABELECE OS PADRÕES E REGULAMENTOS DA UNIVERSIDADE. POR FAVOR USAR ESTE APLICATIVO DE FORMA RESPONSÁVEL.</string>
     <string name="unsubscribedialogtitle">Você está prestes a salir</string>
     <string name="phonebooktitle">Escolha um Contato</string>
+    <string name="timenotupmessage">Para enviar outro alerta, você vai ter que esperar 10 minutos.</string>
+    <string name="timenotuptitle">Você não pode enviar o alerta</string>
     <!-- -->
 
 </resources>

@@ -35,6 +35,8 @@ public class ContactsFragment extends ListFragment{
     private ListView mList;
     private volatile Thread loaderThread;
     private ProgressBar spinner;
+    private SharedPreferences credentials;
+    private SharedPreferences.Editor editor;
 
     public ContactsFragment() {
         // Required empty public constructor
@@ -68,6 +70,9 @@ public class ContactsFragment extends ListFragment{
         spinner = (ProgressBar) getView().findViewById(R.id.progressBar);
         spinner.setVisibility(View.VISIBLE);
 
+        credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        editor = credentials.edit();
+
         loaderThread = new Thread(new Runnable(){
             @Override
             public void run() {
@@ -92,12 +97,18 @@ public class ContactsFragment extends ListFragment{
                                 public void onCompleted(Exception e, String receivedJSON) {
 
                                     // Successful Request
-                                    if (requestIsSuccessful(e)) {
+                                    if (HttpHelper.requestIsSuccessful(e)) {
 
                                         JSONObject decryptedValue = getDecryptedValue(receivedJSON);
                                         System.out.println(decryptedValue);
 
-                                        if(HttpHelper.receivedSuccessMessage("2", decryptedValue)){
+                                        if(HttpHelper.receivedSuccessMessage(decryptedValue, "1")){
+
+                                        }
+                                        if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
+
+                                            editor.putBoolean("sessionDropped", true).commit();
+
                                             Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                             startActivity(splashIntent);
@@ -159,6 +170,7 @@ public class ContactsFragment extends ListFragment{
 
                                     // Errors
                                     else {
+                                        e.printStackTrace();
                                     }
                                 }
 
@@ -183,11 +195,6 @@ public class ContactsFragment extends ListFragment{
                                         e.printStackTrace();
                                     }
                                     return false;
-                                }
-
-                                // Verify if there was an Error in the Request.
-                                private boolean requestIsSuccessful(Exception e) {
-                                    return e == null;
                                 }
 
                                 // Convert received JSON String into a Decrypted JSON.

@@ -1,6 +1,7 @@
 package Fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +36,7 @@ import java.text.ParseException;
 import ListViewHelpers.IncidentsAdapter;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DateHandler;
+import OtherHandlers.JSONHandler;
 import edu.uprm.Sentinel.SplashActivity;
 
 /**
@@ -55,6 +57,10 @@ public class IncidentsFragment extends ListFragment {
     private MapFragment mapFragment;
     private ProgressBar spinner;
     private boolean allowRefresh = true;
+
+    private SharedPreferences credentials;
+    private SharedPreferences.Editor editor;
+
 
     public IncidentsFragment() {
         // Required empty public constructor
@@ -116,6 +122,8 @@ public class IncidentsFragment extends ListFragment {
             final CryptographyHandler crypto;
             try {
                 if (allowRefresh) {
+                    System.out.println("allowrefresh: " + allowRefresh);
+                    System.out.println("ALLOWED REFRESH");
                     crypto = new CryptographyHandler();
 
                     allowRefresh = false;
@@ -133,7 +141,7 @@ public class IncidentsFragment extends ListFragment {
                                     if (HttpHelper.requestIsSuccessful(e)) {
                                         JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
                                         // Received Success Message
-                                        if (HttpHelper.receivedSuccessMessage("1", decryptedValue)) {
+                                        if (HttpHelper.receivedSuccessMessage(decryptedValue, "1")) {
                                             try {
                                                 JSONArray incidents = decryptedValue.getJSONArray("incident");
 
@@ -167,8 +175,12 @@ public class IncidentsFragment extends ListFragment {
                                                 e1.printStackTrace();
                                             }
                                         }
-                                        else if(HttpHelper.receivedSuccessMessage("2", decryptedValue)){
-                                            // Go back to Splash Activity
+                                        else if(HttpHelper.receivedSuccessMessage(decryptedValue,"2")){
+                                            editor.putBoolean("sessionDropped", true).commit();
+
+                                            Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
+                                            splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
+                                            startActivity(splashIntent);
                                         }
                                         // Message Was Not Successful.
                                         else {}
@@ -213,6 +225,7 @@ public class IncidentsFragment extends ListFragment {
                 final CryptographyHandler crypto;
                 try {
                     allowRefresh = false;
+                    System.out.println("REFRESH IS NOW FALSE");
                     crypto = new CryptographyHandler();
 
                     JSONObject registerJSON = new JSONObject();
@@ -228,52 +241,54 @@ public class IncidentsFragment extends ListFragment {
                                     // Successful Request
                                     if (HttpHelper.requestIsSuccessful(e)) {
                                         JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
-                                        try {
-                                            JSONArray incidents = decryptedValue.getJSONArray("incident");
-                                            numberOfIncidents = incidents.length();
 
-                                            for (int i = 0; i < incidents.length(); i++) {
-                                                JSONObject tempJSON = new JSONObject();
-
-                                                if(incidents.length() != jsonArray.length() || incidents.length() == 0) {
-                                                    DateHandler date = new DateHandler(incidents.getJSONObject(i).get("created_on").toString());
-                                                    tempJSON.put("name", incidents.getJSONObject(i).get("regionFullname"));
-                                                    tempJSON.put("date", date.getDisplayDate());
-                                                    tempJSON.put("time", date.getDisplayTime());
-                                                    tempJSON.put("latitude", incidents.getJSONObject(i).get("latitude"));
-                                                    tempJSON.put("longitude", incidents.getJSONObject(i).get("longitude"));
-                                                    jsonArray.put(tempJSON);
-                                                }
-                                                else if(!jsonArray.getJSONObject(i).get("name").equals(incidents.getJSONObject(i).get("regionFullname"))){
-                                                    System.out.println("JSONARRAY DOESNT EQUAL");
-                                                    jsonArray.put(i, incidents.get(i));
-                                                }
-                                            }
-
-                                            mList.post(new Runnable() {
-                                                public void run() {
-                                                    mList.setAdapter(new IncidentsAdapter(jsonArray, getActivity()));
-                                                }
-                                            });
-
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    spinner.setVisibility(View.GONE);
-                                                    allowRefresh = true;
-                                                }
-                                            });
-
-                                        } catch (JSONException e1) {
-                                            e1.printStackTrace();
-                                        } catch (ParseException e1) {
-                                            e1.printStackTrace();
-                                        }
                                         // Received Success Message
-                                        if (HttpHelper.receivedSuccessMessage("1", decryptedValue)) {
+                                        if (HttpHelper.receivedSuccessMessage(decryptedValue, "1")) {
+                                            try {
+                                                JSONArray incidents = decryptedValue.getJSONArray("incident");
+                                                numberOfIncidents = incidents.length();
 
+                                                for (int i = 0; i < incidents.length(); i++) {
+                                                    JSONObject tempJSON = new JSONObject();
+
+                                                    if(incidents.length() != jsonArray.length() || incidents.length() == 0) {
+                                                        DateHandler date = new DateHandler(incidents.getJSONObject(i).get("created_on").toString());
+                                                        tempJSON.put("name", incidents.getJSONObject(i).get("regionFullname"));
+                                                        tempJSON.put("date", date.getDisplayDate());
+                                                        tempJSON.put("time", date.getDisplayTime());
+                                                        tempJSON.put("latitude", incidents.getJSONObject(i).get("latitude"));
+                                                        tempJSON.put("longitude", incidents.getJSONObject(i).get("longitude"));
+                                                        jsonArray.put(tempJSON);
+                                                    }
+                                                    else if(!jsonArray.getJSONObject(i).get("name").equals(incidents.getJSONObject(i).get("regionFullname"))){
+                                                        System.out.println("JSONARRAY DOESNT EQUAL");
+                                                        jsonArray.put(i, incidents.get(i));
+                                                    }
+                                                }
+
+                                                mList.post(new Runnable() {
+                                                    public void run() {
+                                                        mList.setAdapter(new IncidentsAdapter(jsonArray, getActivity()));
+                                                    }
+                                                });
+
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        spinner.setVisibility(View.GONE);
+                                                        allowRefresh = true;
+                                                    }
+                                                });
+
+                                            } catch (JSONException e1) {
+                                                e1.printStackTrace();
+                                            } catch (ParseException e1) {
+                                                e1.printStackTrace();
+                                            }
                                         }
-                                        else if(HttpHelper.receivedSuccessMessage("2", decryptedValue)){
+                                        else if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
+                                            editor.putBoolean("sessionDropped", true).commit();
+
                                             Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                             startActivity(splashIntent);
@@ -289,12 +304,15 @@ public class IncidentsFragment extends ListFragment {
                                             });
                                         }
                                     }
+
+
                                     // Errors
                                     else {
 
                                     }
                                 }
                             });
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (CryptorException e) {

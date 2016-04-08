@@ -32,7 +32,8 @@
         android:label="@string/app_name"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/GrunesLeitmotif">
+        android:theme="@style/GrunesLeitmotif"
+        >
 
         <receiver
             android:name="edu.uprm.Sentinel.Services.NetworkChangeReceiver"

@@ -45,6 +45,7 @@ import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DialogCaller;
 import OtherHandlers.HttpHelper;
+import OtherHandlers.JSONHandler;
 import OtherHandlers.NetworkUtil;
 
 /**
@@ -219,6 +220,17 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
         } else {
 
             final CryptographyHandler crypto = new CryptographyHandler();
+
+            /*
+            InstanceID instanceID = InstanceID.getInstance(this);
+            String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+            */
+
+            //String token = getGCMToken();
+
+            //registerJSON.put("deviceID", Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID).toString());
+            //registerJSON.put("deviceID", instanceID.getToken(Constants.ANDROID_SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE));
+
             Runnable r = new Runnable(){
                 @Override
                 public void run() {
@@ -229,6 +241,12 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                         registerJSON.put("os", Constants.ANDROID_OS_STRING);
                         registerJSON.put("deviceID", token);
                         //registerJSON.put("deviceID", regid);
+
+                        /*
+                    System.out.println("GCM TOKEN IS: " + regid);
+                    final SharedPreferences.Editor credentialsEditor = credentials.edit();
+                    credentialsEditor.commit();
+                    */
 
                         Ion.with(getBaseContext())
                                 .load(Constants.REGISTER_URL)
@@ -243,8 +261,7 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                                             System.out.println(decryptedValue);
 
                                             // Received Success Message
-                                            if (HttpHelper.receivedSuccessMessage("1", decryptedValue)) {
-                                                System.out.println("GENERATED TOKEN: " + token);
+                                            if (HttpHelper.receivedSuccessMessage(decryptedValue, "1")) {
                                                 SharedPreferences credentials = getSharedPreferences(Constants.CREDENTIALS_SP, 0);
                                                 SharedPreferences.Editor credentialsEditor = credentials.edit();
                                                 credentialsEditor.putString(Constants.EMAIL_KEY, email);
@@ -260,6 +277,7 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                                                     }
                                                 });
                                             }
+
                                             // Message Was Not Successful.
                                             else {
                                                 System.out.println("got here");

@@ -179,6 +179,8 @@
     <string name="warningbeforeusemessage">MISSBRAUCH DIESER ANDWENDUNG KANN BESTRAFUNGEN FÜR DEN BENUTZER VERANLASSEN. BITTE VERWENDEN SIE DIESE ANWENDUNG VERANTWORTUNGS.</string>
     <string name="unsubscribedialogtitle">Sie Sind im Begriff zu Abmelden</string>
     <string name="phonebooktitle">Wählen Sie einen Kontakt</string>
+    <string name="timenotupmessage">Um einen weiteren Alarm senden, erhalten Sie 10 Minuten warten müssen.</string>
+    <string name="timenotuptitle">Kann Alarm senden nicht</string>
     <!-- -->
 
 </resources>

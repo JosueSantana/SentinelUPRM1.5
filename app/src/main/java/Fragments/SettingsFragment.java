@@ -15,6 +15,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import OtherHandlers.Constants;
 import OtherHandlers.HttpHelper;
@@ -27,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import OtherHandlers.CryptographyHandler;
+import OtherHandlers.JSONHandler;
 import edu.uprm.Sentinel.SplashActivity;
 
 /**
@@ -46,8 +48,10 @@ public class SettingsFragment extends Fragment {
     private Switch pushSwitch;
     private Switch familySwitch;
 
-    SharedPreferences settings;
-    SharedPreferences credentials;
+    private SharedPreferences credentials;
+    private SharedPreferences.Editor editor;
+
+    private SharedPreferences settings;
     FragmentManager fm;
 
     public SettingsFragment() {
@@ -60,8 +64,8 @@ public class SettingsFragment extends Fragment {
     }
 
     @Override
-         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                  Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_settings, container, false);
     }
@@ -72,6 +76,8 @@ public class SettingsFragment extends Fragment {
 
         fm = getActivity().getSupportFragmentManager();
         credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        editor = credentials.edit();
+
         settings = this.getActivity().getSharedPreferences(Constants.SETTINGS_SP, 0);
 
         //get reference to row objects
@@ -83,8 +89,8 @@ public class SettingsFragment extends Fragment {
         String text;
 
         if(settings.contains("contactsCount"))
-             text = String.format(getResources().getString(R.string.contactcountlabel),
-                     settings.getInt("contactsCount", 0));
+            text = String.format(getResources().getString(R.string.contactcountlabel),
+                    settings.getInt("contactsCount", 0));
         else text = "0 out of 5";
 
         contactsText.setText(text);
@@ -124,17 +130,17 @@ public class SettingsFragment extends Fragment {
         pushSwitch = (Switch) getView().findViewById(R.id.notificationspushswitch);
         familySwitch = (Switch) getView().findViewById(R.id.notificationsfamilyswitch);
 
-        //initialize all settings to true
-        emailSwitch.setChecked(true);
-        smsSwitch.setChecked(true);
-        pushSwitch.setChecked(true);
-        familySwitch.setChecked(true);
 
         //set all the switch listeners
         switchListener(settings, emailSwitch, "mail");
         switchListener(settings, smsSwitch, "sms");
         switchListener(settings, pushSwitch, "push");
         switchListener(settings, familySwitch, "family");
+//
+//        emailSwitch.setChecked(settings.getBoolean("mail", true));
+//        smsSwitch.setChecked(settings.getBoolean("sms", true));
+//        pushSwitch.setChecked(settings.getBoolean("push", true));
+//        familySwitch.setChecked(settings.getBoolean("family", true));
 
         //check switch states
         switchToggle(emailSwitch, "mail");
@@ -151,7 +157,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void switchToggle(CompoundButton slideSwitch, String name){
-        if(settings.getBoolean(name, false)){slideSwitch.toggle();}
+        if(settings.getBoolean(name, true)){slideSwitch.toggle();}
     }
 
     private void switchListener(final SharedPreferences settings, CompoundButton slideSwitch,final String name){
@@ -161,7 +167,7 @@ public class SettingsFragment extends Fragment {
 
                 //get the settings from sharedpreferences
                 SharedPreferences.Editor editor = settings.edit();
-
+                System.out.println("SETTING CHECKED/UNCHECKED");
                 //set email status
                 if (isChecked) {
                     editor.putBoolean(name, true);
@@ -231,33 +237,18 @@ public class SettingsFragment extends Fragment {
                                 public void onCompleted(Exception e, String receivedJSON) {
                                     JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
                                     // Successful Request
-                                    if (HttpHelper.requestIsSuccessful(e)) {
+                                    if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
+                                        editor.putBoolean("sessionDropped", true).commit();
 
-                                        //JSONObject decryptedValue = getDecryptedValue(receivedJSON);
-                                        //System.out.println(decryptedValue);
-
-                                        //Context context = getContext();
-                                        //CharSequence text = "";
-                                        // Received Success Message
-                                            /*if (receivedSuccessMessage(decryptedValue)) {
-                                                text = "Settings Successfully Updated ";
-                                            }
-                                            // Message Was Not Successful.
-                                            else {
-                                                text = "There was an Error Updating Your Settings";
-                                            }
-                                            int duration = Toast.LENGTH_SHORT;
-                                            Toast toast = Toast.makeText(context, text, duration);
-                                            toast.show();*/
-                                    }
-                                    else if(HttpHelper.receivedSuccessMessage("2", decryptedValue)){
                                         Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                         splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                         startActivity(splashIntent);
                                     }
-                                    // Errors
-                                    else {
-
+                                    else if(HttpHelper.receivedSuccessMessage(decryptedValue, "3")){
+                                        int duration = Toast.LENGTH_SHORT;
+                                        String text = "There was an Error Updating Your Settings";
+                                        Toast toast = Toast.makeText(getContext(), text, duration);
+                                        toast.show();
                                     }
                                 }
 

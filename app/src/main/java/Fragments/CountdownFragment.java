@@ -197,22 +197,22 @@ public class CountdownFragment extends Fragment implements
                                                 @Override
                                                 public void run() {
                                                     try {
-                                                        if(HttpHelper.receivedSuccessMessage("1", receivedJSON)){
+                                                        if(HttpHelper.receivedSuccessMessage(receivedJSON, "1")){
                                                             getActivity().getSupportFragmentManager().beginTransaction()
                                                                     .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
                                                                     .remove(CountdownFragment.this).replace(R.id.mainLayout, new AlertWaitFragment()).commit();
                                                         }
-                                                        else if (HttpHelper.receivedSuccessMessage("2", receivedJSON)) {
+                                                        else if (HttpHelper.receivedSuccessMessage(receivedJSON, "2")) {
                                                             Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                                             startActivity(splashIntent);
                                                         }
-                                                        else if(HttpHelper.receivedSuccessMessage("3", receivedJSON)) {
+                                                        else if(HttpHelper.receivedSuccessMessage(receivedJSON, "3")) {
                                                             buttonPressed = true;
                                                             Toast.makeText(CountdownFragment.this.getActivity(), R.string.alertnoinlocationmessage, Toast.LENGTH_SHORT).show();
                                                             getActivity().getSupportFragmentManager().popBackStackImmediate();
                                                         }
-                                                        else if (HttpHelper.receivedSuccessMessage("4", receivedJSON)) {
+                                                        else if (HttpHelper.receivedSuccessMessage(receivedJSON, "4")) {
                                                             Toast.makeText(CountdownFragment.this.getActivity(), "Please Wait 10 Minutes Between Reporting Incidents", Toast.LENGTH_SHORT).show();
                                                             getActivity().getSupportFragmentManager().popBackStackImmediate();
                                                         } else {

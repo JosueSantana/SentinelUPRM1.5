@@ -63,6 +63,8 @@
     
     <!--Alert sent screen -->
     <string name="bottomlabelalerted">To send another alert, you will have to wait %1$s minutes</string>
+    <string name="timenotuptitle">Cannot Send Alert</string>
+    <string name="timenotupmessage">To send another alert, you will have to wait 10 minutes.</string>
     <string name="alerttimerend">Ready to Alert!</string>
     <!-- -->
     
@@ -72,7 +74,7 @@
     <string name="pullRefresh">Pull to Get Current Incidents</string>
     <string name="noincidents">No Incidents Found</string>
     <string name="sortbydate">By Region</string>
-    <string name="sortbyregion">Abmelden</string>
+    <string name="sortbyregion">Region</string>
     <string name="incidentmap">Incidents Map</string>
     <string name="showall">Show All</string>
     <!-- -->

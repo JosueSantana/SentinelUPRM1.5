@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Sentinel</string>
     <string name="action_settings" translatable="false">Settings</string>
-    <string name="title_activity_main" translatable="false">Main</string>
+    <string name="title_activity_main">Main</string>
     <string name="section_format" translatable="false">Hello World from section: %1$d</string>
     <string name="font_fontFamily_medium">Arial</string>
 
@@ -205,4 +205,6 @@
     <string name="unsubscribedialogmessage">Are you sure?</string>
     <string name="unsubscribedialogtitle">You are about to Unsubscribe</string>
     <string name="phonebooktitle">Choose a contact to add from your phone book</string>
+    <string name="timenotupmessage">To send another alert, you will have to wait 10 minutes.</string>
+    <string name="timenotuptitle">Cannot Send Alert</string>
 </resources>

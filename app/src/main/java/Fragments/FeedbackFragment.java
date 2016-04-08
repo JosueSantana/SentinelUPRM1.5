@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.HttpHelper;
+import OtherHandlers.JSONHandler;
 import edu.uprm.Sentinel.R;
 import edu.uprm.Sentinel.SplashActivity;
 
@@ -46,6 +47,10 @@ public class FeedbackFragment extends Fragment {
     private AutoCompleteTextView hintView;
     private ProgressBar spinner;
     private boolean sendingReport = false;
+
+    private SharedPreferences credentials;
+    private SharedPreferences.Editor editor;
+
 
     public FeedbackFragment() {
         // Required empty public constructor
@@ -105,6 +110,13 @@ public class FeedbackFragment extends Fragment {
         return root;
     }
 
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+
+        credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        editor = credentials.edit();
+    }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -159,7 +171,7 @@ public class FeedbackFragment extends Fragment {
                                                         System.out.println(decryptedValue);
 
                                                         // Received Success Message
-                                                        if (HttpHelper.receivedSuccessMessage("1", decryptedValue)) {
+                                                        if (HttpHelper.receivedSuccessMessage(decryptedValue, "1")) {
                                                             getActivity().runOnUiThread(new Runnable() {
                                                                 @Override
                                                                 public void run() {
@@ -171,7 +183,9 @@ public class FeedbackFragment extends Fragment {
                                                             FeedbackFragment.this.getActivity().getSupportFragmentManager().popBackStackImmediate();
                                                         }
 
-                                                        if(HttpHelper.receivedSuccessMessage("2", decryptedValue)){
+                                                        if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
+                                                            editor.putBoolean("sessionDropped", true).commit();
+
                                                             Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                                             startActivity(splashIntent);

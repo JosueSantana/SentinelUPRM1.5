@@ -22,7 +22,6 @@ import Fragments.FeedbackFragment;
 import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DialogCaller;
-import OtherHandlers.HttpHelper;
 import OtherHandlers.JSONHandler;
 
 import Fragments.ViewPagerFragment;
@@ -72,14 +71,17 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
             getSharedPreferences(Constants.CREDENTIALS_SP, 0).edit().clear().commit();
             getSharedPreferences(Constants.SETTINGS_SP, 0).edit().clear().commit();
 
+
             final Runnable r = new Runnable() {
                 @Override
                 public void run() {
                     final CryptographyHandler crypto;
                     try {
                         crypto = new CryptographyHandler();
+
                         JSONObject registerJSON = new JSONObject();
                         registerJSON.put("token", getToken());
+
                         Ion.with(getApplicationContext())
                                 .load(Constants.UNSUBSCRIBE_URL)
                                 .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
@@ -88,19 +90,39 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
                                     @Override
                                     public void onCompleted(Exception e, String receivedJSON) {
                                         // Successful Request
-                                        if (HttpHelper.requestIsSuccessful(e)) {
+                                        if (requestIsSuccessful(e)) {
                                             JSONObject decryptedValue = getDecryptedValue(receivedJSON);
 
                                             // Received Success Message
-                                            if (HttpHelper.receivedSuccessMessage("1", decryptedValue)) {}
+                                            if (receivedSuccess1Message(decryptedValue)) {}
                                             // Message Was Not Successful.
                                             else {
+
                                             }
                                         }
                                         // Errors
                                         else {
+
                                         }
                                     }
+
+                                    // Extract Success Message From Received JSON.
+                                    private boolean receivedSuccess1Message(JSONObject decryptedValue) {
+                                        String success = null;
+                                        try {
+                                            success = decryptedValue.getString("success");
+                                            return success.equals("1");
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return false;
+                                    }
+
+                                    // Verify if there was an Error in the Request.
+                                    private boolean requestIsSuccessful(Exception e) {
+                                        return e == null;
+                                    }
+
                                     // Convert received JSON String into a Decrypted JSON.
                                     private JSONObject getDecryptedValue(String receivedJSONString) {
                                         try {
@@ -117,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
                                         return null;
                                     }
                                 });
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (CryptorException e) {
@@ -125,8 +148,16 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
                 }
             };
             new Thread(r).start();
+
             startActivity(unsubscribeIntent);
             finish();
+        }
+        else if(bundle != null && bundle.getString("intentkind").equals("outofbounds")){
+            getSupportFragmentManager().popBackStackImmediate();
+        }
+
+        else if(bundle != null && bundle.getString("intentkind").equals("timenotout")){
+            getSupportFragmentManager().popBackStackImmediate();
         }
     }
 
