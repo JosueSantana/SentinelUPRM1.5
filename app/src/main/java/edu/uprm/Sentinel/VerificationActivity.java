@@ -223,8 +223,9 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                         if (HttpHelper.requestIsSuccessful(e)) {
                                             JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
 
+                                            // TODO:
                                             // Received Success Message
-                                            if (HttpHelper.receivedSuccessMessage(decryptedValue)) {
+                                            if (HttpHelper.receivedSuccessMessage("1", decryptedValue)) {
                                                 // Store token in Shared Preferences.
                                                 String token = getToken(decryptedValue);
                                                 storeToken(token);
@@ -237,7 +238,7 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                                         finish();
                                                     }
                                                 });
-                                            } else if(HttpHelper.receivedSuccessMessage(decryptedValue)){
+                                            } else if(HttpHelper.receivedSuccessMessage("2", decryptedValue)){
                                                 Context context = getApplicationContext();
                                                 CharSequence text = "Inputted Passcode is Incorrect";
 
@@ -264,19 +265,6 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                         credentialsEditor.commit();
                                     }
 
-                                    // User Enters Incorrect Passcode (success:2).
-                                    /*
-                                    private boolean userEntersIncorrectPasscode(JSONObject decryptedValue) {
-                                        String success = null;
-                                        try {
-                                            success = decryptedValue.getString("success");
-                                            return success.equals("2");
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        return false;
-                                    }
-                                    */
 
                                     // Extract Token from JSON.
                                     private String getToken(JSONObject decryptedValue) {
@@ -305,42 +293,6 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                     private void userIsVerified() {
                                         credentialsEditor.putBoolean("isVerified", true).commit();
                                     }
-
-                                    // Extract Success Message From Received JSON.
-                                    /*
-                                    private boolean receivedSuccessMessage(JSONObject decryptedValue) {
-                                        String success = null;
-                                        try {
-                                            success = decryptedValue.getString("success");
-                                            return success.equals("1");
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        return false;
-                                    }
-
-                                    // Verify if there was an Error in the Request.
-                                    private boolean requestIsSuccessful(Exception e) {
-                                        return e == null;
-                                    }
-
-
-                                    // Convert received JSON String into a Decrypted JSON.
-                                    private JSONObject getDecryptedValue(String receivedJSONString) {
-                                        try {
-                                            JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                            String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                            String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                            JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                            return decryptedJSON;
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        } catch (CryptorException e) {
-                                            e.printStackTrace();
-                                        }
-                                        return null;
-                                    }
-                                    */
                                 });
                     } catch (CryptorException e) {
                         e.printStackTrace();

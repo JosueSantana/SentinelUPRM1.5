@@ -97,7 +97,7 @@ public class ContactsFragment extends ListFragment{
                                         JSONObject decryptedValue = getDecryptedValue(receivedJSON);
                                         System.out.println(decryptedValue);
 
-                                        if(HttpHelper.receivedSuccess2Message(decryptedValue)){
+                                        if(HttpHelper.receivedSuccessMessage("2", decryptedValue)){
                                             Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                             startActivity(splashIntent);

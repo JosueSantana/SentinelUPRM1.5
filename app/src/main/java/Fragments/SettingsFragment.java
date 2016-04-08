@@ -250,7 +250,7 @@ public class SettingsFragment extends Fragment {
                                             Toast toast = Toast.makeText(context, text, duration);
                                             toast.show();*/
                                     }
-                                    else if(HttpHelper.receivedSuccess2Message(decryptedValue)){
+                                    else if(HttpHelper.receivedSuccessMessage("2", decryptedValue)){
                                         Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                         splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                         startActivity(splashIntent);

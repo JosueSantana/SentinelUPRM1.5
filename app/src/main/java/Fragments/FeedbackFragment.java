@@ -159,7 +159,7 @@ public class FeedbackFragment extends Fragment {
                                                         System.out.println(decryptedValue);
 
                                                         // Received Success Message
-                                                        if (HttpHelper.receivedSuccessMessage(decryptedValue)) {
+                                                        if (HttpHelper.receivedSuccessMessage("1", decryptedValue)) {
                                                             getActivity().runOnUiThread(new Runnable() {
                                                                 @Override
                                                                 public void run() {
@@ -171,7 +171,7 @@ public class FeedbackFragment extends Fragment {
                                                             FeedbackFragment.this.getActivity().getSupportFragmentManager().popBackStackImmediate();
                                                         }
 
-                                                        if(HttpHelper.receivedSuccess2Message(decryptedValue)){
+                                                        if(HttpHelper.receivedSuccessMessage("2", decryptedValue)){
                                                             Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                                             startActivity(splashIntent);

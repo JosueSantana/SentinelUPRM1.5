@@ -164,15 +164,6 @@ public class CountdownFragment extends Fragment implements
         });
 
     }
-
-    /*
-    private String getToken() {
-        SharedPreferences credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
-        String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
-        return storedToken;
-    }
-    */
-
     private void sendAlert() throws JSONException, CryptorException {
 
         final CryptographyHandler crypto = new CryptographyHandler();
@@ -181,12 +172,10 @@ public class CountdownFragment extends Fragment implements
         Runnable r = new Runnable(){
             @Override
             public void run() {
-
-
                 try {
-                alertJSON.put("token", Constants.getToken(getContext()));
-                alertJSON.put("latitude", mLastLocation.getLatitude());
-                alertJSON.put("longitude", mLastLocation.getLongitude());
+                    alertJSON.put("token", Constants.getToken(getContext()));
+                    alertJSON.put("latitude", mLastLocation.getLatitude());
+                    alertJSON.put("longitude", mLastLocation.getLongitude());
 
                     Ion.with(getContext())
                             .load(Constants.SEND_ALERT_URL)
@@ -195,48 +184,61 @@ public class CountdownFragment extends Fragment implements
                             .setCallback(new FutureCallback<String>() {
                                 @Override
                                 public void onCompleted(Exception e, String result) {
-                                    System.out.println(result);
-                                    try {
-                                        JSONObject receivedSentinelMessage = JSONHandler.convertStringToJSON(result);
-                                        String encryptedJSONReceived = JSONHandler.getSentinelMessage(receivedSentinelMessage);
-                                        final String decryptedJSONReceived = crypto.decryptString(encryptedJSONReceived);
+                                    /**
+                                     * IF REQUEST WAS SUCCESSFUL:
+                                     */
+                                    if(HttpHelper.requestIsSuccessful(e)){
+                                        try {
+                                            JSONObject receivedSentinelMessage = JSONHandler.convertStringToJSON(result);
+                                            String encryptedJSONReceived = JSONHandler.getSentinelMessage(receivedSentinelMessage);
+                                            final String decryptedJSONReceived = crypto.decryptString(encryptedJSONReceived);
+                                            final JSONObject receivedJSON = JSONHandler.convertStringToJSON(decryptedJSONReceived);
+                                            CountdownFragment.this.getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        if(HttpHelper.receivedSuccessMessage("1", receivedJSON)){
+                                                            getActivity().getSupportFragmentManager().beginTransaction()
+                                                                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                                                                    .remove(CountdownFragment.this).replace(R.id.mainLayout, new AlertWaitFragment()).commit();
+                                                        }
+                                                        else if (HttpHelper.receivedSuccessMessage("2", receivedJSON)) {
+                                                            Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
+                                                            splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
+                                                            startActivity(splashIntent);
+                                                        }
+                                                        else if(HttpHelper.receivedSuccessMessage("3", receivedJSON)) {
+                                                            buttonPressed = true;
+                                                            Toast.makeText(CountdownFragment.this.getActivity(), R.string.alertnoinlocationmessage, Toast.LENGTH_SHORT).show();
+                                                            getActivity().getSupportFragmentManager().popBackStackImmediate();
+                                                        }
+                                                        else if (HttpHelper.receivedSuccessMessage("4", receivedJSON)) {
+                                                            Toast.makeText(CountdownFragment.this.getActivity(), "Please Wait 10 Minutes Between Reporting Incidents", Toast.LENGTH_SHORT).show();
+                                                            getActivity().getSupportFragmentManager().popBackStackImmediate();
+                                                        } else {
 
-                                        final JSONObject receivedJSON = JSONHandler.convertStringToJSON(decryptedJSONReceived);
-
-                                        CountdownFragment.this.getActivity().runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                System.out.println("received:" + receivedJSON);
-
-                                                try {
-                                                    if(receivedJSON.getString("success").equals("3"))  {
-                                                        buttonPressed = true;
-                                                        Toast.makeText(CountdownFragment.this.getActivity(), R.string.alertnoinlocationmessage, Toast.LENGTH_SHORT).show();
-                                                        getActivity().getSupportFragmentManager().popBackStackImmediate();
-
+                                                        }
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
                                                     }
-                                                    else if(HttpHelper.receivedSuccess2Message(receivedJSON)){
-                                                        Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
-                                                        splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
-                                                        startActivity(splashIntent);
-                                                    }
-                                                    else if(receivedJSON.getString("success").equals("1")){
-                                                        getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).remove(CountdownFragment.this).replace(R.id.mainLayout, new AlertWaitFragment()).commit();
-                                                    }
-                                                    else if(HttpHelper.receivedSuccess4Message(receivedJSON)) {
-                                                        Toast.makeText(CountdownFragment.this.getActivity(), "Please Wait 30 Minutes Between Reporting Incidents", Toast.LENGTH_SHORT).show();
-                                                        getActivity().getSupportFragmentManager().popBackStackImmediate();
-                                                    }
-                                                } catch (JSONException e1) {
-                                                    e1.printStackTrace();
                                                 }
-                                            }
-                                        });
-
-                                    } catch (JSONException e1) {
-                                        e1.printStackTrace();
-                                    } catch (CryptorException e1) {
-                                        e1.printStackTrace();
+                                            });
+                                        } catch (JSONException e1) {
+                                            e1.printStackTrace();
+                                        } catch (CryptorException e1) {
+                                            e1.printStackTrace();
+                                        }
+                                    }
+                                    /**
+                                     * IF THE REQUEST WAS UNSUCCESSFUL:
+                                     */
+                                    else{
+                                        Toast.makeText(CountdownFragment.this.getActivity(),
+                                                "There was an error with your request.",
+                                                Toast.LENGTH_SHORT).show();
+                                        getActivity()
+                                                .getSupportFragmentManager()
+                                                .popBackStackImmediate();
                                     }
                                 }
                             });
@@ -246,9 +248,8 @@ public class CountdownFragment extends Fragment implements
                     e.printStackTrace();
                 }
             }
-
         };
-       Thread t =  new Thread(r);
+        Thread t =  new Thread(r);
         t.setPriority(Thread.MAX_PRIORITY);
         t.start();
     }
@@ -263,7 +264,6 @@ public class CountdownFragment extends Fragment implements
             e.printStackTrace();
         }
     }
-
 
     public void onDestroy(){
         super.onDestroy();

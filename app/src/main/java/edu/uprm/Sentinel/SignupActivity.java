@@ -219,76 +219,59 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
         } else {
 
             final CryptographyHandler crypto = new CryptographyHandler();
-
-            /*
-            InstanceID instanceID = InstanceID.getInstance(this);
-            String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-            */
-
-            //String token = getGCMToken();
-
-            //registerJSON.put("deviceID", Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID).toString());
-            //registerJSON.put("deviceID", instanceID.getToken(Constants.ANDROID_SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE));
-
             Runnable r = new Runnable(){
                 @Override
                 public void run() {
                     try{
-                    JSONObject registerJSON = new JSONObject();
-                    registerJSON.put("email", email);
-                    registerJSON.put("phone", phone);
-                    registerJSON.put("os", Constants.ANDROID_OS_STRING);
-                    registerJSON.put("deviceID", token);
-                    //registerJSON.put("deviceID", regid);
+                        JSONObject registerJSON = new JSONObject();
+                        registerJSON.put("email", email);
+                        registerJSON.put("phone", phone);
+                        registerJSON.put("os", Constants.ANDROID_OS_STRING);
+                        registerJSON.put("deviceID", token);
+                        //registerJSON.put("deviceID", regid);
 
-                        /*
-                    System.out.println("GCM TOKEN IS: " + regid);
-                    final SharedPreferences.Editor credentialsEditor = credentials.edit();
-                    credentialsEditor.commit();
-                    */
+                        Ion.with(getBaseContext())
+                                .load(Constants.REGISTER_URL)
+                                .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
+                                .asString()
+                                .setCallback(new FutureCallback<String>() {
+                                    @Override
+                                    public void onCompleted(Exception e, String receivedJSON) {
+                                        // Successful Request
+                                        if (HttpHelper.requestIsSuccessful(e)) {
+                                            JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
+                                            System.out.println(decryptedValue);
 
-                    Ion.with(getBaseContext())
-                            .load(Constants.REGISTER_URL)
-                            .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
-                            .asString()
-                            .setCallback(new FutureCallback<String>() {
-                                @Override
-                                public void onCompleted(Exception e, String receivedJSON) {
-                                    // Successful Request
-                                    if (HttpHelper.requestIsSuccessful(e)) {
-                                        JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
-                                        System.out.println(decryptedValue);
+                                            // Received Success Message
+                                            if (HttpHelper.receivedSuccessMessage("1", decryptedValue)) {
+                                                System.out.println("GENERATED TOKEN: " + token);
+                                                SharedPreferences credentials = getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+                                                SharedPreferences.Editor credentialsEditor = credentials.edit();
+                                                credentialsEditor.putString(Constants.EMAIL_KEY, email);
+                                                credentialsEditor.putString(Constants.TOKEN_KEY, token);
+                                                credentialsEditor.commit();
 
-                                        // Received Success Message
-                                        if (HttpHelper.receivedSuccessMessage(decryptedValue)) {
-                                            SharedPreferences credentials = getSharedPreferences(Constants.CREDENTIALS_SP, 0);
-                                            SharedPreferences.Editor credentialsEditor = credentials.edit();
-                                            credentialsEditor.putString(Constants.EMAIL_KEY, email);
-                                            credentialsEditor.putString(Constants.TOKEN_KEY, token);
-                                            credentialsEditor.commit();
-
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    spinner.setVisibility(View.GONE);
-                                                    showProceedMessage(R.string.sendverificationalerttitle, R.string.sendverificationalertmessage,
-                                                            R.string.okmessage, R.string.okmessage, false);
-                                                }
-                                            });
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        spinner.setVisibility(View.GONE);
+                                                        showProceedMessage(R.string.sendverificationalerttitle, R.string.sendverificationalertmessage,
+                                                                R.string.okmessage, R.string.okmessage, false);
+                                                    }
+                                                });
+                                            }
+                                            // Message Was Not Successful.
+                                            else {
+                                                System.out.println("got here");
+                                            }
                                         }
-
-                                        // Message Was Not Successful.
+                                        // Errors
                                         else {
-                                            System.out.println("got here");
+                                            System.out.println("got here lol");
                                         }
                                     }
-                                    // Errors
-                                    else {
-                                        System.out.println("got here lol");
-                                    }
-                                }
 
-                                // Extract Success Message From Received JSON.
+                                    // Extract Success Message From Received JSON.
                                 /*
                                 private boolean receivedSuccessMessage(JSONObject decryptedValue) {
                                     String success = null;
@@ -323,8 +306,8 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                                 }
                                 */
 
-                            });
-                } catch (CryptorException e) {
+                                });
+                    } catch (CryptorException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {
                         e.printStackTrace();

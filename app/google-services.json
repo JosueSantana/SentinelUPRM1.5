@@ -1,17 +1,50 @@
 {
   "project_info": {
-    "project_id": "default-demo-app-ec76f",
-    "project_number": "450503593838",
-    "name": "Default Demo App"
+    "project_id": "third-light-760",
+    "project_number": "6008874123",
+    "name": "Sentinel"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:450503593838:android:27d689d63f1b7a06",
-        "client_id": "edu.uprm.Sentinel",
+        "mobilesdk_app_id": "1:6008874123:android:f36173e948059ccb",
+        "client_id": "android:gcm.play.android.samples.com.gcmquickstart",
         "client_type": 1,
         "android_client_info": {
-          "package_name": "edu.uprm.Sentinel"
+          "package_name": "gcm.play.android.samples.com.gcmquickstart",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 2,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 1
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6008874123:android:223bba75a886d64c",
+        "client_id": "android:edu.uprm.Sentinel",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "edu.uprm.Sentinel",
+          "certificate_hash": []
         }
       },
       "oauth_client": [],

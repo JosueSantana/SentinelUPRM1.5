@@ -154,7 +154,7 @@ public class PhonebookFragment extends ListFragment{
 
                                         // Successful Request
 
-                                        if(HttpHelper.receivedSuccess2Message(decryptedValue)){
+                                        if(HttpHelper.receivedSuccessMessage("2", decryptedValue)){
                                             Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                             startActivity(splashIntent);
