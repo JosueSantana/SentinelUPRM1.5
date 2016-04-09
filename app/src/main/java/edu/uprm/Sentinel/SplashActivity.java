@@ -40,6 +40,15 @@ public class SplashActivity extends AppCompatActivity {
     private boolean checkSession(SharedPreferences credentials){
         SharedPreferences.Editor editor = credentials.edit();
 
+
+        if(credentials.getBoolean("sessionDropped", false)){
+            editor.putBoolean("sessionDropped", false).commit();
+            editor.putBoolean("atSignup", false).commit();
+
+            editor.remove("token");
+
+        }
+
         //verify token is saved
         if(credentials.contains("token")) {
             //verify verification code

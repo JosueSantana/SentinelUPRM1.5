@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Sentinel</string>
     <string name="action_settings" translatable="false">Settings</string>
-    <string name="title_activity_main">Main</string>
+    <string name="title_activity_main" translatable="false">Main</string>
     <string name="section_format" translatable="false">Hello World from section: %1$d</string>
     <string name="font_fontFamily_medium">Arial</string>
 

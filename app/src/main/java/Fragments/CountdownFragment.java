@@ -2,6 +2,7 @@ package Fragments;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 
@@ -11,10 +12,12 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,10 +51,15 @@ public class CountdownFragment extends Fragment implements
     private static int UPDATE_INTERVAL = 10000; // 10 sec
     private static int FASTEST_INTERVAL = 5000; // 5 sec
     private static int DISPLACEMENT = 5; // 10 meters
+    private ProgressBar spinner;
     private ImageButton cancelButton;
     private ImageButton sendButton;
     CountDownTimer CDT;
     boolean buttonPressed = false;
+    private SharedPreferences credentials;
+    private SharedPreferences.Editor editor;
+
+    private FragmentManager fm;
 
     public CountdownFragment() {
         // Required empty public constructor
@@ -117,6 +125,13 @@ public class CountdownFragment extends Fragment implements
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        fm = getActivity().getSupportFragmentManager();
+
+        spinner = (ProgressBar) getView().findViewById(R.id.progressBar);
+        spinner.setVisibility(View.INVISIBLE);
+
+        credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        editor = credentials.edit();
 
         //The string that holds the countdown number
         countDownDisplay = (TextView) getView().findViewById(R.id.countDownDisplay);
@@ -125,7 +140,9 @@ public class CountdownFragment extends Fragment implements
         CDT = new CountDownTimer(7000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                countDownDisplay.setText(String.valueOf((millisUntilFinished / 1000) - 1));
+                if(!buttonPressed) {
+                    countDownDisplay.setText(String.valueOf((millisUntilFinished / 1000) - 1));
+                }
                 //periodically print location so we know it's working
                 if (mGoogleApiClient.isConnected()) {
                     String text = String.valueOf(mLastLocation.getLatitude()) + ", " + String.valueOf(mLastLocation.getLongitude());
@@ -135,6 +152,7 @@ public class CountdownFragment extends Fragment implements
 
             public void onFinish() {
                 if(!buttonPressed){
+                    toggleUIClicking(false);
                     goBackToAlertWaitFragment();
                 }
             }
@@ -164,6 +182,15 @@ public class CountdownFragment extends Fragment implements
         });
 
     }
+
+    /*
+    private String getToken() {
+        SharedPreferences credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
+        return storedToken;
+    }
+    */
+
     private void sendAlert() throws JSONException, CryptorException {
 
         final CryptographyHandler crypto = new CryptographyHandler();
@@ -177,6 +204,13 @@ public class CountdownFragment extends Fragment implements
                     alertJSON.put("latitude", mLastLocation.getLatitude());
                     alertJSON.put("longitude", mLastLocation.getLongitude());
 
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            spinner.setVisibility(View.VISIBLE);
+                        }
+                    });
+
                     Ion.with(getContext())
                             .load(Constants.SEND_ALERT_URL)
                             .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(alertJSON))
@@ -184,45 +218,42 @@ public class CountdownFragment extends Fragment implements
                             .setCallback(new FutureCallback<String>() {
                                 @Override
                                 public void onCompleted(Exception e, String result) {
-                                    /**
-                                     * IF REQUEST WAS SUCCESSFUL:
-                                     */
-                                    if(HttpHelper.requestIsSuccessful(e)){
+                                    if(HttpHelper.requestIsSuccessful(e)) {
                                         try {
                                             JSONObject receivedSentinelMessage = JSONHandler.convertStringToJSON(result);
                                             String encryptedJSONReceived = JSONHandler.getSentinelMessage(receivedSentinelMessage);
                                             final String decryptedJSONReceived = crypto.decryptString(encryptedJSONReceived);
+
                                             final JSONObject receivedJSON = JSONHandler.convertStringToJSON(decryptedJSONReceived);
+
+                                            //(int titleID, int messageID, int positiveID, int negativeID, String kind, boolean hasNeg)
                                             CountdownFragment.this.getActivity().runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
+                                                    System.out.println("received:" + receivedJSON);
                                                     try {
-                                                        if(HttpHelper.receivedSuccessMessage(receivedJSON, "1")){
-                                                            getActivity().getSupportFragmentManager().beginTransaction()
-                                                                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                                                                    .remove(CountdownFragment.this).replace(R.id.mainLayout, new AlertWaitFragment()).commit();
-                                                        }
-                                                        else if (HttpHelper.receivedSuccessMessage(receivedJSON, "2")) {
+                                                        spinner.setVisibility(View.INVISIBLE);
+                                                        if (HttpHelper.receivedSuccessMessage(receivedJSON, "4")) {
+                                                            showProceedMessage(R.string.timenotuptitle, R.string.timenotupmessage, R.string.okmessage, R.string.cancelmessage, "timenotout", false);
+                                                        } else if (HttpHelper.receivedSuccessMessage(receivedJSON, "3")) {
+                                                            buttonPressed = true;
+                                                            showProceedMessage(R.string.alertnoinlocationtitle, R.string.alertnoinlocationmessage, R.string.okmessage, R.string.cancelmessage, "outofbounds", false);
+                                                        } else if (HttpHelper.receivedSuccessMessage(receivedJSON, "2")) {
+                                                            editor.putBoolean("sessionDropped", true).commit();
+
                                                             Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                                             startActivity(splashIntent);
+                                                        } else if (receivedJSON.getString("success").equals("1")) {
+                                                            getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).remove(CountdownFragment.this).replace(R.id.mainLayout, new AlertWaitFragment()).commit();
                                                         }
-                                                        else if(HttpHelper.receivedSuccessMessage(receivedJSON, "3")) {
-                                                            buttonPressed = true;
-                                                            Toast.makeText(CountdownFragment.this.getActivity(), R.string.alertnoinlocationmessage, Toast.LENGTH_SHORT).show();
-                                                            getActivity().getSupportFragmentManager().popBackStackImmediate();
-                                                        }
-                                                        else if (HttpHelper.receivedSuccessMessage(receivedJSON, "4")) {
-                                                            Toast.makeText(CountdownFragment.this.getActivity(), "Please Wait 10 Minutes Between Reporting Incidents", Toast.LENGTH_SHORT).show();
-                                                            getActivity().getSupportFragmentManager().popBackStackImmediate();
-                                                        } else {
 
-                                                        }
-                                                    } catch (Exception e) {
-                                                        e.printStackTrace();
+                                                    } catch (JSONException e1) {
+                                                        e1.printStackTrace();
                                                     }
                                                 }
                                             });
+
                                         } catch (JSONException e1) {
                                             e1.printStackTrace();
                                         } catch (CryptorException e1) {
@@ -234,7 +265,7 @@ public class CountdownFragment extends Fragment implements
                                      */
                                     else{
                                         Toast.makeText(CountdownFragment.this.getActivity(),
-                                                "There was an error with your request.",
+                                                "Please check your internet connection.",
                                                 Toast.LENGTH_SHORT).show();
                                         getActivity()
                                                 .getSupportFragmentManager()
@@ -248,6 +279,7 @@ public class CountdownFragment extends Fragment implements
                     e.printStackTrace();
                 }
             }
+
         };
         Thread t =  new Thread(r);
         t.setPriority(Thread.MAX_PRIORITY);
@@ -264,6 +296,7 @@ public class CountdownFragment extends Fragment implements
             e.printStackTrace();
         }
     }
+
 
     public void onDestroy(){
         super.onDestroy();
@@ -315,6 +348,21 @@ public class CountdownFragment extends Fragment implements
 
     }
 
+    private void showProceedMessage(int titleID, int messageID, int positiveID, int negativeID, String kind, boolean hasNeg) {
+        //prepare strings to pass to Fragment through Bundle
+        Bundle bundle = new Bundle();
+        bundle.putInt("dialogtitle", titleID);
+        bundle.putInt("dialogmessage", messageID);
+        bundle.putInt("positivetitle", positiveID);
+        bundle.putInt("negativetitle", negativeID);
+        bundle.putString("intentkind", kind);
+        bundle.putBoolean("hasneg", hasNeg );
+
+        //Call up AlertDialog
+        IntentDialogFragment dialogFragment = new IntentDialogFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "Proceed Dialog Fragment");
+    }
     //stops
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
