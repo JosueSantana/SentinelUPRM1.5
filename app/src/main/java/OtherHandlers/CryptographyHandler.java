@@ -12,9 +12,9 @@ import java.nio.charset.StandardCharsets;
  * Created by jeanmendez on 2/3/16.
  */
 
-/*
-    This class handles the Encryption and Decryption of all data sent and received
-    to and from the server.
+/**
+ * This class handles the Encryption and Decryption of all data sent and received
+ * to and from the server.
  */
 
 public final class CryptographyHandler {

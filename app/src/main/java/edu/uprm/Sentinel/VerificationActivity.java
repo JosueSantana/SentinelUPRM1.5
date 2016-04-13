@@ -33,6 +33,9 @@ import OtherHandlers.DialogCaller;
 import OtherHandlers.HttpHelper;
 import OtherHandlers.JSONHandler;
 import OtherHandlers.NetworkUtil;
+import OtherHandlers.Toasts;
+
+import static OtherHandlers.JSONHandler.getTokenFromJSON;
 
 /**
  * Created by a136803 on 2/3/16.
@@ -227,21 +230,25 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                             // Received Success Message
                                             if (HttpHelper.receivedSuccessMessage(decryptedValue, "1")) {
                                                 // Store token in Shared Preferences.
-                                                String token = getToken(decryptedValue);
-                                                storeToken(token);
-                                                userIsVerified();
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        spinner.setVisibility(View.GONE);
-                                                        startMainActivity();
-                                                        finish();
-                                                    }
-                                                });
-                                            } else if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
-                                                Context context = getApplicationContext();
-                                                CharSequence text = "Inputted Passcode is Incorrect";
+                                                String token = null;
+                                                try {
+                                                    token = getTokenFromJSON(decryptedValue);
+                                                    Constants.storeToken(getApplicationContext(), token);
+                                                    userIsVerified();
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            spinner.setVisibility(View.GONE);
+                                                            startMainActivity();
+                                                            finish();
+                                                        }
+                                                    });
+                                                } catch (JSONException e1) {
+                                                    e1.printStackTrace();
+                                                    Toasts.genericErrorToast(VerificationActivity.this);
+                                                }
 
+                                            } else if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
@@ -250,98 +257,26 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                                         toggleUIClicking(true);
                                                     }
                                                 });
-
                                             }
                                             // Message Was Not Successful.
-                                            else {}
+                                            else {
+                                                Toasts.genericErrorToast(VerificationActivity.this);
+                                            }
                                         }
                                         // Request Was Not Successful
-                                        else {}
-                                    }
-
-                                    // Store Token.
-                                    private void storeToken(String token) {
-                                        credentialsEditor.putString(Constants.TOKEN_KEY, token);
-                                        credentialsEditor.commit();
-                                    }
-
-                                    // User Enters Incorrect Passcode (success:2).
-                                    /*
-                                    private boolean userEntersIncorrectPasscode(JSONObject decryptedValue) {
-                                        String success = null;
-                                        try {
-                                            success = decryptedValue.getString("success");
-                                            return success.equals("2");
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                        else {
+                                            Toasts.connectionErrorToast(VerificationActivity.this);
                                         }
-                                        return false;
+                                        spinner.setVisibility(View.GONE);
                                     }
-                                    */
-
-                                    // Extract Token from JSON.
-                                    private String getToken(JSONObject decryptedValue) {
-                                        try {
-                                            return decryptedValue.getString("token");
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        return null;
-                                    }
-
-
                                     private void startMainActivity() {
                                         Intent veriIntent = new Intent(VerificationActivity.this, MainActivity.class);
                                         veriIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                         startActivity(veriIntent);
                                     }
-
-                                    private void startSplashActivity() {
-                                        Intent splashIntent = new Intent(VerificationActivity.this, SplashActivity.class);
-                                        splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
-                                        startActivity(splashIntent);
-                                    }
-
-                                    //
                                     private void userIsVerified() {
                                         credentialsEditor.putBoolean("isVerified", true).commit();
                                     }
-
-                                    // Extract Success Message From Received JSON.
-                                    /*
-                                    private boolean receivedSuccessMessage(JSONObject decryptedValue) {
-                                        String success = null;
-                                        try {
-                                            success = decryptedValue.getString("success");
-                                            return success.equals("1");
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        return false;
-                                    }
-
-                                    // Verify if there was an Error in the Request.
-                                    private boolean requestIsSuccessful(Exception e) {
-                                        return e == null;
-                                    }
-
-
-                                    // Convert received JSON String into a Decrypted JSON.
-                                    private JSONObject getDecryptedValue(String receivedJSONString) {
-                                        try {
-                                            JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                            String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                            String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                            JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                            return decryptedJSON;
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        } catch (CryptorException e) {
-                                            e.printStackTrace();
-                                        }
-                                        return null;
-                                    }
-                                    */
                                 });
                     } catch (CryptorException e) {
                         e.printStackTrace();

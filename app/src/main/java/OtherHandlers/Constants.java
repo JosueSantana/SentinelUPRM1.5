@@ -65,4 +65,23 @@ public class Constants {
         String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
         return storedToken;
     }
+
+    /**
+     * Store Email
+     */
+    public static void storeEmail(Context context, String email) {
+        SharedPreferences credentials = context.getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        SharedPreferences.Editor credentialsEditor = credentials.edit();
+        credentialsEditor.putString(Constants.EMAIL_KEY, email);
+        credentialsEditor.commit();
+    }
+    /**
+     * Store Token
+     */
+    public static void storeToken(Context context, String token) {
+        SharedPreferences credentials = context.getSharedPreferences(Constants.CREDENTIALS_SP, 0);
+        SharedPreferences.Editor credentialsEditor = credentials.edit();
+        credentialsEditor.putString(Constants.TOKEN_KEY, token);
+        credentialsEditor.commit();
+    }
 }

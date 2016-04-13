@@ -37,4 +37,8 @@ public final class JSONHandler {
         return json.get(Constants.SENTINEL_MESSAGE_KEY).toString();
     }
 
+    public static String getTokenFromJSON(JSONObject json) throws JSONException {
+        return json.get(Constants.TOKEN_KEY).toString();
+    }
+
 }

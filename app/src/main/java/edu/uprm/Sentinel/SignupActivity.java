@@ -45,8 +45,8 @@ import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DialogCaller;
 import OtherHandlers.HttpHelper;
-import OtherHandlers.JSONHandler;
 import OtherHandlers.NetworkUtil;
+import OtherHandlers.Toasts;
 
 /**
  * This activity handles the inputs for the login menu.
@@ -62,16 +62,12 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
     private SharedPreferences credentials;
     private SharedPreferences.Editor editor;
 
-    GoogleCloudMessaging gcm;
+    private ProgressBar spinner;
+
     InstanceID instanceID;
     String token;
-    private ProgressBar spinner;
-    String regid;
 
-    // THIS ONE WORKS:
-    //String PROJECT_NUMBER = "797012049317";
-
-    // SENTINEL TEST NUMBER:
+    // SENTINEL NUMBER:
     String PROJECT_NUMBER = "682306700573";
 
     @Override
@@ -220,17 +216,6 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
         } else {
 
             final CryptographyHandler crypto = new CryptographyHandler();
-
-            /*
-            InstanceID instanceID = InstanceID.getInstance(this);
-            String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-            */
-
-            //String token = getGCMToken();
-
-            //registerJSON.put("deviceID", Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID).toString());
-            //registerJSON.put("deviceID", instanceID.getToken(Constants.ANDROID_SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE));
-
             Runnable r = new Runnable(){
                 @Override
                 public void run() {
@@ -240,13 +225,6 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                         registerJSON.put("phone", phone);
                         registerJSON.put("os", Constants.ANDROID_OS_STRING);
                         registerJSON.put("deviceID", token);
-                        //registerJSON.put("deviceID", regid);
-
-                        /*
-                    System.out.println("GCM TOKEN IS: " + regid);
-                    final SharedPreferences.Editor credentialsEditor = credentials.edit();
-                    credentialsEditor.commit();
-                    */
 
                         Ion.with(getBaseContext())
                                 .load(Constants.REGISTER_URL)
@@ -258,72 +236,34 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                                         // Successful Request
                                         if (HttpHelper.requestIsSuccessful(e)) {
                                             JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
-                                            System.out.println(decryptedValue);
 
                                             // Received Success Message
                                             if (HttpHelper.receivedSuccessMessage(decryptedValue, "1")) {
-                                                SharedPreferences credentials = getSharedPreferences(Constants.CREDENTIALS_SP, 0);
-                                                SharedPreferences.Editor credentialsEditor = credentials.edit();
-                                                credentialsEditor.putString(Constants.EMAIL_KEY, email);
-                                                credentialsEditor.putString(Constants.TOKEN_KEY, token);
-                                                credentialsEditor.commit();
+                                                Constants.storeEmail(getApplicationContext(), email);
+                                                Constants.storeToken(getApplicationContext(), token);
 
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
                                                         spinner.setVisibility(View.GONE);
-                                                        showProceedMessage(R.string.sendverificationalerttitle, R.string.sendverificationalertmessage,
-                                                                R.string.okmessage, R.string.okmessage, false);
+                                                        showProceedMessage(R.string.sendverificationalerttitle,
+                                                                R.string.sendverificationalertmessage,
+                                                                R.string.okmessage, R.string.okmessage,
+                                                                false);
                                                     }
                                                 });
                                             }
-
                                             // Message Was Not Successful.
                                             else {
-                                                System.out.println("got here");
+                                                Toasts.genericErrorToast(SignupActivity.this);
                                             }
                                         }
-                                        // Errors
+                                        // There was an Error.
                                         else {
-                                            System.out.println("got here lol");
+                                            Toasts.connectionErrorToast(SignupActivity.this);
                                         }
+                                        spinner.setVisibility(View.GONE);
                                     }
-
-                                    // Extract Success Message From Received JSON.
-                                /*
-                                private boolean receivedSuccessMessage(JSONObject decryptedValue) {
-                                    String success = null;
-                                    try {
-                                        success = decryptedValue.getString("success");
-                                        return success.equals("1");
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    return false;
-                                }
-
-                                // Verify if there was an Error in the Request.
-                                private boolean requestIsSuccessful(Exception e) {
-                                    return e == null;
-                                }
-
-                                // Convert received JSON String into a Decrypted JSON.
-                                private JSONObject getDecryptedValue(String receivedJSONString) {
-                                    try {
-                                        JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                        String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                        String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                        JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                        return decryptedJSON;
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    } catch (CryptorException e) {
-                                        e.printStackTrace();
-                                    }
-                                    return null;
-                                }
-                                */
-
                                 });
                     } catch (CryptorException e) {
                         e.printStackTrace();
