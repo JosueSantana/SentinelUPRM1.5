@@ -247,7 +247,7 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                                     });
                                                 } catch (JSONException e1) {
                                                     e1.printStackTrace();
-                                                    Toasts.genericErrorToast(VerificationActivity.this);
+                                                    Toasts.genericErrorToast(VerificationActivity.this.getApplicationContext());
                                                 }
 
                                             } else if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
@@ -262,12 +262,12 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
                                             }
                                             // Message Was Not Successful.
                                             else {
-                                                Toasts.genericErrorToast(VerificationActivity.this);
+                                                Toasts.genericErrorToast(VerificationActivity.this.getApplicationContext());
                                             }
                                         }
                                         // Request Was Not Successful
                                         else {
-                                            Toasts.connectionErrorToast(VerificationActivity.this);
+                                            Toasts.connectionErrorToast(VerificationActivity.this.getApplicationContext());
                                         }
                                         spinner.setVisibility(View.GONE);
                                     }

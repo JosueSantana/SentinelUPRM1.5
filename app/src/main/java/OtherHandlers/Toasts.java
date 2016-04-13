@@ -1,6 +1,6 @@
 package OtherHandlers;
 
-import android.app.Activity;
+import android.content.Context;
 import android.widget.Toast;
 
 /**
@@ -8,16 +8,16 @@ import android.widget.Toast;
  */
 public class Toasts {
 
-    public static void genericErrorToast(Activity activity) {
-        displayToast(activity, "ERROR! Please Try Again Later.");
+    public static void genericErrorToast(Context context) {
+        displayToast(context, "ERROR! Please Try Again Later.");
     }
 
-    public static void connectionErrorToast(Activity activity) {
-        displayToast(activity, "ERROR! Please check your internet connection.");
+    public static void connectionErrorToast(Context context) {
+        displayToast(context, "ERROR! Please check your internet connection.");
     }
 
-    private static void displayToast(Activity activity, String message){
-        Toast.makeText(activity.getApplicationContext(),
+    private static void displayToast(Context context, String message){
+        Toast.makeText(context,
                 message,
                 Toast.LENGTH_LONG)
                 .show();

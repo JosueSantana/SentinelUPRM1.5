@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import OtherHandlers.Constants;
 import OtherHandlers.HttpHelper;
+import OtherHandlers.Toasts;
 import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -219,7 +220,6 @@ public class SettingsFragment extends Fragment {
         return new Runnable() {
             @Override
             public void run() {
-                System.out.println("IS THIS RUNNING?!?!?!");
                 final CryptographyHandler crypto;
 
                 JSONObject registerJSON = new JSONObject();
@@ -228,6 +228,7 @@ public class SettingsFragment extends Fragment {
 
                     registerJSON.put("token", getToken());
                     registerJSON.put(valuesFinal, settings.getBoolean(name, false));
+
                     Ion.with(getContext())
                             .load(Constants.SETTINGS_URL)
                             .setBodyParameter(Constants.SENTINEL_MESSAGE_KEY, crypto.encryptJSON(registerJSON))
@@ -235,20 +236,23 @@ public class SettingsFragment extends Fragment {
                             .setCallback(new FutureCallback<String>() {
                                 @Override
                                 public void onCompleted(Exception e, String receivedJSON) {
-                                    JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
                                     // Successful Request
-                                    if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
-                                        editor.putBoolean("sessionDropped", true).commit();
+                                    if(HttpHelper.requestIsSuccessful(e)){
+                                        JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
 
-                                        Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
-                                        splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
-                                        startActivity(splashIntent);
-                                    }
-                                    else if(HttpHelper.receivedSuccessMessage(decryptedValue, "3")){
-                                        int duration = Toast.LENGTH_SHORT;
-                                        String text = "There was an Error Updating Your Settings";
-                                        Toast toast = Toast.makeText(getContext(), text, duration);
-                                        toast.show();
+                                        if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
+                                            editor.putBoolean("sessionDropped", true).commit();
+
+                                            Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
+                                            splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
+                                            startActivity(splashIntent);
+                                        }
+                                        else if(HttpHelper.receivedSuccessMessage(decryptedValue, "3")){
+
+                                            Toasts.genericErrorToast(getContext());
+                                        }
+                                    } else {
+                                        Toasts.connectionErrorToast(getContext());
                                     }
                                 }
 

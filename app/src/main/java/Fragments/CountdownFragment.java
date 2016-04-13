@@ -183,14 +183,6 @@ public class CountdownFragment extends Fragment implements
 
     }
 
-    /*
-    private String getToken() {
-        SharedPreferences credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
-        String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
-        return storedToken;
-    }
-    */
-
     private void sendAlert() throws JSONException, CryptorException {
 
         final CryptographyHandler crypto = new CryptographyHandler();

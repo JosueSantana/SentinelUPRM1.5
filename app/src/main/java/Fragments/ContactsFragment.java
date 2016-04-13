@@ -27,7 +27,6 @@ import org.json.JSONObject;
 
 import ListViewHelpers.ContactsAdapter;
 import OtherHandlers.CryptographyHandler;
-import OtherHandlers.JSONHandler;
 import edu.uprm.Sentinel.SplashActivity;
 
 public class ContactsFragment extends ListFragment{
@@ -111,7 +110,7 @@ public class ContactsFragment extends ListFragment{
                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                             startActivity(splashIntent);
                                         } else {
-                                            Toasts.genericErrorToast(getActivity());
+                                            Toasts.genericErrorToast(getContext());
                                         }
 
                                         try {
@@ -149,11 +148,11 @@ public class ContactsFragment extends ListFragment{
 
                                                 editor.putInt("contactsCount", jsonArray.length()).apply();}
                                             catch(NullPointerException e1){
-                                                Toasts.genericErrorToast(getActivity());
+                                                Toasts.genericErrorToast(getContext());
                                             }
 
                                         } catch (JSONException e1) {
-                                            Toasts.genericErrorToast(getActivity());
+                                            Toasts.genericErrorToast(getContext());
                                         }
 
                                         // Created a new session; there are no registered contacts yet.
@@ -162,13 +161,13 @@ public class ContactsFragment extends ListFragment{
                                         else if (receivedExistingContacts(decryptedValue)) {}
                                         //
                                         else {
-                                            Toasts.genericErrorToast(getActivity());
+                                            Toasts.genericErrorToast(getContext());
                                         }
                                     }
                                     // Errors
                                     else {
                                         //e.printStackTrace();
-                                        Toasts.connectionErrorToast(getActivity());
+                                        Toasts.connectionErrorToast(getContext());
                                     }
                                 }
 

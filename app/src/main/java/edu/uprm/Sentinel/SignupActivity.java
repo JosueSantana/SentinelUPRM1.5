@@ -255,12 +255,12 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                                             }
                                             // Message Was Not Successful.
                                             else {
-                                                Toasts.genericErrorToast(SignupActivity.this);
+                                                Toasts.genericErrorToast(SignupActivity.this.getApplicationContext());
                                             }
                                         }
                                         // There was an Error.
                                         else {
-                                            Toasts.connectionErrorToast(SignupActivity.this);
+                                            Toasts.connectionErrorToast(SignupActivity.this.getApplicationContext());
                                         }
                                         spinner.setVisibility(View.GONE);
                                     }

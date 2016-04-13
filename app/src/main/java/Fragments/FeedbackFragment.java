@@ -27,6 +27,8 @@ import org.json.JSONObject;
 import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.HttpHelper;
+import OtherHandlers.Toasts;
+import edu.uprm.Sentinel.MainActivity;
 import edu.uprm.Sentinel.R;
 import edu.uprm.Sentinel.SplashActivity;
 
@@ -145,7 +147,7 @@ public class FeedbackFragment extends Fragment {
                                     JSONObject registerJSON = new JSONObject();
                                     registerJSON.put("message", hintView.getText().toString());
                                     registerJSON.put("os", Constants.ANDROID_OS_STRING);
-                                    registerJSON.put("token", getToken());
+                                    registerJSON.put("token", Constants.getToken(getContext()));
 
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
@@ -167,8 +169,6 @@ public class FeedbackFragment extends Fragment {
                                                     // Successful Request
                                                     if (HttpHelper.requestIsSuccessful(e)) {
                                                         JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
-                                                        System.out.println(decryptedValue);
-
                                                         // Received Success Message
                                                         if (HttpHelper.receivedSuccessMessage(decryptedValue, "1")) {
                                                             getActivity().runOnUiThread(new Runnable() {
@@ -181,73 +181,31 @@ public class FeedbackFragment extends Fragment {
                                                             });
                                                             FeedbackFragment.this.getActivity().getSupportFragmentManager().popBackStackImmediate();
                                                         }
-
-                                                        if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
+                                                        else if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
                                                             editor.putBoolean("sessionDropped", true).commit();
 
                                                             Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                                             startActivity(splashIntent);
                                                         }
-
                                                         // Message Was Not Successful.
                                                         else {
-
+                                                            Toasts.genericErrorToast(getContext());
                                                         }
+                                                        spinner.setVisibility(View.GONE);
                                                     }
                                                     // Errors
                                                     else {
-
+                                                        Toasts.connectionErrorToast(getContext());
+                                                        spinner.setVisibility(View.GONE);
                                                     }
                                                 }
-
-                                                // Extract Success Message From Received JSON.
-                                                /*
-                                                private boolean receivedSuccessMessage(JSONObject decryptedValue) {
-                                                    String success = null;
-                                                    try {
-                                                        success = decryptedValue.getString("success");
-                                                        return success.equals("1");
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                    return false;
-                                                }
-
-                                                // Verify if there was an Error in the Request.
-                                                private boolean requestIsSuccessful(Exception e) {
-                                                    return e == null;
-                                                }
-
-                                                // Convert received JSON String into a Decrypted JSON.
-                                                private JSONObject getDecryptedValue(String receivedJSONString) {
-                                                    try {
-                                                        JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                                        String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                                        String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                                        JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                                        return decryptedJSON;
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    } catch (CryptorException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                    return null;
-                                                }
-                                                */
-
                                             });
                                 } catch (CryptorException e) {
                                     e.printStackTrace();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                            }
-
-                            private String getToken() {
-                                SharedPreferences credentials = getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
-                                String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
-                                return storedToken;
                             }
                         };
 
