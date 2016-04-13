@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 
 import OtherHandlers.Constants;
 import OtherHandlers.HttpHelper;
+import OtherHandlers.Toasts;
 import edu.uprm.Sentinel.R;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -183,14 +184,20 @@ public class IncidentsFragment extends ListFragment {
                                             startActivity(splashIntent);
                                         }
                                         // Message Was Not Successful.
-                                        else {}
+                                        else {
+                                            Toasts.genericErrorToast(getContext());
+                                            spinner.setVisibility(View.GONE);
+                                        }
                                     }
                                     // Errors
-                                    else {}
+                                    else {
+                                        Toasts.connectionErrorToast(getContext());
+                                        spinner.setVisibility(View.GONE);
+                                    }
                                 }
                             });
                 }
-            }catch (JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             } catch (CryptorException e) {
                 e.printStackTrace();
@@ -296,6 +303,7 @@ public class IncidentsFragment extends ListFragment {
 
                                         // Message Was Not Successful.
                                         else {
+                                            Toasts.genericErrorToast(getContext());
                                             getActivity().runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -304,11 +312,10 @@ public class IncidentsFragment extends ListFragment {
                                             });
                                         }
                                     }
-
-
                                     // Errors
                                     else {
-
+                                        Toasts.connectionErrorToast(getContext());
+                                        spinner.setVisibility(View.GONE);
                                     }
                                 }
                             });
@@ -335,9 +342,9 @@ public class IncidentsFragment extends ListFragment {
             public void onScroll(AbsListView view, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
                 swipeRefreshLayout.setEnabled(mList != null &&
-                                (mList.getChildCount() == 0 || mList.getChildCount() > 0
-                                        && mList.getFirstVisiblePosition() == 0
-                                        && mList.getChildAt(0).getTop() == 0)
+                        (mList.getChildCount() == 0 || mList.getChildCount() > 0
+                                && mList.getFirstVisiblePosition() == 0
+                                && mList.getChildAt(0).getTop() == 0)
                 );
             }
         });
