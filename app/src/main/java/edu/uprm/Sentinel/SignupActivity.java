@@ -304,7 +304,7 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                 String msg = "";
                 instanceID = InstanceID.getInstance(getApplicationContext());
                 try {
-                    String token = instanceID.getToken(PROJECT_NUMBER, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                    String token = instanceID.getToken(Constants.ANDROID_SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
                     return token;
                 } catch (IOException e) {
                     e.printStackTrace();

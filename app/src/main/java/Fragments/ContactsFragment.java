@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 
 import OtherHandlers.Constants;
 import OtherHandlers.HttpHelper;
+import OtherHandlers.Toasts;
 import edu.uprm.Sentinel.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -80,13 +81,12 @@ public class ContactsFragment extends ListFragment{
                 try {
 
                     if(Thread.currentThread().interrupted()) throw new InterruptedException();
-
                     final CryptographyHandler crypto;
-
                     JSONObject registerJSON = new JSONObject();
                     crypto = new CryptographyHandler();
 
-                    registerJSON.put("token", getToken());
+                    registerJSON.put("token", Constants.getToken(getContext()));
+                    System.out.println();
 
                     Ion.with(getContext())
                             .load(Constants.CONTACT_LIST_URL)
@@ -95,23 +95,23 @@ public class ContactsFragment extends ListFragment{
                             .setCallback(new FutureCallback<String>() {
                                 @Override
                                 public void onCompleted(Exception e, String receivedJSON) {
-
                                     // Successful Request
                                     if (HttpHelper.requestIsSuccessful(e)) {
 
-                                        JSONObject decryptedValue = getDecryptedValue(receivedJSON);
-                                        System.out.println(decryptedValue);
+                                        JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
 
                                         if(HttpHelper.receivedSuccessMessage(decryptedValue, "1")){
 
                                         }
-                                        if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
+                                        else if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
 
                                             editor.putBoolean("sessionDropped", true).commit();
 
                                             Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                             startActivity(splashIntent);
+                                        } else {
+                                            Toasts.genericErrorToast(getActivity());
                                         }
 
                                         try {
@@ -149,28 +149,26 @@ public class ContactsFragment extends ListFragment{
 
                                                 editor.putInt("contactsCount", jsonArray.length()).apply();}
                                             catch(NullPointerException e1){
-                                                e1.printStackTrace();
+                                                Toasts.genericErrorToast(getActivity());
                                             }
 
                                         } catch (JSONException e1) {
-                                            e1.printStackTrace();
+                                            Toasts.genericErrorToast(getActivity());
                                         }
 
                                         // Created a new session; there are no registered contacts yet.
-                                        if (listIsEmpty(decryptedValue)) {
-                                        }
+                                        if (listIsEmpty(decryptedValue)) {}
                                         // Received contact list.
-                                        else if (receivedExistingContacts(decryptedValue)) {
-                                        }
+                                        else if (receivedExistingContacts(decryptedValue)) {}
                                         //
                                         else {
-
+                                            Toasts.genericErrorToast(getActivity());
                                         }
                                     }
-
                                     // Errors
                                     else {
-                                        e.printStackTrace();
+                                        //e.printStackTrace();
+                                        Toasts.connectionErrorToast(getActivity());
                                     }
                                 }
 
@@ -196,22 +194,6 @@ public class ContactsFragment extends ListFragment{
                                     }
                                     return false;
                                 }
-
-                                // Convert received JSON String into a Decrypted JSON.
-                                private JSONObject getDecryptedValue(String receivedJSONString) {
-                                    try {
-                                        JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                        String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                        String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                        JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                        return decryptedJSON;
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    } catch (CryptorException e) {
-                                        e.printStackTrace();
-                                    }
-                                    return null;
-                                }
                             });
                 } catch (CryptorException e) {
                     e.printStackTrace();
@@ -225,17 +207,6 @@ public class ContactsFragment extends ListFragment{
 
         loaderThread.setPriority(Thread.MAX_PRIORITY);
         loaderThread.start();
-
-
-        //setListAdapter(new ContactsAdapter(jsonArray, getActivity()));
-        //getListView();
-
-    }
-
-    private String getToken() {
-        SharedPreferences credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
-        String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
-        return storedToken;
     }
 
     @Override
@@ -276,28 +247,6 @@ public class ContactsFragment extends ListFragment{
         }
         return false;
     }
-    /*
-    public void setListAdapter(JSONArray jsonArray){
-        this.contactsListView.setAdapter(new ContactsAdapter(jsonArray, getActivity()));
-    }
-
-
-    private class GetMyContactsTask extends AsyncTask<JSONHandler, Long, JSONArray>{
-
-        @Override
-        protected JSONArray doInBackground(JSONHandler... jsonHandlers) {
-
-            //get the resulting JSONArray from HTTP Requests
-
-            //format: return params[0].theMethodThatReturnsJSONArray();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(JSONArray jsonArray) {
-            setListAdapter(jsonArray);
-        }
-    }*/
 
     private void showSignupError(int titleID, int messageID) {
         //prepare strings to pass to Fragment through Bundle
@@ -310,5 +259,4 @@ public class ContactsFragment extends ListFragment{
         dialogFragment.setArguments(bundle);
         dialogFragment.show(getChildFragmentManager(), "Alert Dialog Fragment");
     }
-
 }

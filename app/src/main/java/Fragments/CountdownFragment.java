@@ -266,8 +266,7 @@ public class CountdownFragment extends Fragment implements
                                     else{
                                         Toast.makeText(CountdownFragment.this.getActivity(),
                                                 "Please check your internet connection.",
-                                                Toast.LENGTH_SHORT)
-                                                .show();
+                                                Toast.LENGTH_SHORT).show();
                                         getActivity()
                                                 .getSupportFragmentManager()
                                                 .popBackStackImmediate();

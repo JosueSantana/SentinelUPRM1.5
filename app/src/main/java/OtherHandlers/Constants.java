@@ -42,7 +42,6 @@ public class Constants {
      */
     public static final String SETTINGS_SP = "SettingsFile";
     public static final String CREDENTIALS_SP = "CredentialsFile";
-
     public static final String TOKEN_KEY = "token";
 
     // Settings Values:
@@ -54,8 +53,8 @@ public class Constants {
     public static final String INSTANCE_ID_GCM = "sentinel_instance_id";
     public static final String SENTINEL_MESSAGE_KEY = "SentinelMessage";
     public static final String ANDROID_OS_STRING = "android";
-    public static final long TIMER_PERIOD = 0;
     public static final String ANDROID_SENDER_ID = "682306700573";
+    public static final long TIMER_PERIOD = 0;
 
     /**
      * Get Token
@@ -70,18 +69,19 @@ public class Constants {
      * Store Email
      */
     public static void storeEmail(Context context, String email) {
-        SharedPreferences credentials = context.getSharedPreferences(Constants.CREDENTIALS_SP, 0);
-        SharedPreferences.Editor credentialsEditor = credentials.edit();
-        credentialsEditor.putString(Constants.EMAIL_KEY, email);
-        credentialsEditor.commit();
+        storeValue(context, email, EMAIL_KEY);
     }
     /**
      * Store Token
      */
     public static void storeToken(Context context, String token) {
+        storeValue(context, token, TOKEN_KEY);
+    }
+
+    private static void storeValue(Context context, String value, String key){
         SharedPreferences credentials = context.getSharedPreferences(Constants.CREDENTIALS_SP, 0);
         SharedPreferences.Editor credentialsEditor = credentials.edit();
-        credentialsEditor.putString(Constants.TOKEN_KEY, token);
+        credentialsEditor.putString(key, value);
         credentialsEditor.commit();
     }
 }
