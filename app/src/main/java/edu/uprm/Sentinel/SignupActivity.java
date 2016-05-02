@@ -68,7 +68,7 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
     String token;
 
     // SENTINEL NUMBER:
-    String PROJECT_NUMBER = "682306700573";
+    //String PROJECT_NUMBER = "682306700573";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,7 +240,6 @@ public class SignupActivity extends FragmentActivity implements DialogCaller {
                                             // Received Success Message
                                             if (HttpHelper.receivedSuccessMessage(decryptedValue, "1")) {
                                                 Constants.storeEmail(getApplicationContext(), email);
-                                                Constants.storeToken(getApplicationContext(), token);
 
                                                 runOnUiThread(new Runnable() {
                                                     @Override

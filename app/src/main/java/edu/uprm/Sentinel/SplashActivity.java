@@ -50,7 +50,7 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         //verify token is saved
-        if(credentials.contains("token")) {
+        if(credentials.getString(Constants.SENTINEL_TOKEN_KEY, null) != null) {
             //verify verification code
             if(credentials.contains("alertDisabled") && credentials.getBoolean("alertDisabled", false)){
 

@@ -43,6 +43,7 @@ public class Constants {
     public static final String SETTINGS_SP = "SettingsFile";
     public static final String CREDENTIALS_SP = "CredentialsFile";
     public static final String TOKEN_KEY = "token";
+    public static final String SENTINEL_TOKEN_KEY = "sentinel_uprm_token";
 
     // Settings Values:
     public static final String EMAIL_KEY = "mail";
@@ -61,7 +62,7 @@ public class Constants {
      */
     public static String getToken(Context context) {
         SharedPreferences credentials = context.getSharedPreferences(Constants.CREDENTIALS_SP, 0);
-        String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
+        String storedToken = credentials.getString(Constants.SENTINEL_TOKEN_KEY, null);
         return storedToken;
     }
 
@@ -75,7 +76,14 @@ public class Constants {
      * Store Token
      */
     public static void storeToken(Context context, String token) {
-        storeValue(context, token, TOKEN_KEY);
+        storeValue(context, token, SENTINEL_TOKEN_KEY);
+    }
+
+    /**
+     * Delete Token
+     */
+    public static void deleteToken(Context context) {
+        storeValue(context, null, SENTINEL_TOKEN_KEY);
     }
 
     private static void storeValue(Context context, String value, String key){

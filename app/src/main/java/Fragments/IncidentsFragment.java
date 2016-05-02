@@ -178,7 +178,7 @@ public class IncidentsFragment extends ListFragment {
                                         }
                                         else if(HttpHelper.receivedSuccessMessage(decryptedValue,"2")){
                                             editor.putBoolean("sessionDropped", true).commit();
-
+                                            // Delete token here.
                                             Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                             startActivity(splashIntent);
@@ -295,7 +295,7 @@ public class IncidentsFragment extends ListFragment {
                                         }
                                         else if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
                                             editor.putBoolean("sessionDropped", true).commit();
-
+                                            // delete token here
                                             Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                             startActivity(splashIntent);

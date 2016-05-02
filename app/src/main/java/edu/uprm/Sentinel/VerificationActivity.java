@@ -53,10 +53,14 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
     private SharedPreferences credentials;
     private SharedPreferences.Editor credentialsEditor;
 
+    private String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification);
+
+        //this.token = getIntent().getStringExtra("token");
 
         //fix orientation on Portrait
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

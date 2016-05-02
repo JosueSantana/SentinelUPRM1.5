@@ -151,12 +151,6 @@ public class SettingsFragment extends Fragment {
 
     }
 
-    private String getToken() {
-        credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
-        String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
-        return storedToken;
-    }
-
     private void switchToggle(CompoundButton slideSwitch, String name){
         if(settings.getBoolean(name, true)){slideSwitch.toggle();}
     }
@@ -226,7 +220,7 @@ public class SettingsFragment extends Fragment {
                 try {
                     crypto = new CryptographyHandler();
 
-                    registerJSON.put("token", getToken());
+                    registerJSON.put("token", Constants.getToken(getContext()));
                     registerJSON.put(valuesFinal, settings.getBoolean(name, false));
 
                     Ion.with(getContext())
@@ -242,7 +236,7 @@ public class SettingsFragment extends Fragment {
 
                                         if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
                                             editor.putBoolean("sessionDropped", true).commit();
-
+                                            // delete token here.
                                             Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                             startActivity(splashIntent);
@@ -255,45 +249,6 @@ public class SettingsFragment extends Fragment {
                                         Toasts.connectionErrorToast(getContext());
                                     }
                                 }
-
-                                // Extract Success Message From Received JSON.
-                                /*)
-                                private boolean receivedSuccessMessage(JSONObject decryptedValue) {
-                                    String success = null;
-                                    try {
-                                        success = decryptedValue.getString("success");
-                                        return success.equals("1");
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    return false;
-                                }
-
-                                // Verify if there was an Error in the Request.
-                                private boolean requestIsSuccessful(Exception e) {
-                                    return e == null;
-                                }
-
-                                // Convert received JSON String into a Decrypted JSON.
-                                private JSONObject getDecryptedValue(String receivedJSONString) {
-                                    try {
-                                        JSONObject receivedJSON =
-                                                JSONHandler.convertStringToJSON(receivedJSONString);
-                                        String encryptedStringValue =
-                                                JSONHandler.getSentinelMessage(receivedJSON);
-                                        String decryptedStringValue =
-                                                crypto.decryptString(encryptedStringValue);
-                                        JSONObject decryptedJSON =
-                                                JSONHandler.convertStringToJSON(decryptedStringValue);
-                                        return decryptedJSON;
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    } catch (CryptorException e) {
-                                        e.printStackTrace();
-                                    }
-                                    return null;
-                                }
-                                */
                             });
                 } catch (JSONException e) {
                     e.printStackTrace();

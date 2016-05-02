@@ -135,7 +135,7 @@ public class ContactsAdapter extends BaseAdapter {
         try {
             crypto = new CryptographyHandler();
 
-            registerJSON.put("token", getToken());
+            registerJSON.put("token", Constants.getToken(this.activity.getApplicationContext()));
             registerJSON.put("delete", telephone);
 
             if(!isDeleting) {
@@ -222,12 +222,6 @@ public class ContactsAdapter extends BaseAdapter {
         } catch (CryptorException e) {
             e.printStackTrace();
         }
-    }
-
-    private String getToken() {
-        SharedPreferences credentials = this.activity.getApplicationContext().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
-        String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
-        return storedToken;
     }
 
     private class ContactsRow

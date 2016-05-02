@@ -166,7 +166,6 @@ public class ContactsFragment extends ListFragment{
                                     }
                                     // Errors
                                     else {
-                                        //e.printStackTrace();
                                         Toasts.connectionErrorToast(getContext());
                                     }
                                 }

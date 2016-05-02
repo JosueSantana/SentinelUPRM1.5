@@ -25,6 +25,7 @@ import OtherHandlers.DialogCaller;
 import OtherHandlers.JSONHandler;
 
 import Fragments.ViewPagerFragment;
+import OtherHandlers.Toasts;
 
 public class MainActivity extends AppCompatActivity implements DialogCaller {
 
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
                         crypto = new CryptographyHandler();
 
                         JSONObject registerJSON = new JSONObject();
-                        registerJSON.put("token", getToken());
+                        registerJSON.put("token", Constants.getToken(getApplicationContext()));
 
                         Ion.with(getApplicationContext())
                                 .load(Constants.UNSUBSCRIBE_URL)
@@ -94,15 +95,17 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
                                             JSONObject decryptedValue = getDecryptedValue(receivedJSON);
 
                                             // Received Success Message
-                                            if (receivedSuccess1Message(decryptedValue)) {}
+                                            if (receivedSuccess1Message(decryptedValue)) {
+
+                                            }
                                             // Message Was Not Successful.
                                             else {
-
+                                                Toasts.genericErrorToast(getApplicationContext());
                                             }
                                         }
                                         // Errors
                                         else {
-
+                                            Toasts.connectionErrorToast(getApplicationContext());
                                         }
                                     }
 
@@ -149,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
             };
             new Thread(r).start();
 
+            Constants.deleteToken(getApplicationContext());
             startActivity(unsubscribeIntent);
             finish();
         }
@@ -166,11 +170,13 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
 
     }
 
+    /*
     private String getToken() {
         SharedPreferences credentials = this.getSharedPreferences(Constants.CREDENTIALS_SP, 0);
         String storedToken = credentials.getString(Constants.TOKEN_KEY, null);
         return storedToken;
     }
+    */
 
     @Override
     public void doItemClick(Bundle bundle) {
