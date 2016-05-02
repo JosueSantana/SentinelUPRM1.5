@@ -22,6 +22,7 @@ import Fragments.FeedbackFragment;
 import OtherHandlers.Constants;
 import OtherHandlers.CryptographyHandler;
 import OtherHandlers.DialogCaller;
+import OtherHandlers.HttpHelper;
 import OtherHandlers.JSONHandler;
 
 import Fragments.ViewPagerFragment;
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
                         crypto = new CryptographyHandler();
 
                         JSONObject registerJSON = new JSONObject();
-                        registerJSON.put("token", Constants.getToken(getApplicationContext()));
+                        registerJSON.put(Constants.TOKEN_KEY, Constants.getToken(getApplicationContext()));
 
                         Ion.with(getApplicationContext())
                                 .load(Constants.UNSUBSCRIBE_URL)
@@ -91,12 +92,12 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
                                     @Override
                                     public void onCompleted(Exception e, String receivedJSON) {
                                         // Successful Request
-                                        if (requestIsSuccessful(e)) {
-                                            JSONObject decryptedValue = getDecryptedValue(receivedJSON);
+                                        Constants.deleteToken(getApplicationContext());
+                                        if (HttpHelper.requestIsSuccessful(e)) {
+                                            JSONObject decryptedValue = crypto.getDecryptedValue(receivedJSON);
 
                                             // Received Success Message
-                                            if (receivedSuccess1Message(decryptedValue)) {
-
+                                            if (HttpHelper.receivedSuccessMessage(decryptedValue, "1")) {
                                             }
                                             // Message Was Not Successful.
                                             else {
@@ -107,39 +108,6 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
                                         else {
                                             Toasts.connectionErrorToast(getApplicationContext());
                                         }
-                                    }
-
-                                    // Extract Success Message From Received JSON.
-                                    private boolean receivedSuccess1Message(JSONObject decryptedValue) {
-                                        String success = null;
-                                        try {
-                                            success = decryptedValue.getString("success");
-                                            return success.equals("1");
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        return false;
-                                    }
-
-                                    // Verify if there was an Error in the Request.
-                                    private boolean requestIsSuccessful(Exception e) {
-                                        return e == null;
-                                    }
-
-                                    // Convert received JSON String into a Decrypted JSON.
-                                    private JSONObject getDecryptedValue(String receivedJSONString) {
-                                        try {
-                                            JSONObject receivedJSON = JSONHandler.convertStringToJSON(receivedJSONString);
-                                            String encryptedStringValue = JSONHandler.getSentinelMessage(receivedJSON);
-                                            String decryptedStringValue = crypto.decryptString(encryptedStringValue);
-                                            JSONObject decryptedJSON = JSONHandler.convertStringToJSON(decryptedStringValue);
-                                            return decryptedJSON;
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        } catch (CryptorException e) {
-                                            e.printStackTrace();
-                                        }
-                                        return null;
                                     }
                                 });
 
@@ -152,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements DialogCaller {
             };
             new Thread(r).start();
 
-            Constants.deleteToken(getApplicationContext());
             startActivity(unsubscribeIntent);
             finish();
         }

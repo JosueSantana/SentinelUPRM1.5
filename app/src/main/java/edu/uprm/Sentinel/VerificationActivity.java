@@ -60,8 +60,6 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification);
 
-        //this.token = getIntent().getStringExtra("token");
-
         //fix orientation on Portrait
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -203,12 +201,6 @@ public class VerificationActivity extends AppCompatActivity implements DialogCal
             spinner.setVisibility(View.GONE);
         }
         else {
-
-            /*
-            SharedPreferences credentials = getSharedPreferences(Constants.CREDENTIALS_SP, 0);
-            SharedPreferences.Editor editor = credentials.edit();
-             */
-
             final CryptographyHandler crypto = new CryptographyHandler();
             String emailAddress = credentials.getString(Constants.EMAIL_KEY, null);
 
