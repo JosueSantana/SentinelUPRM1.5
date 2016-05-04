@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0'
+        classpath 'com.android.tools.build:gradle:2.1.0'
         classpath 'com.google.gms:google-services:2.0.0-beta6'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -21,51 +21,3 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-/*
-if gradle blows up, use this as your google-package.json:
-
-{
-            "project_info": {
-            "project_id": "third-light-760",
-            "project_number": "6008874123",
-            "name": "Sentinel"
-        },
-            "client": [
-                {
-                    "client_info": {
-                    "mobilesdk_app_id": "1:6008874123:android:f36173e948059ccb",
-                    "client_id": "com.hmkcode.locations.sentineluprm15",
-                    "client_type": 1,
-                    "android_client_info": {
-                        "package_name": "com.hmkcode.locations.sentineluprm15"
-                    }
-                },
-                    "oauth_client": [],
-                    "api_key": [],
-                    "services": {
-                    "analytics_service": {
-                        "status": 1
-                    },
-                    "cloud_messaging_service": {
-                        "status": 2,
-                        "apns_config": []
-                    },
-                    "appinvite_service": {
-                        "status": 1,
-                        "other_platform_oauth_client": []
-                    },
-                    "google_signin_service": {
-                        "status": 1
-                    },
-                    "ads_service": {
-                        "status": 1
-                    }
-                }
-                }
-        ],
-            "client_info": [],
-            "ARTIFACT_VERSION": "1"
-        }
-
- */
