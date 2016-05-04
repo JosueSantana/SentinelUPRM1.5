@@ -45,7 +45,6 @@ public class GcmMessageHandler extends IntentService {
         // extras.keySet has all the keys.
         mes = extras.getString("title");
         showToast();
-        Log.i("GCM", "Received : (" + messageType + ")  " + extras.getString("title"));
 
         sendNotification(extras.get("gcm.notification.title").toString());
 

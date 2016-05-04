@@ -61,9 +61,8 @@ public class CountdownFragment extends Fragment implements
 
     private FragmentManager fm;
 
-    public CountdownFragment() {
-        // Required empty public constructor
-    }
+    // Required empty public constructor:
+    public CountdownFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,7 +92,7 @@ public class CountdownFragment extends Fragment implements
         super.onResume();
 
         //checkPlayServices();
-
+        mGoogleApiClient.connect();
         // Resuming the periodic location updates
         if (mGoogleApiClient.isConnected()) {
             startLocationUpdates();
@@ -133,10 +132,10 @@ public class CountdownFragment extends Fragment implements
         credentials = this.getActivity().getSharedPreferences(Constants.CREDENTIALS_SP, 0);
         editor = credentials.edit();
 
-        //The string that holds the countdown number
+        // The string that holds the countdown number
         countDownDisplay = (TextView) getView().findViewById(R.id.countDownDisplay);
 
-        //Set up the countdown timer
+        // Set up the countdown timer
         CDT = new CountDownTimer(7000, 1000) {
 
             public void onTick(long millisUntilFinished) {
@@ -159,6 +158,9 @@ public class CountdownFragment extends Fragment implements
         }.start();
 
         //reference to the send button, moves into the alertwaitfragment
+        /**
+         * Send Button (Green Button) Listener:
+         */
         sendButton = (ImageButton) getView().findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,11 +172,18 @@ public class CountdownFragment extends Fragment implements
             }
         });
 
-        //reference to the back button,
+        /**
+         * Cancel Button (Red Button) Listener:
+         */
         cancelButton = (ImageButton) getView().findViewById(R.id.cancelButton);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CDT.cancel();
+                if(mGoogleApiClient.isConnected()){
+                    mGoogleApiClient.disconnect();
+                }
+                stopLocationUpdates();
                 buttonPressed = true;
                 toggleUIClicking(false);
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
@@ -291,6 +300,7 @@ public class CountdownFragment extends Fragment implements
 
 
     public void onDestroy(){
+
         super.onDestroy();
         //cancel timer when this fragment is destroyed
     }
@@ -308,8 +318,7 @@ public class CountdownFragment extends Fragment implements
             return;
         }
         //get initial connected location
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         startLocationUpdates();
     }
 
@@ -335,8 +344,7 @@ public class CountdownFragment extends Fragment implements
             return;
         }
         //begin attempting updates
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                mGoogleApiClient, mLocationRequest, this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 
     }
 
@@ -357,7 +365,9 @@ public class CountdownFragment extends Fragment implements
     }
     //stops
     protected void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        if(mGoogleApiClient.isConnected()){
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        }
     }
 
     //Sets up the google api client
