@@ -184,6 +184,7 @@ public class FeedbackFragment extends Fragment {
                                                         else if(HttpHelper.receivedSuccessMessage(decryptedValue, "2")){
                                                             editor.putBoolean("sessionDropped", true).commit();
 
+                                                            Constants.deleteToken(getContext());
                                                             Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                                             startActivity(splashIntent);

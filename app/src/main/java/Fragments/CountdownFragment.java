@@ -232,7 +232,7 @@ public class CountdownFragment extends Fragment implements
                                                             showProceedMessage(R.string.alertnoinlocationtitle, R.string.alertnoinlocationmessage, R.string.okmessage, R.string.cancelmessage, "outofbounds", false);
                                                         } else if (HttpHelper.receivedSuccessMessage(receivedJSON, "2")) {
                                                             editor.putBoolean("sessionDropped", true).commit();
-
+                                                            Constants.deleteToken(getContext());
                                                             Intent splashIntent = new Intent(getActivity(), SplashActivity.class);
                                                             splashIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //use to clear activity stack
                                                             startActivity(splashIntent);
