@@ -1,0 +1,57 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="Fragments.FeedbackFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/material_grey_50">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reportproblem"
+            android:id="@+id/feedbacktitle"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/minHeight"
+            android:layout_marginBottom="@dimen/abc_action_bar_subtitle_bottom_margin_material"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:textStyle="bold" />
+
+        <AutoCompleteTextView
+            android:layout_width="fill_parent"
+            android:layout_height="320dp"
+            android:id="@+id/myFeedback"
+            android:layout_below="@+id/feedbacktitle"
+            android:textAlignment="gravity"
+            android:gravity="left|top"
+            android:background="@drawable/back"
+            android:layout_marginLeft="@dimen/abc_action_bar_subtitle_bottom_margin_material"
+            android:layout_marginRight="@dimen/abc_action_bar_subtitle_bottom_margin_material"
+            android:padding="@dimen/abc_dialog_list_padding_vertical_material"
+            android:hint="@string/problemhint" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reportproblemfooter"
+            android:id="@+id/feedbackmessage"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_below="@+id/myFeedback" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progressDrawable="@drawable/circular_progress_bar"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+</FrameLayout>

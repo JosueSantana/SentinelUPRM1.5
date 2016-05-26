@@ -1,0 +1,52 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="Fragments.ReportFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/textColorPrimary">
+
+        <ImageButton
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:id="@+id/alertButton"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/alert_button"
+            android:clickable="true"
+            android:layout_below="@+id/alertHeader" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/toplabel"
+            android:id="@+id/alertHeader"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/headline"
+            android:layout_marginBottom="30sp"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="10sp"
+            android:fontFamily="sans-serif-black"
+            android:layout_alignParentTop="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bottomlabel"
+            android:id="@+id/alertFooter"
+            android:layout_below="@+id/alertButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10sp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/abc_text_size_medium_material"
+            android:gravity="center_horizontal"
+            android:fontFamily="sans-serif-condensed-light"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_alignParentBottom="true" />
+    </RelativeLayout>
+</FrameLayout>

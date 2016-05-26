@@ -1,0 +1,186 @@
+<resources>
+    <string name="app_name">Sentinel</string>
+    <string name="font_fontFamily_medium">Arial</string>
+
+    <!--Barra navegadora -->
+    <string name="alert">Alerte</string>
+    <string name="incident">Incidents</string>
+    <string name="call">Appeler</string>
+    <string name="settings">Réglages</string>
+    <string name="noconnectiontitle">Pas de connexion à Internet</string>
+    <string name="noconnectionmessage">Assurez-vous que votre appareil est connecté à Internet.</string>
+    <!-- -->
+    
+    <!--Pantalla para registrarse -->
+    <string name="signuptitle">Enregistrer</string>
+    <string name="okmessage">OK</string>
+    <string name="emptyformatalerttitle">Champs Vides</string>
+    <string name="emptyformatalertmessage">S\'il vous plaît remplir tous les champs.</string>
+    <string name="incorrectemailformattitle">Le E-mail est incorrect</string>
+    <string name="incorrectemailformatmessage">L\'e-mail que vous avez entré est invalide. Assurez-vous que votre e-mail appartient au domaine de l\'UPR ou UPRM.</string>
+    <string name="entercodelabel">Saisissez le Code</string>
+    <string name="sendvalidationlabel">Valider</string>
+    <string name="sendverificationalerttitle">Code de Vérification Envoyé</string>
+    <string name="sendverificationalertmessage">Un code de vérification a été envoyé à votre e-mail pour légitimer la session.</string>
+    <string name="wrongcodetitle">Code Incorrect</string>
+    <string name="wrongcodemessage">Le code que vous avez soumis ne correspond pas. Vérifiez que vous avez entré le code correctement.</string>
+    <string name="emailhint">Courrier électronique</string>
+    <string name="passwordhint">Mot de Passe</string>
+    <!-- -->
+    
+    <!--Notificaciones -->
+    <string name="notificationTitle">L\'incident a été localisé</string>
+    <string name="notificationMessage">Actualiser le tableau des incidents tirant vers le bas pour montrer nouveaux incidents.</string>
+    <!-- -->
+    
+    <!--Pantalla de Alerta -->
+    <string name="toplabel">Appuyez pour Alerter</string>
+    <string name="bottomlabel">ATTENTION: Vous avez 5 secondes pour arrêter l\'alerte avant d\'être envoyé.</string>
+    <string name="locationtitle">Voir Emplacement actuelle</string>
+    <string name="locationmessage">S\'il vous plaît choisir une option.</string>
+    <string name="viewlocationtitle">Voir Emplacement</string>
+    <string name="alertlocationdonelabel">Fermer</string>
+    <string name="setlocationtitle">Set emplacement manuellement</string>
+    <string name="unsetlocationtitle">Détacher Emplacement Manuellement</string>
+    <string name="sendbutton">ENVOYER</string>
+    <string name="stopbutton">ARRÊTER</string>
+    <string name="alertnoinlocationtitle">En dehors du environs de l\'Université</string>
+    <string name="alertnoinlocationmessage">Pour envoyer l\'alerte, vous devez être dans les environs de l\'université.</string>
+    <string name="alertlocationnotavailabletitle">Emplacement Non Disponible</string>
+    <string name="alertlocationnotavailablemessage">Vous pouvez activer votre GPS ou autoriser l\'application pour obtenir votre emplacement dans le menu Paramètres.</string>
+    <string name="sendingalert">Envoi Alerte Demandé…</string>
+    <!-- -->
+    
+    <!--Pantalla de alerta enviada -->
+    <string name="toplabelalerted">S\'il vous plaît attendre de l\'aide à venir!</string>
+    <string name="bottomlabelalerted">Pour envoyer une autre alerte, vous devrez attendre %1$s  minutes</string>
+    <string name="alerttimerend">Prêt à alerter!</string>
+    <!-- -->
+    
+    <!--Pantalla para ver incidentes -->
+    <string name="viewmap">Voir Carte</string>
+    <string name="markertap">Appuyez sur Marker pour Obtenir Information</string>
+    <string name="showall">Montre Tout</string>
+    <!-- -->
+    
+    <!--Pantalla de mapas de ubicación -->
+    <string name="invalidadjustmentalert">Ajustement Invalide</string>
+    <string name="invalidadjustmentmessage">Vous avez placé le curseur hors des environs.</string>
+    <string name="unchangedalert">Son emplacement reste le même</string>
+    <string name="distanceview">Distance</string>
+    <string name="orangelabel">Ajustez la position du curseur dans 1000 mètres de votre position actuelle</string>
+    <string name="setbarbutton">Placer</string>
+    <!-- -->
+    
+    <!--Pantalla para Llamar -->
+    <string name="oncallalerttitle">Votre appareil doit être un téléphone pour appeler</string>
+    <string name="oncallalertmessage">Cette fonction n\'est pas disponibles pour les tablettes.</string>
+    <string name="campussecurityheader">Garde Université</string>
+    <string name="medicalservicesheader">Services Médicaux</string>
+    <string name="healthnsafetyheader">Santé et Sécurité</string>
+    <string name="medicalemergenciesheader">Urgences Médicales</string>
+    <string name="municipalpoliceheader">Police Municipale</string>
+    <string name="statepoliceheader">Police de l\'État</string>
+    <string name="bellavistahospitalheader">Hôpital Bella Vista</string>
+    <string name="sanantoniohospitalheader">Hôpital San Antonio</string>
+    <string name="pereahospitalheader">Hôpital Perea</string>
+    <!-- -->
+    
+    <!--Pantalla de Ajustes -->
+    <string name="emaillabel">Courrier électronique</string>
+    <string name="smslabel">Messages Texte</string>
+    <string name="pushlabel">Notifications Push</string>
+    <string name="fflabel">Famille et Amis</string>
+    <string name="languagelabel">Français</string>
+    <string name="contactlabel">Contacts</string>
+    <string name="langlabel">Langues</string>
+    <string name="notificationheader">Notifications</string>
+    <string name="notificationfooter">Notifications Push peuvent également être ajustés à partir du menu de configuration de votre appareil mobile.</string>
+    <string name="contactcountlabel">%1$d sur 5</string>
+    <string name="familylabel">Famille et Amis</string>
+    <string name="familyheader">Vous pouvez ajouter 5 numéros de téléphone de famille ou des amis</string>
+    <string name="familyfooter">Ils recevront un message texte si vous avez une urgence.</string>
+    <string name="languageheader">Options</string>
+    <string name="supportheader">Soutien</string>
+    <string name="privacylabel">Politique de Confidentialité et Conditions</string>
+    <string name="feedbacklabel">Commentaires</string>
+    <string name="aboutuslabel">À propos de Nous</string>
+    <!-- -->
+    
+    <!--Pantalla de Idiomas -->
+    <string name="languageselectlabel">Sélectionnez la langue</string>
+    <string name="languageselectnotice">Vous avez sélectionné français</string>
+    <!-- -->
+    
+    <!--Pantalla de Reportes -->
+    <string name="reportsendbutton">ENVOYER</string>
+    <string name="reportlabel">Signaler un Problème</string>
+    <string name="reportfeedback">Opinion Générale</string>
+    <string name="reportproblem">Quelque Chose ne Fonctionne pas</string>
+    <string name="reportproblemfooter">Si vous êtes sûr que vous traitez avec une erreur, s\'il vous plaît remplir le formulaire. Assurez-vous de décrire votre problème en autant de détails que possible. Utilisez votre jugement.</string>
+    <string name="reportfeedbackfooter">Si vous avez des suggestions pour améliorer l\'application, laissez-nous savoir. Nous voulons donner une expérience agréable à travers de Sentinel.</string>
+    <string name="reportalertonsendtitle">Enviado</string>
+    <string name="reportalertonsendmessage">Merci pour nous aider à améliorer!</string>
+    <!-- -->
+    
+    <!--Pantalla de Contactos -->
+    <string name="alertoverloadtitle">Malheureusement, Vous ne Pouvez pas Autoriser plus Contacts</string>
+    <string name="alertoverloadmessage">S\'il vous plaît modifier ou supprimer quelques contacts.</string>
+    <string name="alertphonevalidtitle">Format Incorrect</string>
+    <string name="alertphonevalidmessage">S\'il vous plaît entrer le format correct pour le numéro de téléphone.</string>
+    <string name="alertcontactaddtitle">Champs Vides</string>
+    <string name="alertcontactaddmessage">Remplissez tous les champs s\'il vous plait. </string>
+    <string name="alertcontactaddedtitle">Nouveau Contact Ajouté</string>
+    <string name="navigationtitle">Liste de Contacts</string>
+    <string name="navcontacttitle">Contact</string>
+    <string name="saveButton">Garder</string>
+    <!-- -->
+    
+    <!--Mensajes de Solicitud -->
+    <string name="errorconnectiontitle">Erreur de Connexion</string>
+    <string name="errorconnectionmessage">Demande Suspendue.</string>
+    <string name="errorretrievingtitle">Erreur d\'Information</string>
+    <string name="errorretrievingmessage">Un problème a été rencontré lors de la demande d\'information.</string>
+    <string name="tableplaceholder">Aucun Contact ajouté</string>
+    <!-- -->
+
+    <!--Ir a registrarse -->
+    <string name="gotologintitle">Vous avez ouvert une session sur un autre appareil</string>
+    <string name="gotologinmessage">Pour réutiliser l\'application sur cet appareil, vous devez inscrire à nouveau</string>
+    <string name="unsubscribetitle">Annulation de Abonnement Terminé</string>
+    <string name="unsubscribemessage">La demande d\'annulation de votre abonnement a été complétée. Vous pouvez toujours recevoir messages texte de masse en cas d\'urgence.</string>
+    <string name="distancelabel">Distance:</string>
+    <string name="incorrectphoneformattitle">Format Incorrect</string>
+    <string name="incorrectphoneformatmessage">S\'il vous plaît entrer le format correct de numéro de téléphone.</string>
+    <string name="phonehint">Numéro de Téléphone</string>
+    <string name="codenotreceivedmessage">Je n\'ai pas reçu mon code</string>
+    <string name="aboutusblurbp1">L\'engagement avec la sécurité de notre institution est démontrée par la création d\'outils qui améliorent notre qualité de coexistence. Le 14 Août 2014, un professeur a été poignardé par un délinquant, le laissant au bord de la mort. Ce fait a démontré la nécessité d\'un mécanisme par lequel les gens peuvent communiquer leur urgence à la communauté sans délai.</string>
+    <string name="aboutusblurbp2">Suite à ce terrible événement, le Conseil étudiant et les bureaux administratifs ont cherché des solutions. Sous l\'approbation de ces entités, co-fondateurs Joel R. Corporán, Jean C. Méndez et Josué A. Santana développés Sentinel, une demande d\'alertes d\'urgence au sein de l\'Université de Puerto Rico Mayagüez Campus. Sentinel vise à établir un système efficace et fiable de réaction immédiate qui mobilise les agents et la communauté du campus pour résoudre les événements critiques.</string>
+    <string name="problemhint">Décrivez votre situation…</string>
+    <string name="sentinelspecs">® Sentinel, pour UPRM | Version 1.0.0</string>
+    <string name="feedbackhint">Faites-nous savoir ce que vous pensez ...</string>
+    <string name="continuemessage">Continuer</string>
+    <string name="gobacktitle">Je n\'ai pas reçu mon code</string>
+    <string name="gobackmessage">Vous voulez essayer entrer à nouveau?</string>
+    <string name="cancelmessage">Annuler</string>
+    <string name="incidentmap">Carte d\'Incidents</string>
+    <string name="locationviewtitle">Emplacement</string>
+    <string name="privacytitle">Conditions</string>
+    <string name="pullRefresh">Tirez pour voir Incidents</string>
+    <string name="pushnotificationavailabilitytitle">Sentinel n\'est Autorisé pas à Recevoir des Notifications de Type Push.</string>
+    <string name="pushnotificationavailabiltymessage">Pour autoriser ce type de notification, s\'il vous plaît se aller dans le menu de configuration sur le téléphone et fixer notifications Push</string>
+    <string name="unsubscribe">Désabonner</string>
+    <string name="noincidents">Pas d\'Incidents Trouvés</string>
+    <string name="warningbeforeusetitle">ATTENTION</string>
+    <string name="sortbydate">Par Région</string>
+    <string name="sortbyregion">Par Date</string>
+    <string name="reporttitle">Opinion </string>
+    <string name="unsubscribedialogmessage">Êtes-vous sûr?</string>
+    <string name="warningbeforeusemessage">LA MAUVAISE UTILISATION DE CETTE APPLICATION PEUT PROVOQUER DES SANCTIONS À L\'UTILISATEUR, TEL QU\'ÉTABLI PAR LES POLITIQUES ET RÈGLEMENTS UNIVERSITAIRES. S\'IL VOUS PLAÎT UTILISER RESPONSABLEMENT.</string>
+    <string name="unsubscribedialogtitle">Vous Êtes sur le Point de Quitter</string>
+    <string name="phonebooktitle">Choisir un Contact</string>
+    <string name="timenotupmessage">Pour envoyer une autre alerte, vous devrez attendre 10 minutes.</string>
+    <string name="timenotuptitle">Vous ne pouvez pas Envoyer l\'Alerte</string>
+    <!-- -->
+
+</resources>
