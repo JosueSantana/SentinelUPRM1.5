@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="Sentinel.hmkcode.locations.test.Activities.VerificationActivity"
+    android:background="@color/colorSecondaryDark"
+    android:id="@+id/verificationRLayout">
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:id="@+id/barlayoutsignup"
+        android:background="@color/colorPrimary">
+
+        <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/phoneOnSignup2"
+            android:layout_centerInParent="true"
+            android:background="@drawable/ic_settings_phone_white_24dp"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="10dp" />
+
+    </RelativeLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorPrimaryT"
+        android:layout_below="@+id/shieldsignup"
+        android:id="@+id/codeContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:layout_alignParentTop="false">
+
+        <AutoCompleteTextView
+            android:id="@+id/codeEnter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/entercodelabel"
+            android:inputType="textVisiblePassword"
+            android:imeOptions="actionGo"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:backgroundTint="@color/textColorPrimary"
+            android:textColor="@color/textColorPrimary"
+            android:gravity="center_horizontal" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageButton
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/proceedverification"
+        android:layout_below="@+id/codenotreceived"
+        android:layout_centerInParent="true"
+        android:background="@drawable/proceedbutton"
+        android:layout_marginTop="50dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/codenotreceivedmessage"
+        android:id="@+id/codenotreceived"
+        android:layout_below="@+id/codeContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20sp"
+        android:textSize="@dimen/abc_text_size_body_1_material"
+        android:textColor="@color/textColorPrimary"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:layout_width="135dp"
+        android:layout_height="135dp"
+        android:id="@+id/shieldsignup"
+        android:layout_below="@+id/barlayoutsignup"
+        android:background="@drawable/logosentinel"
+        android:layout_centerHorizontal="true"
+        />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>

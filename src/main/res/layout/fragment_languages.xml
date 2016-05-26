@@ -1,0 +1,131 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="Fragments.LanguagesFragment"
+    android:background="@color/windowBackground">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:shrinkColumns="*"
+        android:stretchColumns="*"
+        android:orientation="vertical">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/languageselectlabel"
+                android:id="@+id/textView"
+                android:layout_gravity="center"
+                android:textSize="@dimen/abc_text_size_medium_material"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/englishRow"
+            android:background="@drawable/cell_shape"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="English"
+                android:id="@+id/textView2"
+                android:layout_gravity="center"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="@dimen/abc_text_size_large_material" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/espanolRow"
+            android:background="@drawable/cell_shape"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Español"
+                android:id="@+id/textView4"
+                android:layout_gravity="center"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="@dimen/abc_text_size_large_material" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/deutschRow"
+            android:background="@drawable/cell_shape"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Deutsch"
+                android:id="@+id/textView6"
+                android:layout_gravity="center"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="@dimen/abc_text_size_large_material" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/francaisRow"
+            android:background="@drawable/cell_shape"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Français"
+                android:id="@+id/textView3"
+                android:layout_gravity="center"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="@dimen/abc_text_size_large_material" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/portuguesRow"
+            android:background="@drawable/cell_shape"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Portugûes"
+                android:id="@+id/textView5"
+                android:layout_gravity="center"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="@dimen/abc_text_size_large_material" />
+        </TableRow>
+
+    </TableLayout>
+
+</FrameLayout>

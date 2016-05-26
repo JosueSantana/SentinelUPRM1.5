@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/signupRLayout"
+    tools:context="Sentinel.hmkcode.locations.test.Activities.SignupActivity"
+    android:background="@color/colorSecondaryDark">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:id="@+id/barlayoutsignup"
+        android:background="@color/colorPrimary">
+
+        <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/phoneOnSignup"
+            android:layout_centerInParent="true"
+            android:background="@drawable/ic_settings_phone_white_24dp"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="10dp" />
+
+    </RelativeLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorPrimaryT"
+        android:textColor="@color/textColorPrimary"
+        android:id="@+id/emailContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/shieldsignup"
+        android:layout_marginTop="20dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/emailhint"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            android:backgroundTint="@color/textColorPrimary"
+            android:textColor="@color/textColorPrimary"
+            android:gravity="center_horizontal" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorPrimaryT"
+        android:textColor="@color/textColorPrimary"
+        android:layout_below="@+id/emailContainer"
+        android:id="@+id/phoneContainer"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp">
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/phonehint"
+            android:imeActionId="@+id/login"
+            android:imeActionLabel="@string/action_sign_in_short"
+            android:imeOptions="actionGo"
+            android:inputType="phone"
+            android:backgroundTint="@color/textColorPrimary"
+            android:textColor="@color/textColorPrimary"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:gravity="center" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageButton
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/proceedsignup"
+        android:layout_below="@+id/phoneContainer"
+        android:layout_centerInParent="true"
+        android:background="@drawable/proceedbutton"
+        android:layout_marginTop="50dp" />
+
+    <ImageView
+        android:layout_width="135dp"
+        android:layout_height="135dp"
+        android:id="@+id/shieldsignup"
+        android:layout_below="@+id/barlayoutsignup"
+        android:background="@drawable/logosentinel"
+        android:layout_centerHorizontal="true"
+        />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>
